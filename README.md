@@ -1,6 +1,6 @@
 # Tetris
 
-## Introduction
+## Introduction / Project Proposal
 
 This project is a re-creation of [Tetris](https://en.wikipedia.org/wiki/Tetris). The main action of the game
 happens on a board with 20 rows and 10 columns. The goal of the game is to earn as many points as possible by 
@@ -12,4 +12,4 @@ board such that there is no space for the tetromino to fit.
 This classic singleplayer game can be played by **anyone**. Tetris is still popular to this day—see [the intensive
 finals of the 2018 Classic Tetris World Championship](https://www.youtube.com/watch?v=L_UPHsGR6fM)). I decided to
 re-create Tetris as a personal project because I have played some Tetris myself and am amazed at how such a simple 
-game can be so fun.
+game can be so fun to play.
