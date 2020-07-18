@@ -4,7 +4,7 @@
 
 This project is a re-creation of [Tetris](https://en.wikipedia.org/wiki/Tetris). The main action of the game
 happens on a board with 20 rows and 10 columns. The goal of the game is to earn as many points as possible by 
-manipulating falling *tetrominos* (a.k.a. *pieces*) to fill the rows of the board. When all the cells of a row are 
+manipulating falling *tetrominoes* (a.k.a. *pieces*) to fill the rows of the board. When all the cells of a row are 
 filled with tetromino tiles, the tiles in that row are deleted—this is called a *line clear*. More points are earned 
 when the player clears more lines at a time. The game ends if the player allows a piece to be placed at the top 
 of the board such that there is no space for the piece to fit.
@@ -20,7 +20,7 @@ game can be so fun to play.
 the game is over.
 - As a user, I want to be able to move pieces horizontally.
 - As a user, I want to be able to rotate pieces.
-- As a user, I want to be able to clear line(s) by completely filling a row with the tiles of tetrominos.
+- As a user, I want to be able to clear line(s) by completely filling a row with the tiles of tetrominoes.
 - As a user, I want to be able to see my current in-game score.
 - As a user, I want to be able to see my current in-game level.
 - As a user, I want to be able to see the number of lines I have cleared so far.
