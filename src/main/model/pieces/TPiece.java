@@ -8,6 +8,6 @@ public class TPiece extends Tetromino {
     // REQUIRES: game has started and is not over
     // EFFECTS: creates an "T" piece in given game. The piece is placed at the topmost row.
     public TPiece(Game game) {
-
+        super.game = game;
     }
 }

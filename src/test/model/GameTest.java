@@ -156,10 +156,10 @@ public class GameTest {
 
     @Test
     public void testUpdateSingleLineClear() {
-        List<ArrayList<Boolean>> riggedBoard = getBlankBoard();
+        List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
 
         for (int i = 0; i < Game.WIDTH; i++) {
-            riggedBoard.get(i).set(Game.HEIGHT - 1, true);
+            riggedBoard.get(Game.HEIGHT - 1).set(i, true);
         }
 
         g.setBoard(riggedBoard);
@@ -168,17 +168,17 @@ public class GameTest {
         assertEquals(Game.SINGLE_POINTS, g.getScore());
         assertEquals(1, g.getLinesCleared());
         for (int i = 0; i < Game.WIDTH; i++) {
-            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 1));
+            assertFalse(riggedBoard.get(Game.HEIGHT - 1).get(i));
         }
     }
 
     @Test
     public void testUpdateDoubleLineClear() {
-        List<ArrayList<Boolean>> riggedBoard = getBlankBoard();
+        List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
 
         for (int i = 0; i < Game.WIDTH; i++) {
-            riggedBoard.get(i).set(Game.HEIGHT - 2, true);
-            riggedBoard.get(i).set(Game.HEIGHT - 1, true);
+            riggedBoard.get(Game.HEIGHT - 2).set(i, true);
+            riggedBoard.get(Game.HEIGHT - 1).set(i, true);
         }
 
         g.setBoard(riggedBoard);
@@ -187,19 +187,19 @@ public class GameTest {
         assertEquals(Game.DOUBLE_POINTS, g.getScore());
         assertEquals(2, g.getLinesCleared());
         for (int i = 0; i < Game.WIDTH; i++) {
-            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 2));
-            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 1));
+            assertFalse(riggedBoard.get(Game.HEIGHT - 2).get(i));
+            assertFalse(riggedBoard.get(Game.HEIGHT - 1).get(i));
         }
     }
 
     @Test
     public void testUpdateTripleLineClear() {
-        List<ArrayList<Boolean>> riggedBoard = getBlankBoard();
+        List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
 
         for (int i = 0; i < Game.WIDTH; i++) {
-            riggedBoard.get(i).set(Game.HEIGHT - 3, true);
-            riggedBoard.get(i).set(Game.HEIGHT - 2, true);
-            riggedBoard.get(i).set(Game.HEIGHT - 1, true);
+            riggedBoard.get(Game.HEIGHT - 3).set(i, true);
+            riggedBoard.get(Game.HEIGHT - 2).set(i, true);
+            riggedBoard.get(Game.HEIGHT - 1).set(i, true);
         }
 
         g.setBoard(riggedBoard);
@@ -208,21 +208,21 @@ public class GameTest {
         assertEquals(Game.TRIPLE_POINTS, g.getScore());
         assertEquals(3, g.getLinesCleared());
         for (int i = 0; i < Game.WIDTH; i++) {
-            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 3));
-            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 2));
-            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 1));
+            assertFalse(riggedBoard.get(Game.HEIGHT - 3).get(i));
+            assertFalse(riggedBoard.get(Game.HEIGHT - 2).get(i));
+            assertFalse(riggedBoard.get(Game.HEIGHT - 1).get(i));
         }
     }
 
     @Test
     public void testUpdateTetrisLineClear() {
-        List<ArrayList<Boolean>> riggedBoard = getBlankBoard();
+        List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
 
         for (int i = 0; i < Game.WIDTH; i++) {
-            riggedBoard.get(i).set(Game.HEIGHT - 4, true);
-            riggedBoard.get(i).set(Game.HEIGHT - 3, true);
-            riggedBoard.get(i).set(Game.HEIGHT - 2, true);
-            riggedBoard.get(i).set(Game.HEIGHT - 1, true);
+            riggedBoard.get(Game.HEIGHT - 4).set(i, true);
+            riggedBoard.get(Game.HEIGHT - 3).set(i, true);
+            riggedBoard.get(Game.HEIGHT - 2).set(i, true);
+            riggedBoard.get(Game.HEIGHT - 1).set(i, true);
         }
 
         g.setBoard(riggedBoard);
@@ -231,31 +231,31 @@ public class GameTest {
         assertEquals(Game.TETRIS_POINTS, g.getScore());
         assertEquals(4, g.getLinesCleared());
         for (int i = 0; i < Game.WIDTH; i++) {
-            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 4));
-            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 3));
-            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 2));
-            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 1));
+            assertFalse(riggedBoard.get(Game.HEIGHT - 4).get(i));
+            assertFalse(riggedBoard.get(Game.HEIGHT - 3).get(i));
+            assertFalse(riggedBoard.get(Game.HEIGHT - 2).get(i));
+            assertFalse(riggedBoard.get(Game.HEIGHT - 1).get(i));
         }
     }
 
     @Test
     public void testUpdateLineClearsWithLinesAbove() {
-        List<ArrayList<Boolean>> riggedBoard = getBlankBoard();
+        List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < Game.HEIGHT; j++) {
                 if (j >= Game.HEIGHT - 5) {
-                    riggedBoard.get(i).set(j, true);
+                    riggedBoard.get(j).set(i, true);
                 }
             }
         }
         for (int i = 3; i < Game.WIDTH; i++) {
             for (int j = 0; j < Game.HEIGHT; j++) {
                 if (j == Game.HEIGHT - 2 || j == Game.HEIGHT - 4) {
-                    riggedBoard.get(i).set(j, true);
+                    riggedBoard.get(j).set(i, true);
                 }
             }
         }
-        riggedBoard.get(5).set(Game.HEIGHT - 6, true);
+        riggedBoard.get(Game.HEIGHT - 6).set(5, true);
 
         g.setBoard(riggedBoard);
         g.update();
@@ -264,35 +264,44 @@ public class GameTest {
         assertEquals(Game.DOUBLE_POINTS, g.getScore());
         for (int i = 0; i < 3; i++) {
             for (int j = Game.HEIGHT - 3; j < Game.HEIGHT; j++) {
-                assertTrue(updatedBoard.get(i).get(j));
+                assertTrue(updatedBoard.get(j).get(i));
             }
         }
-        assertTrue(updatedBoard.get(5).get(Game.HEIGHT - 4));
-        assertFalse(updatedBoard.get(5).get(Game.HEIGHT - 6));
+        assertTrue(updatedBoard.get(Game.HEIGHT - 4).get(5));
+        assertFalse(updatedBoard.get(Game.HEIGHT - 6).get(5));
     }
 
     @Test
     public void testUpdateGameOver() {
-        // The game will surely be over after Game.HEIGHT * Game.HEIGHT ticks
-        // of dropping tetrominos straight down. Unfortunately, there is
-        // no way to write a test that can catch the exact point that the game
-        // is over without sacrificing the principle of Single Point of Control,
-        // since we might change Game.HEIGHT in the future.
-        for (int i = 0; i < Game.HEIGHT * Game.HEIGHT; i++) {
-            g.update();
+        List<ArrayList<Boolean>> gameOverBoard = new ArrayList<ArrayList<Boolean>>();
+        for (int r = 0; r < Game.HEIGHT; r++) {
+            ArrayList<Boolean> row = new ArrayList<Boolean>();
+            for (int c = 0; c < Game.WIDTH; c++) {
+                if (r == 0 || r == 1 || c == 0) {
+                    row.add(false);
+                } else {
+                    row.add(true);
+                }
+            }
+            gameOverBoard.add(row);
         }
 
+        g.setBoard(gameOverBoard);
+        g.update(); // S piece lands at the top
+        assertFalse(g.isGameOver());
+
+        g.update(); // L piece has nowhere to go, so player tops out
         assertTrue(g.isGameOver());
 
         List<ArrayList<Boolean>> board = g.getBoard();
         List<ArrayList<Boolean>> boardCopy = new ArrayList<ArrayList<Boolean>>();
 
-        for (int i = 0; i < Game.WIDTH; i++) {
-            ArrayList<Boolean> column = new ArrayList<Boolean>();
-            for (int j = 0; j < Game.HEIGHT; j++) {
-                column.add(board.get(i).get(j));
+        for (int i = 0; i < Game.HEIGHT; i++) {
+            ArrayList<Boolean> row = new ArrayList<Boolean>();
+            for (int j = 0; j < Game.WIDTH; j++) {
+                row.add(board.get(i).get(j));
             }
-            boardCopy.add(column);
+            boardCopy.add(row);
         }
 
         // Should do nothing
@@ -301,8 +310,8 @@ public class GameTest {
         board = g.getBoard();
 
         // Check that the board did not change
-        for (int i = 0; i < Game.WIDTH; i++) {
-            for (int j = 0; j < Game.HEIGHT; j++) {
+        for (int i = 0; i < Game.HEIGHT; i++) {
+            for (int j = 0; j < Game.WIDTH; j++) {
                 assertEquals(board.get(i).get(j), boardCopy.get(i).get(j));
             }
         }
@@ -351,10 +360,23 @@ public class GameTest {
         assertTrue(seenZPiece);
     }
 
+    @Test
+    public void testGetBlankBoard() {
+        List<ArrayList<Boolean>> blankBoard = Game.getBlankBoard();
+        assertEquals(Game.HEIGHT, blankBoard.size());
+        for (int i = 0; i < blankBoard.size(); i++) {
+            List<Boolean> row = blankBoard.get(i);
+            assertEquals(Game.WIDTH, row.size());
+            for (int j = 0; j < row.size(); j++) {
+                assertFalse(row.get(j));
+            }
+        }
+    }
+
     // EFFECTS: Ensures that the given board contains the given tetromino
     public static void checkBoardContainsTetromino(List<ArrayList<Boolean>> boardCells, Tetromino tetromino) {
         for (Point p : tetromino.getTileLocations()) {
-            assertTrue(boardCells.get(p.x).get(p.y));
+            assertTrue(boardCells.get(p.y).get(p.x));
         }
     }
 
@@ -383,19 +405,5 @@ public class GameTest {
             }
         }
         return numTiles;
-    }
-
-    // EFFECTS: returns a blank game board
-    public static List<ArrayList<Boolean>> getBlankBoard() {
-        List<ArrayList<Boolean>> blankBoard = new ArrayList<ArrayList<Boolean>>();
-
-        for (int i = 0; i < Game.WIDTH; i++) {
-            ArrayList<Boolean> column = new ArrayList<Boolean>();
-            for (int j = 0; j < Game.HEIGHT; j++) {
-                column.add(false);
-            }
-            blankBoard.add(column);
-        }
-        return blankBoard;
     }
 }

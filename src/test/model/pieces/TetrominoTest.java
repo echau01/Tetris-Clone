@@ -1,15 +1,11 @@
 package model.pieces;
 
 import model.Game;
-import model.GameTest;
-import model.pieces.OPiece;
-import model.pieces.Tetromino;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,19 +25,19 @@ public abstract class TetrominoTest {
     @BeforeEach
     public void setUpTestGame() {
         testGame = new Game();
-        testGame.startNewGame(0);
+        // Do NOT start the game. We do not want an active tetromino in the game.
 
-        List<ArrayList<Boolean>> riggedBoard = GameTest.getBlankBoard();
+        List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
         int approximateCenter = Math.floorDiv(Game.WIDTH - 1, 2);
-        for (int i = 0; i < Game.WIDTH; i++) {
-            ArrayList<Boolean> column = riggedBoard.get(i);
-            if (i != approximateCenter - 2
-                    && i != approximateCenter - 1
-                    && i != approximateCenter
-                    && i != approximateCenter + 1
-                    && i != approximateCenter + 2) {
-                for (int j = TEST_GAME_WALL_HEIGHT; j < Game.HEIGHT; j++) {
-                    column.set(j, true);
+        for (int i = Game.HEIGHT / 2; i < Game.HEIGHT; i++) {
+            ArrayList<Boolean> row = riggedBoard.get(i);
+            for (int j = 0; j < Game.WIDTH; j++) {
+                if (j != approximateCenter - 2
+                        && j != approximateCenter - 1
+                        && j != approximateCenter
+                        && j != approximateCenter + 1
+                        && j != approximateCenter + 2) {
+                    row.set(j, true);
                 }
             }
         }
@@ -51,8 +47,8 @@ public abstract class TetrominoTest {
 
     @Test
     public void testMoveLeftNotBoundary() {
-        Set<Point> oldTileLocations = getTileLocationsCopy(t);
-        t.moveLeft();
+        Set<Point> oldTileLocations = t.getTileLocations();
+        assertTrue(t.moveLeft());
 
         Set<Point> newTileLocations = t.getTileLocations();
         for (Point location : newTileLocations) {
@@ -70,8 +66,8 @@ public abstract class TetrominoTest {
 
         // By now, t is guaranteed to be at the left wall
 
-        Set<Point> oldTileLocations = getTileLocationsCopy(t);
-        t.moveLeft();
+        Set<Point> oldTileLocations = t.getTileLocations();
+        assertFalse(t.moveLeft());
 
         Set<Point> newTileLocations = t.getTileLocations();
         for (Point location : newTileLocations) {
@@ -88,16 +84,17 @@ public abstract class TetrominoTest {
         }
         t.moveLeft();
         t.moveLeft();
-
-        Set<Point> tileLocations = getTileLocationsCopy(t);
         t.moveLeft();
+
+        Set<Point> tileLocations = t.getTileLocations();
+        assertFalse(t.moveLeft());
         assertEquals(tileLocations, t.getTileLocations());
     }
 
     @Test
     public void testMoveRightNotBoundary() {
-        Set<Point> oldTileLocations = getTileLocationsCopy(t);
-        t.moveRight();
+        Set<Point> oldTileLocations = t.getTileLocations();
+        assertTrue(t.moveRight());
 
         Set<Point> newTileLocations = t.getTileLocations();
         for (Point location : newTileLocations) {
@@ -115,8 +112,8 @@ public abstract class TetrominoTest {
 
         // By now, t is guaranteed to be at the right wall
 
-        Set<Point> oldTileLocations = getTileLocationsCopy(t);
-        t.moveRight();
+        Set<Point> oldTileLocations = t.getTileLocations();
+        assertFalse(t.moveRight());
 
         Set<Point> newTileLocations = t.getTileLocations();
         for (Point location : newTileLocations) {
@@ -134,15 +131,15 @@ public abstract class TetrominoTest {
         t.moveRight();
         t.moveRight();
 
-        Set<Point> tileLocations = getTileLocationsCopy(t);
-        t.moveRight();
+        Set<Point> tileLocations = t.getTileLocations();
+        assertFalse(t.moveRight());
         assertEquals(tileLocations, t.getTileLocations());
     }
 
     @Test
     public void testMoveDownNotBoundary() {
-        Set<Point> oldTileLocations = getTileLocationsCopy(t);
-        t.moveDown();
+        Set<Point> oldTileLocations = t.getTileLocations();
+        assertTrue(t.moveDown());
 
         Set<Point> newTileLocations = t.getTileLocations();
         for (Point location : newTileLocations) {
@@ -160,8 +157,8 @@ public abstract class TetrominoTest {
 
         // By now, t is guaranteed to be at the floor
 
-        Set<Point> oldTileLocations = getTileLocationsCopy(t);
-        t.moveDown();
+        Set<Point> oldTileLocations = t.getTileLocations();
+        assertFalse(t.moveDown());
 
         Set<Point> newTileLocations = t.getTileLocations();
         for (Point location : newTileLocations) {
@@ -182,20 +179,30 @@ public abstract class TetrominoTest {
 
         // t is guaranteed to be directly above a tile now.
 
-        Set<Point> tileLocations = getTileLocationsCopy(t);
-        t.moveDown();
+        Set<Point> tileLocations = t.getTileLocations();
+        assertFalse(t.moveDown());
         assertEquals(tileLocations, t.getTileLocations());
     }
 
     @Test
     public void testRotateAtCeiling() {
-        Set<Point> tileLocations = getTileLocationsCopy(t);
+        Set<Point> tileLocations = t.getTileLocations();
         if (t instanceof OPiece) {
             assertTrue(t.rotate());
         } else {
             assertFalse(t.rotate());
         }
         assertEquals(tileLocations, t.getTileLocations());
+    }
+
+    @Test
+    public void testGetTileLocationsChangingReturnedSet() {
+        Set<Point> tileLocations = t.getTileLocations();
+        tileLocations.add(new Point(2 * Game.WIDTH, 2 * Game.HEIGHT));
+
+        // Changing tileLocations should not change the actual locations
+        // of the tiles of t.
+        assertNotEquals(tileLocations, t.getTileLocations());
     }
 
     @Test
@@ -206,13 +213,4 @@ public abstract class TetrominoTest {
 
     @Test
     public abstract void testRotateWithObstructingTiles();
-
-    // EFFECTS: returns a copy of tetromino.getTileLocations()
-    protected Set<Point> getTileLocationsCopy(Tetromino tetromino) {
-        Set<Point> tileLocations = new HashSet<Point>();
-        for (Point location : tetromino.getTileLocations()) {
-            tileLocations.add(new Point(location));
-        }
-        return tileLocations;
-    }
 }
