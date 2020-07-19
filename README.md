@@ -16,13 +16,12 @@ game can be so fun to play.
 
 ## User Stories
 
-- As a user, I want to be able to add an entry (containing my score, name, and level reached) to a scoreboard after
+- As a user, I want to be able to add an entry (containing my score, name, and lines cleared) to a scoreboard after
 the game is over.
 - As a user, I want to be able to move pieces horizontally.
 - As a user, I want to be able to rotate pieces.
 - As a user, I want to be able to clear line(s) by completely filling a row with the tiles of tetrominoes.
 - As a user, I want to be able to see my current in-game score.
-- As a user, I want to be able to see my current in-game level.
 - As a user, I want to be able to see the number of lines I have cleared so far.
 - As a user, I want to be able to see the next piece that will come after I place the current piece.
 - As a user, I want to be able to replay the game after it ends.
