@@ -1,10 +1,14 @@
-package model;
+package model.pieces;
 
+import model.Game;
+import model.GameTest;
+import model.pieces.OPiece;
 import model.pieces.Tetromino;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,22 +16,12 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class TetrominoTest {
+    protected static int TEST_GAME_WALL_HEIGHT = Game.HEIGHT / 2;
+
     protected Tetromino t;
 
-    // This game contains three "I" pieces that are dropped into very specific places.
-    // The first "I" piece is dropped straight down onto the floor, in the same horizontal position
-    // that it spawned in.
-    // The second "I" piece is dropped on top of the leftmost tile of the first "I" piece, and is rotated
-    // so that it stands upright.
-    // The third "I" piece is dropped on top of the right tile of the first "I" piece, and is rotated
-    // so that it stands upright.
-    // This setup creates an open box on the board that can be used to test the rotate, moveLeft,
-    // moveRight, and moveDown methods.
+    // Do not call update on this game!
     protected Game testGame;
-
-    // This seed has been tested and is guaranteed to generate three "I" pieces in a row at the beginning
-    // of the game.
-    private static final int TEST_GAME_SEED = 768;
 
     // We want this @BeforeEach method to run before the @BeforeEach methods in the subclasses of
     // TetrominoTest. Fortunately, https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/BeforeEach.html
@@ -35,42 +29,24 @@ public abstract class TetrominoTest {
     @BeforeEach
     public void setUpTestGame() {
         testGame = new Game();
-        testGame.startNewGame(TEST_GAME_SEED);
+        testGame.startNewGame(0);
 
-        // Drop the first "I" piece to the floor
-        for (int i = 0; i < Game.HEIGHT; i++) {
-            testGame.update();
-        }
-
-        // Drop the second "I" piece to the appropriate place
-        testGame.update();
-        testGame.getActiveTetromino().rotate();
-        testGame.getActiveTetromino().moveLeft();
-        testGame.getActiveTetromino().moveLeft();
-        for (int i = 0; i < Game.HEIGHT - 2; i++) {
-            testGame.update();
-        }
-
-        // Drop the third "I" piece to the appropriate place
-        testGame.update();
-        testGame.getActiveTetromino().rotate();
-        testGame.getActiveTetromino().moveRight();
-        testGame.getActiveTetromino().moveRight();
-        for (int i = 0; i < Game.HEIGHT - 2; i++) {
-            testGame.update();
-        }
-
-        // Ensure that we only have 12 tiles on the board.
-        int numTiles = 0;
-        for (List<Boolean> column : testGame.getBoard()) {
-            for (boolean cellOccupied : column) {
-                if (cellOccupied) {
-                    numTiles++;
+        List<ArrayList<Boolean>> riggedBoard = GameTest.getBlankBoard();
+        int approximateCenter = Math.floorDiv(Game.WIDTH - 1, 2);
+        for (int i = 0; i < Game.WIDTH; i++) {
+            ArrayList<Boolean> column = riggedBoard.get(i);
+            if (i != approximateCenter - 2
+                    && i != approximateCenter - 1
+                    && i != approximateCenter
+                    && i != approximateCenter + 1
+                    && i != approximateCenter + 2) {
+                for (int j = TEST_GAME_WALL_HEIGHT; j < Game.HEIGHT; j++) {
+                    column.set(j, true);
                 }
             }
         }
 
-        assertEquals(12, numTiles);
+        testGame.setBoard(riggedBoard);
     }
 
     @Test
@@ -105,9 +81,18 @@ public abstract class TetrominoTest {
         assertEquals(oldTileLocations.size(), newTileLocations.size());
     }
 
-    // Test that moving leftwards into another tile does nothing
     @Test
-    public abstract void testMoveLeftSpaceOccupiedByTile();
+    public void testMoveLeftSpaceOccupiedByTile() {
+        for (int i = 0; i < TEST_GAME_WALL_HEIGHT; i++) {
+            t.moveDown();
+        }
+        t.moveLeft();
+        t.moveLeft();
+
+        Set<Point> tileLocations = getTileLocationsCopy(t);
+        t.moveLeft();
+        assertEquals(tileLocations, t.getTileLocations());
+    }
 
     @Test
     public void testMoveRightNotBoundary() {
@@ -141,9 +126,18 @@ public abstract class TetrominoTest {
         assertEquals(oldTileLocations.size(), newTileLocations.size());
     }
 
-    // Test that moving rightwards into another tile does nothing
     @Test
-    public abstract void testMoveRightSpaceOccupiedByTile();
+    public void testMoveRightSpaceOccupiedByTile() {
+        for (int i = 0; i < TEST_GAME_WALL_HEIGHT; i++) {
+            t.moveDown();
+        }
+        t.moveRight();
+        t.moveRight();
+
+        Set<Point> tileLocations = getTileLocationsCopy(t);
+        t.moveRight();
+        assertEquals(tileLocations, t.getTileLocations());
+    }
 
     @Test
     public void testMoveDownNotBoundary() {
@@ -177,12 +171,44 @@ public abstract class TetrominoTest {
         assertEquals(oldTileLocations.size(), newTileLocations.size());
     }
 
-    // Test that moving downwards into another tile does nothing
     @Test
-    public abstract void testMoveDownSpaceOccupiedByTile();
+    public void testMoveDownSpaceOccupiedByTile() {
+        for (int i = 0; i < Game.WIDTH; i++) {
+            t.moveLeft();
+        }
+        for (int i = 0; i < Game.HEIGHT; i++) {
+            t.moveDown();
+        }
+
+        // t is guaranteed to be directly above a tile now.
+
+        Set<Point> tileLocations = getTileLocationsCopy(t);
+        t.moveDown();
+        assertEquals(tileLocations, t.getTileLocations());
+    }
+
+    @Test
+    public void testRotateAtCeiling() {
+        Set<Point> tileLocations = getTileLocationsCopy(t);
+        if (t instanceof OPiece) {
+            assertTrue(t.rotate());
+        } else {
+            assertFalse(t.rotate());
+        }
+        assertEquals(tileLocations, t.getTileLocations());
+    }
+
+    @Test
+    public abstract void testRotateInFreeSpace();
+
+    @Test
+    public abstract void testRotateAtWall();
+
+    @Test
+    public abstract void testRotateWithObstructingTiles();
 
     // EFFECTS: returns a copy of tetromino.getTileLocations()
-    private Set<Point> getTileLocationsCopy(Tetromino tetromino) {
+    protected Set<Point> getTileLocationsCopy(Tetromino tetromino) {
         Set<Point> tileLocations = new HashSet<Point>();
         for (Point location : tetromino.getTileLocations()) {
             tileLocations.add(new Point(location));

@@ -27,7 +27,6 @@ public class GameTest {
 
     @Test
     public void testStartNewGame() {
-        assertEquals(1, g.getLevel());
         assertEquals(0, g.getScore());
         assertEquals(0, g.getLinesCleared());
         assertFalse(g.isGameOver());
@@ -82,15 +81,7 @@ public class GameTest {
         checkBoardContainsTetromino(board, g.getActiveTetromino());
 
         // Check that there are only four tiles on the board:
-        int numTiles = 0;
-        for (List<Boolean> column : board) {
-            for (boolean cellOccupied : column) {
-                if (cellOccupied) {
-                    numTiles++;
-                }
-            }
-        }
-        assertEquals(4, numTiles);
+        assertEquals(4, getNumTilesOnBoard());
     }
 
     @Test
@@ -164,6 +155,123 @@ public class GameTest {
     }
 
     @Test
+    public void testUpdateSingleLineClear() {
+        List<ArrayList<Boolean>> riggedBoard = getBlankBoard();
+
+        for (int i = 0; i < Game.WIDTH; i++) {
+            riggedBoard.get(i).set(Game.HEIGHT - 1, true);
+        }
+
+        g.setBoard(riggedBoard);
+        g.update();
+
+        assertEquals(Game.SINGLE_POINTS, g.getScore());
+        assertEquals(1, g.getLinesCleared());
+        for (int i = 0; i < Game.WIDTH; i++) {
+            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 1));
+        }
+    }
+
+    @Test
+    public void testUpdateDoubleLineClear() {
+        List<ArrayList<Boolean>> riggedBoard = getBlankBoard();
+
+        for (int i = 0; i < Game.WIDTH; i++) {
+            riggedBoard.get(i).set(Game.HEIGHT - 2, true);
+            riggedBoard.get(i).set(Game.HEIGHT - 1, true);
+        }
+
+        g.setBoard(riggedBoard);
+        g.update();
+
+        assertEquals(Game.DOUBLE_POINTS, g.getScore());
+        assertEquals(2, g.getLinesCleared());
+        for (int i = 0; i < Game.WIDTH; i++) {
+            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 2));
+            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 1));
+        }
+    }
+
+    @Test
+    public void testUpdateTripleLineClear() {
+        List<ArrayList<Boolean>> riggedBoard = getBlankBoard();
+
+        for (int i = 0; i < Game.WIDTH; i++) {
+            riggedBoard.get(i).set(Game.HEIGHT - 3, true);
+            riggedBoard.get(i).set(Game.HEIGHT - 2, true);
+            riggedBoard.get(i).set(Game.HEIGHT - 1, true);
+        }
+
+        g.setBoard(riggedBoard);
+        g.update();
+
+        assertEquals(Game.TRIPLE_POINTS, g.getScore());
+        assertEquals(3, g.getLinesCleared());
+        for (int i = 0; i < Game.WIDTH; i++) {
+            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 3));
+            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 2));
+            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 1));
+        }
+    }
+
+    @Test
+    public void testUpdateTetrisLineClear() {
+        List<ArrayList<Boolean>> riggedBoard = getBlankBoard();
+
+        for (int i = 0; i < Game.WIDTH; i++) {
+            riggedBoard.get(i).set(Game.HEIGHT - 4, true);
+            riggedBoard.get(i).set(Game.HEIGHT - 3, true);
+            riggedBoard.get(i).set(Game.HEIGHT - 2, true);
+            riggedBoard.get(i).set(Game.HEIGHT - 1, true);
+        }
+
+        g.setBoard(riggedBoard);
+        g.update();
+
+        assertEquals(Game.TETRIS_POINTS, g.getScore());
+        assertEquals(4, g.getLinesCleared());
+        for (int i = 0; i < Game.WIDTH; i++) {
+            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 4));
+            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 3));
+            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 2));
+            assertFalse(riggedBoard.get(i).get(Game.HEIGHT - 1));
+        }
+    }
+
+    @Test
+    public void testUpdateLineClearsWithLinesAbove() {
+        List<ArrayList<Boolean>> riggedBoard = getBlankBoard();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < Game.HEIGHT; j++) {
+                if (j >= Game.HEIGHT - 5) {
+                    riggedBoard.get(i).set(j, true);
+                }
+            }
+        }
+        for (int i = 3; i < Game.WIDTH; i++) {
+            for (int j = 0; j < Game.HEIGHT; j++) {
+                if (j == Game.HEIGHT - 2 || j == Game.HEIGHT - 4) {
+                    riggedBoard.get(i).set(j, true);
+                }
+            }
+        }
+        riggedBoard.get(5).set(Game.HEIGHT - 6, true);
+
+        g.setBoard(riggedBoard);
+        g.update();
+
+        List<ArrayList<Boolean>> updatedBoard = g.getBoard();
+        assertEquals(Game.DOUBLE_POINTS, g.getScore());
+        for (int i = 0; i < 3; i++) {
+            for (int j = Game.HEIGHT - 3; j < Game.HEIGHT; j++) {
+                assertTrue(updatedBoard.get(i).get(j));
+            }
+        }
+        assertTrue(updatedBoard.get(5).get(Game.HEIGHT - 4));
+        assertFalse(updatedBoard.get(5).get(Game.HEIGHT - 6));
+    }
+
+    @Test
     public void testUpdateGameOver() {
         // The game will surely be over after Game.HEIGHT * Game.HEIGHT ticks
         // of dropping tetrominos straight down. Unfortunately, there is
@@ -175,6 +283,29 @@ public class GameTest {
         }
 
         assertTrue(g.isGameOver());
+
+        List<ArrayList<Boolean>> board = g.getBoard();
+        List<ArrayList<Boolean>> boardCopy = new ArrayList<ArrayList<Boolean>>();
+
+        for (int i = 0; i < Game.WIDTH; i++) {
+            ArrayList<Boolean> column = new ArrayList<Boolean>();
+            for (int j = 0; j < Game.HEIGHT; j++) {
+                column.add(board.get(i).get(j));
+            }
+            boardCopy.add(column);
+        }
+
+        // Should do nothing
+        g.update();
+
+        board = g.getBoard();
+
+        // Check that the board did not change
+        for (int i = 0; i < Game.WIDTH; i++) {
+            for (int j = 0; j < Game.HEIGHT; j++) {
+                assertEquals(board.get(i).get(j), boardCopy.get(i).get(j));
+            }
+        }
     }
 
     @Test
@@ -191,8 +322,8 @@ public class GameTest {
         boolean seenZPiece = false;
 
         // With the specific rng seed 23352, we will have seen all the different
-        // piece types after 7 * Game.HEIGHT - 38 game updates.
-        for (int i = 0; i < 7 * Game.HEIGHT - 38; i++) {
+        // piece types after 7 * Game.HEIGHT - 39 game updates.
+        for (int i = 0; i < 7 * Game.HEIGHT - 39; i++) {
             Tetromino activeTetromino = g.getActiveTetromino();
             if (!seenIPiece && activeTetromino instanceof IPiece) {
                 seenIPiece = true;
@@ -221,23 +352,50 @@ public class GameTest {
     }
 
     // EFFECTS: Ensures that the given board contains the given tetromino
-    private void checkBoardContainsTetromino(List<ArrayList<Boolean>> boardCells, Tetromino tetromino) {
+    public static void checkBoardContainsTetromino(List<ArrayList<Boolean>> boardCells, Tetromino tetromino) {
         for (Point p : tetromino.getTileLocations()) {
             assertTrue(boardCells.get(p.x).get(p.y));
         }
     }
 
     // EFFECTS: Ensures that the tetromino's tiles are located at the four given points
-    private void checkTetrominoHasTileLocations(Tetromino tetromino,
-                                                Point point1,
-                                                Point point2,
-                                                Point point3,
-                                                Point point4) {
+    public static void checkTetrominoHasTileLocations(Tetromino tetromino,
+                                                       Point point1,
+                                                       Point point2,
+                                                       Point point3,
+                                                       Point point4) {
         Set<Point> tetrominoTileLocations = tetromino.getTileLocations();
         assertTrue(tetrominoTileLocations.contains(point1));
         assertTrue(tetrominoTileLocations.contains(point2));
         assertTrue(tetrominoTileLocations.contains(point3));
         assertTrue(tetrominoTileLocations.contains(point4));
         assertEquals(4, tetrominoTileLocations.size());
+    }
+
+    // EFFECTS: returns the number of tiles on the game board
+    private int getNumTilesOnBoard() {
+        int numTiles = 0;
+        for (List<Boolean> column : g.getBoard()) {
+            for (boolean cellOccupied : column) {
+                if (cellOccupied) {
+                    numTiles++;
+                }
+            }
+        }
+        return numTiles;
+    }
+
+    // EFFECTS: returns a blank game board
+    public static List<ArrayList<Boolean>> getBlankBoard() {
+        List<ArrayList<Boolean>> blankBoard = new ArrayList<ArrayList<Boolean>>();
+
+        for (int i = 0; i < Game.WIDTH; i++) {
+            ArrayList<Boolean> column = new ArrayList<Boolean>();
+            for (int j = 0; j < Game.HEIGHT; j++) {
+                column.add(false);
+            }
+            blankBoard.add(column);
+        }
+        return blankBoard;
     }
 }

@@ -11,6 +11,12 @@ public class Game {
     public static final int WIDTH = 10;
     public static final int HEIGHT = 20;
 
+    // Points awarded for line clears
+    public static final int SINGLE_POINTS = 40;
+    public static final int DOUBLE_POINTS = 100;
+    public static final int TRIPLE_POINTS = 300;
+    public static final int TETRIS_POINTS = 1200;
+
     // Used with the random number generator that chooses which type of tetromino to make next.
     // Credit to https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html for the tutorial
     // on how to make enums.
@@ -45,11 +51,19 @@ public class Game {
     // MODIFIES: this
     // EFFECTS: updates the state of the game.
     //          Moves the active tetromino down one row if there is space.
-    //          Otherwise, if the game is not over, clears any filled rows and begins dropping a
-    //          new tetromino from the top of the board.
+    //          Otherwise, if the game is not over, clears any filled rows and awards points accordingly.
+    //          Then, begins dropping a new tetromino from the top of the board.
     //          If the game is over, ends the game.
     //          Note: if the game is already over, calling this method does nothing.
     public void update() {
+        //stub
+    }
+
+    // REQUIRES: list contains Game.WIDTH arraylists, each of which contain
+    //           Game.HEIGHT booleans
+    // MODIFIES: this
+    // EFFECTS: sets the board of this game
+    public void setBoard(List<ArrayList<Boolean>> board) {
         //stub
     }
 
@@ -73,11 +87,6 @@ public class Game {
 
     // EFFECTS: returns the player's score
     public int getScore() {
-        return 0;   //stub
-    }
-
-    // EFFECTS: returns the current level
-    public int getLevel() {
         return 0;   //stub
     }
 

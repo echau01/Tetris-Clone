@@ -1,7 +1,5 @@
 package model.pieces;
 
-import model.Game;
-
 import java.awt.Point;
 import java.util.Set;
 
@@ -12,10 +10,11 @@ import java.util.Set;
 // is invariant under rotations).
 public abstract class Tetromino {
     
-    // EFFECTS: rotates the tetromino 90 degrees clockwise. Does nothing if the rotation
-    //          results in this tetromino intersecting a wall or an occupied cell.
-    public void rotate() {
-        //stub
+    // EFFECTS: rotates the tetromino 90 degrees clockwise. If successful, returns true.
+    //          If the rotation results in this tetromino intersecting a wall or an occupied cell,
+    //          returns false and does not perform the rotation.
+    public boolean rotate() {
+        return false;   //stub
     }
 
     // MODIFIES: this
@@ -41,11 +40,6 @@ public abstract class Tetromino {
 
     // EFFECTS: returns a set containing the locations (as points) of each of the tetromino's tiles
     public Set<Point> getTileLocations() {
-        return null;    //stub
-    }
-
-    // EFFECTS: returns the game instance that this tetromino is in
-    public Game getGame() {
         return null;    //stub
     }
 
