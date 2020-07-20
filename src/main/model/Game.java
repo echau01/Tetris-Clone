@@ -79,7 +79,6 @@ public class Game {
             boolean pieceMovedDown = activePiece.moveDown();
             if (!pieceMovedDown) {
                 clearLines();
-
                 activePiece = nextPiece;
                 if (!addPieceToBoard(activePiece)) {
                     gameOver = true;
@@ -94,6 +93,12 @@ public class Game {
     // EFFECTS: sets the board of this game
     public void setBoard(List<ArrayList<Boolean>> board) {
         this.board = board;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the active piece of the game
+    public void setActivePiece(Piece piece) {
+        this.activePiece = piece;
     }
 
     // EFFECTS: returns the board, represented as a list of arraylists of booleans
@@ -171,24 +176,68 @@ public class Game {
     //          intersect with other tiles, returns true. If the piece intersects with other tiles on the
     //          board, returns false.
     private boolean addPieceToBoard(Piece piece) {
-        boolean obstructed = false;
+        boolean noIntersection = true;
         for (Point p : piece.getTileLocations()) {
             // The addPieceToBoard method is only called when spawning a new piece into the board.
             // The only reason a piece could fail to spawn is if it is forced to intersect
             // with a tile.
             if (board.get(p.y).get(p.x)) {
-                obstructed = true;
+                noIntersection = false;
             }
             board.get(p.y).set(p.x, true);
         }
-        return obstructed;
+        return noIntersection;
     }
 
     // MODIFIES: this
     // EFFECTS: clears any filled rows and moves the tiles in above rows downward
-    //          by the appropriate number of rows. Changes the number of lines cleared
-    //          and the player's score accordingly.
+    //          by the appropriate number of rows. In particular, if n rows below a particular
+    //          row, R, are cleared, then R will be moved down n rows.
+    //          Changes the number of lines cleared and the player's score accordingly.
     private void clearLines() {
-        //stub
+        List<Integer> rowsCleared = getFilledRowsIndices();
+
+        for (int i = 0; i < rowsCleared.size(); i++) {
+            ArrayList<Boolean> blankRow = new ArrayList<Boolean>();
+            for (int j = 0; j < Game.WIDTH; j++) {
+                blankRow.add(false);
+            }
+            board.remove((int) rowsCleared.get(i));
+            board.add(0, blankRow);
+        }
+
+        int numRowsCleared = rowsCleared.size();
+        linesCleared += numRowsCleared;
+        if (numRowsCleared == 1) {
+            score += SINGLE_POINTS;
+        } else if (numRowsCleared == 2) {
+            score += DOUBLE_POINTS;
+        } else if (numRowsCleared == 3) {
+            score += TRIPLE_POINTS;
+        } else if (numRowsCleared == 4) {
+            score += TETRIS_POINTS;
+        }
+    }
+
+    // EFFECTS: returns a list of indices of rows that are currently completely
+    //          filled with tiles
+    private List<Integer> getFilledRowsIndices() {
+        List<Integer> rowsCleared = new ArrayList<Integer>();
+
+        for (int i = 0; i < Game.HEIGHT; i++) {
+            List<Boolean> row = board.get(i);
+            boolean rowCompletelyFilled = true;
+            for (Boolean cellOccupied : row) {
+                if (!cellOccupied) {
+                    rowCompletelyFilled = false;
+                    break;
+                }
+            }
+            if (rowCompletelyFilled) {
+                rowsCleared.add(i);
+            }
+        }
+
+        return rowsCleared;
     }
 }

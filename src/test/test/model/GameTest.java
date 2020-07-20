@@ -143,7 +143,7 @@ public class GameTest {
 
         g.update();
 
-        // The I piece should have spawned in now.
+        // The "I" piece should have spawned in now.
 
         point1.x = point1XPos - 1;
         point1.y = 0;
@@ -159,17 +159,25 @@ public class GameTest {
     public void testUpdateSingleLineClear() {
         List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
 
-        for (int i = 0; i < Game.WIDTH; i++) {
+        for (int i = 0; i < Game.WIDTH - 1; i++) {
             riggedBoard.get(Game.HEIGHT - 1).set(i, true);
         }
 
         g.setBoard(riggedBoard);
+        g.setActivePiece(makeUprightIPieceInBottomRightCorner());
         g.update();
 
+        List<ArrayList<Boolean>> updatedBoard = g.getBoard();
         assertEquals(Game.SINGLE_POINTS, g.getScore());
         assertEquals(1, g.getLinesCleared());
-        for (int i = 0; i < Game.WIDTH; i++) {
-            assertFalse(riggedBoard.get(Game.HEIGHT - 1).get(i));
+        for (int c = 0; c <= Game.WIDTH - 2; c++) {
+            assertFalse(updatedBoard.get(Game.HEIGHT - 1).get(c));
+        }
+
+        // Check that the I piece moved down 1 row
+        assertFalse(updatedBoard.get(Game.HEIGHT - 4).get(Game.WIDTH - 1));
+        for (int r = Game.HEIGHT - 3; r <= Game.HEIGHT - 1; r++) {
+            assertTrue(updatedBoard.get(r).get(Game.WIDTH - 1));
         }
     }
 
@@ -177,49 +185,65 @@ public class GameTest {
     public void testUpdateDoubleLineClear() {
         List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
 
-        for (int i = 0; i < Game.WIDTH; i++) {
+        for (int i = 0; i < Game.WIDTH - 1; i++) {
             riggedBoard.get(Game.HEIGHT - 2).set(i, true);
             riggedBoard.get(Game.HEIGHT - 1).set(i, true);
         }
 
         g.setBoard(riggedBoard);
+        g.setActivePiece(makeUprightIPieceInBottomRightCorner());
         g.update();
 
+        List<ArrayList<Boolean>> updatedBoard = g.getBoard();
         assertEquals(Game.DOUBLE_POINTS, g.getScore());
         assertEquals(2, g.getLinesCleared());
-        for (int i = 0; i < Game.WIDTH; i++) {
-            assertFalse(riggedBoard.get(Game.HEIGHT - 2).get(i));
-            assertFalse(riggedBoard.get(Game.HEIGHT - 1).get(i));
+        for (int c = 0; c <= Game.WIDTH - 2; c++) {
+            assertFalse(updatedBoard.get(Game.HEIGHT - 2).get(c));
+            assertFalse(updatedBoard.get(Game.HEIGHT - 1).get(c));
         }
+
+        // Check that the "I" piece moved down 2 rows
+        assertFalse(updatedBoard.get(Game.HEIGHT - 4).get(Game.WIDTH - 1));
+        assertFalse(updatedBoard.get(Game.HEIGHT - 3).get(Game.WIDTH - 1));
+        assertTrue(updatedBoard.get(Game.HEIGHT - 2).get(Game.WIDTH - 1));
+        assertTrue(updatedBoard.get(Game.HEIGHT - 1).get(Game.WIDTH - 1));
     }
 
     @Test
     public void testUpdateTripleLineClear() {
         List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
 
-        for (int i = 0; i < Game.WIDTH; i++) {
+        for (int i = 0; i < Game.WIDTH - 1; i++) {
             riggedBoard.get(Game.HEIGHT - 3).set(i, true);
             riggedBoard.get(Game.HEIGHT - 2).set(i, true);
             riggedBoard.get(Game.HEIGHT - 1).set(i, true);
         }
 
         g.setBoard(riggedBoard);
+        g.setActivePiece(makeUprightIPieceInBottomRightCorner());
         g.update();
 
+        List<ArrayList<Boolean>> updatedBoard = g.getBoard();
         assertEquals(Game.TRIPLE_POINTS, g.getScore());
         assertEquals(3, g.getLinesCleared());
-        for (int i = 0; i < Game.WIDTH; i++) {
-            assertFalse(riggedBoard.get(Game.HEIGHT - 3).get(i));
-            assertFalse(riggedBoard.get(Game.HEIGHT - 2).get(i));
-            assertFalse(riggedBoard.get(Game.HEIGHT - 1).get(i));
+        for (int c = 0; c < Game.WIDTH - 1; c++) {
+            assertFalse(updatedBoard.get(Game.HEIGHT - 3).get(c));
+            assertFalse(updatedBoard.get(Game.HEIGHT - 2).get(c));
+            assertFalse(updatedBoard.get(Game.HEIGHT - 1).get(c));
         }
+
+        // Check that the "I" piece moved down 3 rows
+        for (int r = Game.HEIGHT - 4; r <= Game.HEIGHT - 2; r++) {
+            assertFalse(updatedBoard.get(r).get(Game.WIDTH - 1));
+        }
+        assertTrue(updatedBoard.get(Game.HEIGHT - 1).get(Game.WIDTH - 1));
     }
 
     @Test
     public void testUpdateTetrisLineClear() {
         List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
 
-        for (int i = 0; i < Game.WIDTH; i++) {
+        for (int i = 0; i < Game.WIDTH - 1; i++) {
             riggedBoard.get(Game.HEIGHT - 4).set(i, true);
             riggedBoard.get(Game.HEIGHT - 3).set(i, true);
             riggedBoard.get(Game.HEIGHT - 2).set(i, true);
@@ -227,74 +251,97 @@ public class GameTest {
         }
 
         g.setBoard(riggedBoard);
+        g.setActivePiece(makeUprightIPieceInBottomRightCorner());
         g.update();
 
+        List<ArrayList<Boolean>> updatedBoard = g.getBoard();
         assertEquals(Game.TETRIS_POINTS, g.getScore());
         assertEquals(4, g.getLinesCleared());
-        for (int i = 0; i < Game.WIDTH; i++) {
-            assertFalse(riggedBoard.get(Game.HEIGHT - 4).get(i));
-            assertFalse(riggedBoard.get(Game.HEIGHT - 3).get(i));
-            assertFalse(riggedBoard.get(Game.HEIGHT - 2).get(i));
-            assertFalse(riggedBoard.get(Game.HEIGHT - 1).get(i));
+
+        // The bottommost four rows of the board should be empty
+        for (int r = Game.HEIGHT - 4; r < Game.HEIGHT; r++) {
+            for (int c = 0; c < Game.WIDTH; c++) {
+                assertFalse(updatedBoard.get(r).get(c));
+            }
         }
     }
 
     @Test
     public void testUpdateLineClearsWithLinesAbove() {
         List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < Game.HEIGHT; j++) {
-                if (j >= Game.HEIGHT - 5) {
-                    riggedBoard.get(j).set(i, true);
-                }
-            }
+
+        // riggedBoard is set to a board that satisfies the following:
+        // - The 2nd and 4th rows from the bottom are completely filled, save for
+        //   the rightmost column.
+        // - The leftmost 3 columns of the bottom 5 rows are filled.
+        // - There is a single tile in the 5th column of the 6th row from the bottom.
+        // - All other cells are empty.
+        for (int c = 0; c < Game.WIDTH - 1; c++) {
+            riggedBoard.get(Game.HEIGHT - 2).set(c, true);
+            riggedBoard.get(Game.HEIGHT - 4).set(c, true);
         }
-        for (int i = 3; i < Game.WIDTH; i++) {
-            for (int j = 0; j < Game.HEIGHT; j++) {
-                if (j == Game.HEIGHT - 2 || j == Game.HEIGHT - 4) {
-                    riggedBoard.get(j).set(i, true);
+        for (int c = 0; c < 3; c++) {
+            for (int r = 0; r < Game.HEIGHT; r++) {
+                if (r >= Game.HEIGHT - 5) {
+                    riggedBoard.get(r).set(c, true);
                 }
             }
         }
         riggedBoard.get(Game.HEIGHT - 6).set(5, true);
 
         g.setBoard(riggedBoard);
+
+        // Now, we put an upright "I" piece in the bottom right corner.
+        // The 2nd and 4th rows from the bottom get completely filled, and
+        // the 1st and 3rd rows from the bottom now have a tile in the rightmost column.
+        g.setActivePiece(makeUprightIPieceInBottomRightCorner());
         g.update();
 
         List<ArrayList<Boolean>> updatedBoard = g.getBoard();
         assertEquals(Game.DOUBLE_POINTS, g.getScore());
-        for (int i = 0; i < 3; i++) {
-            for (int j = Game.HEIGHT - 3; j < Game.HEIGHT; j++) {
-                assertTrue(updatedBoard.get(j).get(i));
+        assertEquals(2, g.getLinesCleared());
+
+        // The leftmost 3 columns of the bottom 3 rows should be filled.
+        for (int c = 0; c < 3; c++) {
+            for (int r = Game.HEIGHT - 3; r < Game.HEIGHT; r++) {
+                assertTrue(updatedBoard.get(r).get(c));
             }
         }
+
+        // The single tile from the 5th column of the 6th row from the bottom
+        // should have moved down by 2 rows.
         assertTrue(updatedBoard.get(Game.HEIGHT - 4).get(5));
         assertFalse(updatedBoard.get(Game.HEIGHT - 6).get(5));
+
+        // Check that the remaining tiles of the "I" piece are in the correct place.
+        assertFalse(updatedBoard.get(Game.HEIGHT - 4).get(Game.WIDTH - 1));
+        assertFalse(updatedBoard.get(Game.HEIGHT - 3).get(Game.WIDTH - 1));
+        assertTrue(updatedBoard.get(Game.HEIGHT - 2).get(Game.WIDTH - 1));
+        assertTrue(updatedBoard.get(Game.HEIGHT - 1).get(Game.WIDTH - 1));
     }
 
     @Test
     public void testUpdateGameOver() {
-        List<ArrayList<Boolean>> gameOverBoard = new ArrayList<ArrayList<Boolean>>();
-        for (int r = 0; r < Game.HEIGHT; r++) {
+        List<ArrayList<Boolean>> board = g.getBoard();
+        for (int r = 2; r < Game.HEIGHT; r++) {
             ArrayList<Boolean> row = new ArrayList<Boolean>();
             for (int c = 0; c < Game.WIDTH; c++) {
-                if (r == 0 || r == 1 || c == 0) {
+                if (c == 0) {
                     row.add(false);
                 } else {
                     row.add(true);
                 }
             }
-            gameOverBoard.add(row);
+            board.set(r, row);
         }
 
-        g.setBoard(gameOverBoard);
-        g.update(); // S piece lands at the top
-        assertFalse(g.isGameOver());
+        g.update();
 
-        g.update(); // L piece has nowhere to go, so player tops out
+        // The S piece landed at the top, and the newly-spawned L piece intersects the S piece
+        // Hence, the player tops out.
         assertTrue(g.isGameOver());
 
-        List<ArrayList<Boolean>> board = g.getBoard();
+        board = g.getBoard();
         List<ArrayList<Boolean>> boardCopy = new ArrayList<ArrayList<Boolean>>();
 
         for (int i = 0; i < Game.HEIGHT; i++) {
@@ -334,6 +381,8 @@ public class GameTest {
         // With the specific rng seed 23352, we will have seen all the different
         // piece types after 7 * Game.HEIGHT - 39 game updates.
         for (int i = 0; i < 7 * Game.HEIGHT - 39; i++) {
+            g.update();
+
             Piece activePiece = g.getActivePiece();
             if (!seenIPiece && activePiece instanceof IPiece) {
                 seenIPiece = true;
@@ -406,5 +455,21 @@ public class GameTest {
             }
         }
         return numTiles;
+    }
+
+    // REQUIRES: the first four rows of g's board, as well as the rightmost column of the board,
+    //           have no tiles.
+    // EFFECTS: returns an upright "I" piece that is located in the bottom right corner of Game g's board
+    private IPiece makeUprightIPieceInBottomRightCorner() {
+        IPiece ip = new IPiece(g);
+        ip.moveDown();
+        ip.rotate();
+        for (int i = 0; i < Game.WIDTH; i++) {
+            ip.moveRight();
+        }
+        for (int i = 0; i < Game.HEIGHT; i++) {
+            ip.moveDown();
+        }
+        return ip;
     }
 }
