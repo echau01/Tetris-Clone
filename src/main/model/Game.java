@@ -21,17 +21,17 @@ public class Game {
     public static final int TETRIS_POINTS = 1200;
 
     private Random random;
-    private Tetromino activeTetromino;
-    private Tetromino nextTetromino;
+    private Piece activePiece;
+    private Piece nextPiece;
     private List<ArrayList<Boolean>> board;
     private int score;
     private int linesCleared;
     private boolean gameOver;
 
-    // Used with the random number generator that chooses which type of tetromino to make next.
+    // Used with the random number generator that chooses which type of piece to make next.
     // Credit to https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html for the tutorial
     // on how to make enums.
-    private enum TetrominoEnum {
+    private enum PieceEnum {
         IPIECE(0),
         JPIECE(1),
         LPIECE(2),
@@ -42,14 +42,14 @@ public class Game {
 
         int value;
 
-        TetrominoEnum(int value) {
+        PieceEnum(int value) {
             this.value = value;
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: Starts a new game. Tetrominoes are randomly generated using the given seed.
-    //          Randomly generates an active tetromino and a next tetromino. The active tetromino
+    // EFFECTS: Starts a new game. Pieces are randomly generated using the given seed.
+    //          Randomly generates an active piece and a next piece. The active piece
     //          spawns at the top of the board.
     public void startNewGame(long seed) {
         // Note: this method has a "seed" argument just so we can test the Game class
@@ -57,34 +57,34 @@ public class Game {
         // on StackOverflow by the user Parappa: https://stackoverflow.com/a/88110/3335320
 
         random = new Random(seed);
-        activeTetromino = intToTetromino(random.nextInt(NUM_TETRIS_PIECES));
-        nextTetromino = intToTetromino(random.nextInt(NUM_TETRIS_PIECES));
+        activePiece = intToPiece(random.nextInt(NUM_TETRIS_PIECES));
+        nextPiece = intToPiece(random.nextInt(NUM_TETRIS_PIECES));
         board = getBlankBoard();
         score = 0;
         linesCleared = 0;
         gameOver = false;
 
-        addTetrominoToBoard(activeTetromino);
+        addPieceToBoard(activePiece);
     }
 
     // MODIFIES: this
     // EFFECTS: updates the state of the game.
-    //          Moves the active tetromino down one row if there is space.
+    //          Moves the active piece down one row if there is space.
     //          Otherwise, if the game is not over, clears any filled rows and awards points accordingly.
-    //          Then, begins dropping a new tetromino from the top of the board.
+    //          Then, begins dropping a new piece from the top of the board.
     //          If the game is over (because the player topped out), ends the game.
     //          Note: if the game is already over, calling this method does nothing.
     public void update() {
         if (!gameOver) {
-            boolean tetrominoMovedDown = activeTetromino.moveDown();
-            if (!tetrominoMovedDown) {
+            boolean pieceMovedDown = activePiece.moveDown();
+            if (!pieceMovedDown) {
                 clearLines();
 
-                activeTetromino = nextTetromino;
-                if (!addTetrominoToBoard(activeTetromino)) {
+                activePiece = nextPiece;
+                if (!addPieceToBoard(activePiece)) {
                     gameOver = true;
                 }
-                nextTetromino = intToTetromino(random.nextInt(NUM_TETRIS_PIECES));
+                nextPiece = intToPiece(random.nextInt(NUM_TETRIS_PIECES));
             }
         }
     }
@@ -104,14 +104,14 @@ public class Game {
         return board;
     }
 
-    // EFFECTS: returns the active tetromino
-    public Tetromino getActiveTetromino() {
-        return activeTetromino;
+    // EFFECTS: returns the active piece
+    public Piece getActivePiece() {
+        return activePiece;
     }
 
-    // EFFECTS: returns the next tetromino
-    public Tetromino getNextTetromino() {
-        return nextTetromino;    //stub
+    // EFFECTS: returns the next piece
+    public Piece getNextPiece() {
+        return nextPiece;    //stub
     }
 
     // EFFECTS: returns the player's score
@@ -143,38 +143,38 @@ public class Game {
         return blankBoard;
     }
 
-    // REQUIRES: 0 <= num <= TetrominoEnum.values.length - 1
-    // EFFECTS: returns a new tetromino associated with given number (as specified
-    //          in TetrominoEnum).
-    private Tetromino intToTetromino(int num) {
-        if (num == TetrominoEnum.IPIECE.value) {
+    // REQUIRES: 0 <= num <= PieceEnum.values.length - 1
+    // EFFECTS: returns a new piece associated with given number (as specified
+    //          in PieceEnum).
+    private Piece intToPiece(int num) {
+        if (num == PieceEnum.IPIECE.value) {
             return new IPiece(this);
-        } else if (num == TetrominoEnum.JPIECE.value) {
+        } else if (num == PieceEnum.JPIECE.value) {
             return new JPiece(this);
-        } else if (num == TetrominoEnum.LPIECE.value) {
+        } else if (num == PieceEnum.LPIECE.value) {
             return new LPiece(this);
-        } else if (num == TetrominoEnum.OPIECE.value) {
+        } else if (num == PieceEnum.OPIECE.value) {
             return new OPiece(this);
-        } else if (num == TetrominoEnum.SPIECE.value) {
+        } else if (num == PieceEnum.SPIECE.value) {
             return new SPiece(this);
-        } else if (num == TetrominoEnum.TPIECE.value) {
+        } else if (num == PieceEnum.TPIECE.value) {
             return new TPiece(this);
-        } else if (num == TetrominoEnum.ZPIECE.value) {
+        } else if (num == PieceEnum.ZPIECE.value) {
             return new ZPiece(this);
         }
         return null;
     }
 
-    // REQUIRES: the tile locations of t are all on the board (not out of bounds).
+    // REQUIRES: the tile locations of piece are all on the board (not out of bounds).
     // MODIFIES: this
-    // EFFECTS: adds the given tetromino to the board. If the addition does not cause the tetromino to
-    //          intersect with other tiles, returns true. If the tetromino intersects with other tiles on the
+    // EFFECTS: adds the given piece to the board. If the addition does not cause the piece to
+    //          intersect with other tiles, returns true. If the piece intersects with other tiles on the
     //          board, returns false.
-    private boolean addTetrominoToBoard(Tetromino t) {
+    private boolean addPieceToBoard(Piece piece) {
         boolean obstructed = false;
-        for (Point p : t.getTileLocations()) {
-            // This method is only called when spawning a new tetromino into the board.
-            // The only reason a tetromino could fail to spawn is if it is forced to intersect
+        for (Point p : piece.getTileLocations()) {
+            // The addPieceToBoard method is only called when spawning a new piece into the board.
+            // The only reason a piece could fail to spawn is if it is forced to intersect
             // with a tile.
             if (board.get(p.y).get(p.x)) {
                 obstructed = true;

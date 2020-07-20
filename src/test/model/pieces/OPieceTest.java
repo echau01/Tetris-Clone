@@ -10,11 +10,11 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class OPieceTest extends TetrominoTest {
+public class OPieceTest extends PieceTest {
 
     @BeforeEach
     public void setUpPiece() {
-        t = new OPiece(super.testGame);
+        piece = new OPiece(super.testGame);
     }
 
     @Test
@@ -26,7 +26,7 @@ public class OPieceTest extends TetrominoTest {
         Point point3 = new Point(approximateCenter + 1, 0);
         Point point4 = new Point(approximateCenter + 1, 1);
 
-        GameTest.checkTetrominoHasTileLocations(t, point1, point2, point3, point4);
+        GameTest.checkPieceHasTileLocations(piece, point1, point2, point3, point4);
     }
 
     /* The O piece is invariant under rotations */
@@ -34,34 +34,36 @@ public class OPieceTest extends TetrominoTest {
     @Test
     @Override
     public void testRotateInFreeSpace() {
-        Set<Point> tileLocations = t.getTileLocations();
-        assertTrue(t.rotate());
-        assertEquals(tileLocations, t.getTileLocations());
+        for (int i = 0; i < 4; i++) {
+            Set<Point> tileLocations = piece.getTileLocations();
+            assertTrue(piece.rotate());
+            assertEquals(tileLocations, piece.getTileLocations());
+        }
     }
 
     @Test
     @Override
     public void testRotateAtWall() {
         for (int i = 0; i < Game.WIDTH; i++) {
-            t.moveLeft();
+            piece.moveLeft();
         }
-        Set<Point> tileLocations = t.getTileLocations();
-        assertTrue(t.rotate());
-        assertEquals(tileLocations, t.getTileLocations());
+        Set<Point> tileLocations = piece.getTileLocations();
+        assertTrue(piece.rotate());
+        assertEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test
     @Override
     public void testRotateWithObstructingTiles() {
         for (int i = 0; i < TEST_GAME_WALL_HEIGHT; i++) {
-            t.moveDown();
+            piece.moveDown();
         }
-        t.moveRight();
-        t.moveRight();
-        t.moveRight();
+        piece.moveRight();
+        piece.moveRight();
+        piece.moveRight();
 
-        Set<Point> tileLocations = t.getTileLocations();
-        assertTrue(t.rotate());
-        assertEquals(tileLocations, t.getTileLocations());
+        Set<Point> tileLocations = piece.getTileLocations();
+        assertTrue(piece.rotate());
+        assertEquals(tileLocations, piece.getTileLocations());
     }
 }

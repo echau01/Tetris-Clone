@@ -30,8 +30,8 @@ public class GameTest {
         assertEquals(0, g.getScore());
         assertEquals(0, g.getLinesCleared());
         assertFalse(g.isGameOver());
-        assertNotNull(g.getActiveTetromino());
-        assertNotNull(g.getNextTetromino());
+        assertNotNull(g.getActivePiece());
+        assertNotNull(g.getNextPiece());
 
         // The first piece is an S piece
 
@@ -42,27 +42,27 @@ public class GameTest {
         Point point3 = new Point(point1XPos + 1, 0);
         Point point4 = new Point(point1XPos + 2, 0);
 
-        checkTetrominoHasTileLocations(g.getActiveTetromino(), point1, point2, point3, point4);
+        checkPieceHasTileLocations(g.getActivePiece(), point1, point2, point3, point4);
 
         // Check that the S piece shows up on the board
-        checkBoardContainsTetromino(g.getBoard(), g.getActiveTetromino());
+        checkBoardContainsPiece(g.getBoard(), g.getActivePiece());
 
-        assertTrue(g.getNextTetromino() instanceof LPiece);
+        assertTrue(g.getNextPiece() instanceof LPiece);
     }
 
     @Test
     public void testUpdateMoveDownOnce() {
-        // We first make a copy of the current set of tile locations for the active tetromino.
+        // We first make a copy of the current set of tile locations for the active piece.
         // We must make this copy because we do not want oldTileLocations to change
         // when we call g.update().
         Set<Point> oldTileLocations = new HashSet<Point>();
-        for (Point location : g.getActiveTetromino().getTileLocations()) {
+        for (Point location : g.getActivePiece().getTileLocations()) {
             oldTileLocations.add(new Point(location));
         }
 
         g.update();
 
-        Set<Point> newTileLocations = g.getActiveTetromino().getTileLocations();
+        Set<Point> newTileLocations = g.getActivePiece().getTileLocations();
 
         // Make sure that each point in newTileLocations corresponds to a point
         // in oldTileLocations moved down by 1 unit. This ensures the correctness
@@ -76,16 +76,16 @@ public class GameTest {
 
         assertEquals(oldTileLocations.size(), newTileLocations.size());
 
-        // Check that the tetromino does not somehow disappear from the board:
+        // Check that the piece does not somehow disappear from the board:
         List<ArrayList<Boolean>> board = g.getBoard();
-        checkBoardContainsTetromino(board, g.getActiveTetromino());
+        checkBoardContainsPiece(board, g.getActivePiece());
 
         // Check that there are only four tiles on the board:
         assertEquals(4, getNumTilesOnBoard());
     }
 
     @Test
-    public void testUpdateTetrominoLandsAtBottom() {
+    public void testUpdatePieceLandsAtBottom() {
         // The first piece is an S piece.
         for (int i = 1; i <= Game.HEIGHT - 2; i++) {
             g.update();
@@ -98,8 +98,8 @@ public class GameTest {
         Point point3 = new Point(point1XPos + 1, Game.HEIGHT - 2);
         Point point4 = new Point(point1XPos + 2, Game.HEIGHT - 2);
 
-        checkTetrominoHasTileLocations(g.getActiveTetromino(), point1, point2, point3, point4);
-        checkBoardContainsTetromino(g.getBoard(), g.getActiveTetromino());
+        checkPieceHasTileLocations(g.getActivePiece(), point1, point2, point3, point4);
+        checkBoardContainsPiece(g.getBoard(), g.getActivePiece());
 
         // Update the game once more:
 
@@ -114,14 +114,14 @@ public class GameTest {
         point3.y = 0;
         point4.y = 0;
 
-        checkTetrominoHasTileLocations(g.getActiveTetromino(), point1, point2, point3, point4);
-        checkBoardContainsTetromino(g.getBoard(), g.getActiveTetromino());
+        checkPieceHasTileLocations(g.getActivePiece(), point1, point2, point3, point4);
+        checkBoardContainsPiece(g.getBoard(), g.getActivePiece());
 
-        assertTrue(g.getNextTetromino() instanceof IPiece);
+        assertTrue(g.getNextPiece() instanceof IPiece);
     }
 
     @Test
-    public void testUpdateTetrominoLandsOnTetromino() {
+    public void testUpdatePieceLandsOnPiece() {
         // Get the S piece to land at the bottom, then get the L piece to
         // be just about to land on the S piece.
         for (int i = 1; i <= 2 * Game.HEIGHT - 4; i++) {
@@ -135,8 +135,8 @@ public class GameTest {
         Point point3 = new Point(point1XPos + 1, Game.HEIGHT - 3);
         Point point4 = new Point(point1XPos + 2, Game.HEIGHT - 3);
 
-        checkTetrominoHasTileLocations(g.getActiveTetromino(), point1, point2, point3, point4);
-        checkBoardContainsTetromino(g.getBoard(), g.getActiveTetromino());
+        checkPieceHasTileLocations(g.getActivePiece(), point1, point2, point3, point4);
+        checkBoardContainsPiece(g.getBoard(), g.getActivePiece());
 
         // Update the game once more, causing the L piece to land on the S piece:
 
@@ -150,8 +150,8 @@ public class GameTest {
         point3.y = 0;
         point4.y = 0;
 
-        checkTetrominoHasTileLocations(g.getActiveTetromino(), point1, point2, point3, point4);
-        checkBoardContainsTetromino(g.getBoard(), g.getActiveTetromino());
+        checkPieceHasTileLocations(g.getActivePiece(), point1, point2, point3, point4);
+        checkBoardContainsPiece(g.getBoard(), g.getActivePiece());
     }
 
     @Test
@@ -318,7 +318,7 @@ public class GameTest {
     }
 
     @Test
-    public void testUpdateTetrominoGeneration() {
+    public void testUpdatePieceGeneration() {
         // The purpose of this test is to make sure that the random tetromino generator
         // behaves properly.
 
@@ -333,20 +333,20 @@ public class GameTest {
         // With the specific rng seed 23352, we will have seen all the different
         // piece types after 7 * Game.HEIGHT - 39 game updates.
         for (int i = 0; i < 7 * Game.HEIGHT - 39; i++) {
-            Tetromino activeTetromino = g.getActiveTetromino();
-            if (!seenIPiece && activeTetromino instanceof IPiece) {
+            Piece activePiece = g.getActivePiece();
+            if (!seenIPiece && activePiece instanceof IPiece) {
                 seenIPiece = true;
-            } else if (!seenJPiece && activeTetromino instanceof JPiece) {
+            } else if (!seenJPiece && activePiece instanceof JPiece) {
                 seenJPiece = true;
-            } else if (!seenLPiece && activeTetromino instanceof LPiece) {
+            } else if (!seenLPiece && activePiece instanceof LPiece) {
                 seenLPiece = true;
-            } else if (!seenOPiece && activeTetromino instanceof OPiece) {
+            } else if (!seenOPiece && activePiece instanceof OPiece) {
                 seenOPiece = true;
-            } else if (!seenSPiece && activeTetromino instanceof SPiece) {
+            } else if (!seenSPiece && activePiece instanceof SPiece) {
                 seenSPiece = true;
-            } else if (!seenTPiece && activeTetromino instanceof TPiece) {
+            } else if (!seenTPiece && activePiece instanceof TPiece) {
                 seenTPiece = true;
-            } else if (!seenZPiece && activeTetromino instanceof ZPiece) {
+            } else if (!seenZPiece && activePiece instanceof ZPiece) {
                 seenZPiece = true;
             }
         }
@@ -373,25 +373,25 @@ public class GameTest {
         }
     }
 
-    // EFFECTS: Ensures that the given board contains the given tetromino
-    public static void checkBoardContainsTetromino(List<ArrayList<Boolean>> boardCells, Tetromino tetromino) {
-        for (Point p : tetromino.getTileLocations()) {
+    // EFFECTS: Ensures that the given board contains the given piece
+    public static void checkBoardContainsPiece(List<ArrayList<Boolean>> boardCells, Piece piece) {
+        for (Point p : piece.getTileLocations()) {
             assertTrue(boardCells.get(p.y).get(p.x));
         }
     }
 
-    // EFFECTS: Ensures that the tetromino's tiles are located at the four given points
-    public static void checkTetrominoHasTileLocations(Tetromino tetromino,
-                                                       Point point1,
-                                                       Point point2,
-                                                       Point point3,
-                                                       Point point4) {
-        Set<Point> tetrominoTileLocations = tetromino.getTileLocations();
-        assertTrue(tetrominoTileLocations.contains(point1));
-        assertTrue(tetrominoTileLocations.contains(point2));
-        assertTrue(tetrominoTileLocations.contains(point3));
-        assertTrue(tetrominoTileLocations.contains(point4));
-        assertEquals(4, tetrominoTileLocations.size());
+    // EFFECTS: Ensures that the piece's tiles are located at the four given points
+    public static void checkPieceHasTileLocations(Piece piece,
+                                                  Point point1,
+                                                  Point point2,
+                                                  Point point3,
+                                                  Point point4) {
+        Set<Point> pieceTileLocations = piece.getTileLocations();
+        assertTrue(pieceTileLocations.contains(point1));
+        assertTrue(pieceTileLocations.contains(point2));
+        assertTrue(pieceTileLocations.contains(point3));
+        assertTrue(pieceTileLocations.contains(point4));
+        assertEquals(4, pieceTileLocations.size());
     }
 
     // EFFECTS: returns the number of tiles on the game board

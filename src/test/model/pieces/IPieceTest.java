@@ -10,11 +10,11 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class IPieceTest extends TetrominoTest {
+public class IPieceTest extends PieceTest {
 
     @BeforeEach
     public void setUpPiece() {
-        t = new IPiece(super.testGame);
+        piece = new IPiece(super.testGame);
     }
 
     @Test
@@ -26,84 +26,86 @@ public class IPieceTest extends TetrominoTest {
         Point point3 = new Point(approximateCenter + 1, 0);
         Point point4 = new Point(approximateCenter + 2, 0);
 
-        GameTest.checkTetrominoHasTileLocations(t, point1, point2, point3, point4);
+        GameTest.checkPieceHasTileLocations(piece, point1, point2, point3, point4);
     }
 
     @Test
     @Override
     public void testRotateInFreeSpace() {
-        t.moveDown();
-        assertTrue(t.rotate());
+        piece.moveDown();
+        for (int i = 0; i < 2; i++) {
+            assertTrue(piece.rotate());
 
-        int approximateCenter = Math.floorDiv(Game.WIDTH - 1, 2);
+            int approximateCenter = Math.floorDiv(Game.WIDTH - 1, 2);
 
-        Point point1 = new Point(approximateCenter + 1, 0);
-        Point point2 = new Point(approximateCenter + 1, 1);
-        Point point3 = new Point(approximateCenter + 1, 2);
-        Point point4 = new Point(approximateCenter + 1, 3);
+            Point point1 = new Point(approximateCenter + 1, 0);
+            Point point2 = new Point(approximateCenter + 1, 1);
+            Point point3 = new Point(approximateCenter + 1, 2);
+            Point point4 = new Point(approximateCenter + 1, 3);
 
-        GameTest.checkTetrominoHasTileLocations(t, point1, point2, point3, point4);
+            GameTest.checkPieceHasTileLocations(piece, point1, point2, point3, point4);
 
-        assertTrue(t.rotate());
+            assertTrue(piece.rotate());
 
-        point1.x = approximateCenter - 1;
-        point1.y = 1;
-        point2.x = approximateCenter;
-        point2.y = 1;
-        point3.x = approximateCenter + 1;
-        point3.y = 1;
-        point4.x = approximateCenter + 2;
-        point4.y = 1;
+            point1.x = approximateCenter - 1;
+            point1.y = 1;
+            point2.x = approximateCenter;
+            point2.y = 1;
+            point3.x = approximateCenter + 1;
+            point3.y = 1;
+            point4.x = approximateCenter + 2;
+            point4.y = 1;
 
-        GameTest.checkTetrominoHasTileLocations(t, point1, point2, point3, point4);
+            GameTest.checkPieceHasTileLocations(piece, point1, point2, point3, point4);
+        }
     }
 
     @Test
     public void testRotateAtFloor() {
         for (int i = 1; i <= Game.HEIGHT - 2; i++) {
-            t.moveDown();
+            piece.moveDown();
         }
-        Set<Point> tileLocations = t.getTileLocations();
-        assertFalse(t.rotate());
-        assertEquals(tileLocations, t.getTileLocations());
+        Set<Point> tileLocations = piece.getTileLocations();
+        assertFalse(piece.rotate());
+        assertEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test
     @Override
     public void testRotateAtWall() {
-        assertTrue(t.rotate()); // make the piece upright
+        piece.moveDown();
+        assertTrue(piece.rotate()); // make the piece upright
 
         for (int i = 0; i < Game.WIDTH; i++) {
-            t.moveLeft();
+            piece.moveLeft();
         }
 
-        Set<Point> tileLocations = t.getTileLocations();
-        assertFalse(t.rotate());
-        assertEquals(tileLocations, t.getTileLocations());
+        Set<Point> tileLocations = piece.getTileLocations();
+        assertFalse(piece.rotate());
+        assertEquals(tileLocations, piece.getTileLocations());
 
         for (int i = 0; i < Game.WIDTH; i++) {
-            t.moveRight();
+            piece.moveRight();
         }
 
-        tileLocations = t.getTileLocations();
-        assertFalse(t.rotate());
-        assertEquals(tileLocations, t.getTileLocations());
+        tileLocations = piece.getTileLocations();
+        assertFalse(piece.rotate());
+        assertEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test
     @Override
     public void testRotateWithObstructingTiles() {
-        t.moveDown();
-        assertTrue(t.rotate());
-        t.moveRight();
-        t.moveRight();
+        piece.moveDown();
+        assertTrue(piece.rotate());
+        piece.moveRight();
 
         for (int i = 0; i < TEST_GAME_WALL_HEIGHT; i++) {
-            t.moveDown();
+            piece.moveDown();
         }
 
-        Set<Point> tileLocations = t.getTileLocations();
-        assertFalse(t.rotate());
-        assertEquals(tileLocations, t.getTileLocations());
+        Set<Point> tileLocations = piece.getTileLocations();
+        assertFalse(piece.rotate());
+        assertEquals(tileLocations, piece.getTileLocations());
     }
 }

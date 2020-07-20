@@ -11,21 +11,21 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public abstract class TetrominoTest {
+public abstract class PieceTest {
     protected static int TEST_GAME_WALL_HEIGHT = Game.HEIGHT / 2;
 
-    protected Tetromino t;
+    protected Piece piece;
 
     // Do not call update on this game!
     protected Game testGame;
 
     // We want this @BeforeEach method to run before the @BeforeEach methods in the subclasses of
-    // TetrominoTest. Fortunately, https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/BeforeEach.html
+    // this class. Fortunately, https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/BeforeEach.html
     // tells us that this behaviour will happen.
     @BeforeEach
     public void setUpTestGame() {
         testGame = new Game();
-        // Do NOT start the game. We do not want an active tetromino in the game.
+        // Do NOT start the game. We do not want an active piece in the game.
 
         List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
         int approximateCenter = Math.floorDiv(Game.WIDTH - 1, 2);
@@ -47,10 +47,10 @@ public abstract class TetrominoTest {
 
     @Test
     public void testMoveLeftNotBoundary() {
-        Set<Point> oldTileLocations = t.getTileLocations();
-        assertTrue(t.moveLeft());
+        Set<Point> oldTileLocations = piece.getTileLocations();
+        assertTrue(piece.moveLeft());
 
-        Set<Point> newTileLocations = t.getTileLocations();
+        Set<Point> newTileLocations = piece.getTileLocations();
         for (Point location : newTileLocations) {
             assertTrue(oldTileLocations.contains(new Point(location.x + 1, location.y)));
         }
@@ -61,15 +61,15 @@ public abstract class TetrominoTest {
     @Test
     public void testMoveLeftWallBoundary() {
         for (int i = 0; i < Game.WIDTH; i++) {
-            t.moveLeft();
+            piece.moveLeft();
         }
 
         // By now, t is guaranteed to be at the left wall
 
-        Set<Point> oldTileLocations = t.getTileLocations();
-        assertFalse(t.moveLeft());
+        Set<Point> oldTileLocations = piece.getTileLocations();
+        assertFalse(piece.moveLeft());
 
-        Set<Point> newTileLocations = t.getTileLocations();
+        Set<Point> newTileLocations = piece.getTileLocations();
         for (Point location : newTileLocations) {
             assertTrue(oldTileLocations.contains(new Point(location.x, location.y)));
         }
@@ -80,23 +80,23 @@ public abstract class TetrominoTest {
     @Test
     public void testMoveLeftSpaceOccupiedByTile() {
         for (int i = 0; i < TEST_GAME_WALL_HEIGHT; i++) {
-            t.moveDown();
+            piece.moveDown();
         }
-        t.moveLeft();
-        t.moveLeft();
-        t.moveLeft();
+        piece.moveLeft();
+        piece.moveLeft();
+        piece.moveLeft();
 
-        Set<Point> tileLocations = t.getTileLocations();
-        assertFalse(t.moveLeft());
-        assertEquals(tileLocations, t.getTileLocations());
+        Set<Point> tileLocations = piece.getTileLocations();
+        assertFalse(piece.moveLeft());
+        assertEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test
     public void testMoveRightNotBoundary() {
-        Set<Point> oldTileLocations = t.getTileLocations();
-        assertTrue(t.moveRight());
+        Set<Point> oldTileLocations = piece.getTileLocations();
+        assertTrue(piece.moveRight());
 
-        Set<Point> newTileLocations = t.getTileLocations();
+        Set<Point> newTileLocations = piece.getTileLocations();
         for (Point location : newTileLocations) {
             assertTrue(oldTileLocations.contains(new Point(location.x - 1, location.y)));
         }
@@ -107,15 +107,15 @@ public abstract class TetrominoTest {
     @Test
     public void testMoveRightWallBoundary() {
         for (int i = 0; i < Game.WIDTH; i++) {
-            t.moveRight();
+            piece.moveRight();
         }
 
         // By now, t is guaranteed to be at the right wall
 
-        Set<Point> oldTileLocations = t.getTileLocations();
-        assertFalse(t.moveRight());
+        Set<Point> oldTileLocations = piece.getTileLocations();
+        assertFalse(piece.moveRight());
 
-        Set<Point> newTileLocations = t.getTileLocations();
+        Set<Point> newTileLocations = piece.getTileLocations();
         for (Point location : newTileLocations) {
             assertTrue(oldTileLocations.contains(new Point(location.x, location.y)));
         }
@@ -126,22 +126,22 @@ public abstract class TetrominoTest {
     @Test
     public void testMoveRightSpaceOccupiedByTile() {
         for (int i = 0; i < TEST_GAME_WALL_HEIGHT; i++) {
-            t.moveDown();
+            piece.moveDown();
         }
-        t.moveRight();
-        t.moveRight();
+        piece.moveRight();
+        piece.moveRight();
 
-        Set<Point> tileLocations = t.getTileLocations();
-        assertFalse(t.moveRight());
-        assertEquals(tileLocations, t.getTileLocations());
+        Set<Point> tileLocations = piece.getTileLocations();
+        assertFalse(piece.moveRight());
+        assertEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test
     public void testMoveDownNotBoundary() {
-        Set<Point> oldTileLocations = t.getTileLocations();
-        assertTrue(t.moveDown());
+        Set<Point> oldTileLocations = piece.getTileLocations();
+        assertTrue(piece.moveDown());
 
-        Set<Point> newTileLocations = t.getTileLocations();
+        Set<Point> newTileLocations = piece.getTileLocations();
         for (Point location : newTileLocations) {
             assertTrue(oldTileLocations.contains(new Point(location.x, location.y - 1)));
         }
@@ -152,15 +152,15 @@ public abstract class TetrominoTest {
     @Test
     public void testMoveDownFloorBoundary() {
         for (int i = 0; i < Game.HEIGHT; i++) {
-            t.moveDown();
+            piece.moveDown();
         }
 
         // By now, t is guaranteed to be at the floor
 
-        Set<Point> oldTileLocations = t.getTileLocations();
-        assertFalse(t.moveDown());
+        Set<Point> oldTileLocations = piece.getTileLocations();
+        assertFalse(piece.moveDown());
 
-        Set<Point> newTileLocations = t.getTileLocations();
+        Set<Point> newTileLocations = piece.getTileLocations();
         for (Point location : newTileLocations) {
             assertTrue(oldTileLocations.contains(new Point(location.x, location.y)));
         }
@@ -171,38 +171,38 @@ public abstract class TetrominoTest {
     @Test
     public void testMoveDownSpaceOccupiedByTile() {
         for (int i = 0; i < Game.WIDTH; i++) {
-            t.moveLeft();
+            piece.moveLeft();
         }
         for (int i = 0; i < Game.HEIGHT; i++) {
-            t.moveDown();
+            piece.moveDown();
         }
 
         // t is guaranteed to be directly above a tile now.
 
-        Set<Point> tileLocations = t.getTileLocations();
-        assertFalse(t.moveDown());
-        assertEquals(tileLocations, t.getTileLocations());
+        Set<Point> tileLocations = piece.getTileLocations();
+        assertFalse(piece.moveDown());
+        assertEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test
     public void testRotateAtCeiling() {
-        Set<Point> tileLocations = t.getTileLocations();
-        if (t instanceof OPiece) {
-            assertTrue(t.rotate());
+        Set<Point> tileLocations = piece.getTileLocations();
+        if (piece instanceof OPiece) {
+            assertTrue(piece.rotate());
         } else {
-            assertFalse(t.rotate());
+            assertFalse(piece.rotate());
         }
-        assertEquals(tileLocations, t.getTileLocations());
+        assertEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test
     public void testGetTileLocationsChangingReturnedSet() {
-        Set<Point> tileLocations = t.getTileLocations();
+        Set<Point> tileLocations = piece.getTileLocations();
         tileLocations.add(new Point(2 * Game.WIDTH, 2 * Game.HEIGHT));
 
         // Changing tileLocations should not change the actual locations
         // of the tiles of t.
-        assertNotEquals(tileLocations, t.getTileLocations());
+        assertNotEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test
