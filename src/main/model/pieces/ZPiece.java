@@ -19,6 +19,8 @@ public class ZPiece extends Piece {
         rotationReferencePoint = new Point(Math.floorDiv(Game.WIDTH - 1, 2), -1);
     }
 
+    // EFFECTS: returns a set of the tile locations of this "Z" piece relative to rotationReferencePoint
+    //          for orientation 0
     @Override
     protected Set<Point> getOrientation0RelativeLocations() {
         Set<Point> orientation0RelativeLocations = new HashSet<Point>();
@@ -29,6 +31,8 @@ public class ZPiece extends Piece {
         return orientation0RelativeLocations;
     }
 
+    // EFFECTS: returns a set of the tile locations of this "Z" piece relative to rotationReferencePoint
+    //          for orientation 1
     @Override
     protected Set<Point> getOrientation1RelativeLocations() {
         Set<Point> orientation1RelativeLocations = new HashSet<Point>();
@@ -39,11 +43,15 @@ public class ZPiece extends Piece {
         return orientation1RelativeLocations;
     }
 
+    // EFFECTS: returns a set of the tile locations of this "Z" piece relative to rotationReferencePoint
+    //          for orientation 2
     @Override
     protected Set<Point> getOrientation2RelativeLocations() {
         return getOrientation0RelativeLocations();
     }
 
+    // EFFECTS: returns a set of the tile locations of this "Z" piece relative to rotationReferencePoint
+    //          for orientation 3
     @Override
     protected Set<Point> getOrientation3RelativeLocations() {
         return getOrientation1RelativeLocations();

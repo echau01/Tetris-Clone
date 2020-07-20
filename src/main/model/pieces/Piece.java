@@ -115,22 +115,18 @@ public abstract class Piece {
         orientationToTileRelativeLocation.put(3, getOrientation3RelativeLocations());
     }
 
-    // MODIFIES: this
     // EFFECTS: returns a set of the tile locations of this piece relative to rotationReferencePoint
     //          for orientation 0
     protected abstract Set<Point> getOrientation0RelativeLocations();
 
-    // MODIFIES: this
     // EFFECTS: returns a set of the tile locations of this piece relative to rotationReferencePoint
     //          for orientation 1
     protected abstract Set<Point> getOrientation1RelativeLocations();
 
-    // MODIFIES: this
     // EFFECTS: returns a set of the tile locations of this piece relative to rotationReferencePoint
     //          for orientation 2
     protected abstract Set<Point> getOrientation2RelativeLocations();
 
-    // MODIFIES: this
     // EFFECTS: returns a set of the tile locations of this piece relative to rotationReferencePoint
     //          for orientation 3
     protected abstract Set<Point> getOrientation3RelativeLocations();
