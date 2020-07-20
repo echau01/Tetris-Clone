@@ -1,5 +1,6 @@
-package model;
+package test.model;
 
+import model.Game;
 import model.pieces.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

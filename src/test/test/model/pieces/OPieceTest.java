@@ -1,14 +1,14 @@
-package model.pieces;
+package test.model.pieces;
 
 import model.Game;
-import model.GameTest;
+import model.pieces.OPiece;
+import org.junit.jupiter.api.Assertions;
+import test.model.GameTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class OPieceTest extends PieceTest {
 
@@ -36,8 +36,8 @@ public class OPieceTest extends PieceTest {
     public void testRotateInFreeSpace() {
         for (int i = 0; i < 4; i++) {
             Set<Point> tileLocations = piece.getTileLocations();
-            assertTrue(piece.rotate());
-            assertEquals(tileLocations, piece.getTileLocations());
+            Assertions.assertTrue(piece.rotate());
+            Assertions.assertEquals(tileLocations, piece.getTileLocations());
         }
     }
 
@@ -48,8 +48,8 @@ public class OPieceTest extends PieceTest {
             piece.moveLeft();
         }
         Set<Point> tileLocations = piece.getTileLocations();
-        assertTrue(piece.rotate());
-        assertEquals(tileLocations, piece.getTileLocations());
+        Assertions.assertTrue(piece.rotate());
+        Assertions.assertEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class OPieceTest extends PieceTest {
         piece.moveRight();
 
         Set<Point> tileLocations = piece.getTileLocations();
-        assertTrue(piece.rotate());
-        assertEquals(tileLocations, piece.getTileLocations());
+        Assertions.assertTrue(piece.rotate());
+        Assertions.assertEquals(tileLocations, piece.getTileLocations());
     }
 }

@@ -1,14 +1,14 @@
-package model.pieces;
+package test.model.pieces;
 
 import model.Game;
-import model.GameTest;
+import model.pieces.IPiece;
+import org.junit.jupiter.api.Assertions;
+import test.model.GameTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class IPieceTest extends PieceTest {
 
@@ -34,7 +34,7 @@ public class IPieceTest extends PieceTest {
     public void testRotateInFreeSpace() {
         piece.moveDown();
         for (int i = 0; i < 2; i++) {
-            assertTrue(piece.rotate());
+            Assertions.assertTrue(piece.rotate());
 
             int approximateCenter = Math.floorDiv(Game.WIDTH - 1, 2);
 
@@ -45,7 +45,7 @@ public class IPieceTest extends PieceTest {
 
             GameTest.checkPieceHasTileLocations(piece, point1, point2, point3, point4);
 
-            assertTrue(piece.rotate());
+            Assertions.assertTrue(piece.rotate());
 
             point1.x = approximateCenter - 1;
             point1.y = 1;
@@ -66,38 +66,38 @@ public class IPieceTest extends PieceTest {
             piece.moveDown();
         }
         Set<Point> tileLocations = piece.getTileLocations();
-        assertFalse(piece.rotate());
-        assertEquals(tileLocations, piece.getTileLocations());
+        Assertions.assertFalse(piece.rotate());
+        Assertions.assertEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test
     @Override
     public void testRotateAtWall() {
         piece.moveDown();
-        assertTrue(piece.rotate()); // make the piece upright
+        Assertions.assertTrue(piece.rotate()); // make the piece upright
 
         for (int i = 0; i < Game.WIDTH; i++) {
             piece.moveLeft();
         }
 
         Set<Point> tileLocations = piece.getTileLocations();
-        assertFalse(piece.rotate());
-        assertEquals(tileLocations, piece.getTileLocations());
+        Assertions.assertFalse(piece.rotate());
+        Assertions.assertEquals(tileLocations, piece.getTileLocations());
 
         for (int i = 0; i < Game.WIDTH; i++) {
             piece.moveRight();
         }
 
         tileLocations = piece.getTileLocations();
-        assertFalse(piece.rotate());
-        assertEquals(tileLocations, piece.getTileLocations());
+        Assertions.assertFalse(piece.rotate());
+        Assertions.assertEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test
     @Override
     public void testRotateWithObstructingTiles() {
         piece.moveDown();
-        assertTrue(piece.rotate());
+        Assertions.assertTrue(piece.rotate());
         piece.moveRight();
 
         for (int i = 0; i < TEST_GAME_WALL_HEIGHT; i++) {
@@ -105,7 +105,7 @@ public class IPieceTest extends PieceTest {
         }
 
         Set<Point> tileLocations = piece.getTileLocations();
-        assertFalse(piece.rotate());
-        assertEquals(tileLocations, piece.getTileLocations());
+        Assertions.assertFalse(piece.rotate());
+        Assertions.assertEquals(tileLocations, piece.getTileLocations());
     }
 }

@@ -1,7 +1,8 @@
-package model.pieces;
+package test.model.pieces;
 
 import model.Game;
-import model.GameTest;
+import model.pieces.SPiece;
+import test.model.GameTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,21 +11,21 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ZPieceTest extends PieceTest {
+public class SPieceTest extends PieceTest {
 
     @BeforeEach
     public void setUpPiece() {
-        piece = new ZPiece(super.testGame);
+        piece = new SPiece(super.testGame);
     }
 
     @Test
     public void testConstructor() {
         int approximateCenter = Math.floorDiv(Game.WIDTH - 1, 2);
 
-        Point point1 = new Point(approximateCenter, 0);
-        Point point2 = new Point(approximateCenter + 1, 0);
-        Point point3 = new Point(approximateCenter + 1, 1);
-        Point point4 = new Point(approximateCenter + 2, 1);
+        Point point1 = new Point(approximateCenter, 1);
+        Point point2 = new Point(approximateCenter + 1, 1);
+        Point point3 = new Point(approximateCenter + 1, 0);
+        Point point4 = new Point(approximateCenter + 2, 0);
 
         GameTest.checkPieceHasTileLocations(piece, point1, point2, point3, point4);
     }
@@ -38,23 +39,23 @@ public class ZPieceTest extends PieceTest {
             assertTrue(piece.rotate());
             int approximateCenter = Math.floorDiv(Game.WIDTH - 1, 2);
 
-            Point point1 = new Point(approximateCenter + 1, 2);
-            Point point2 = new Point(approximateCenter + 1, 1);
-            Point point3 = new Point(approximateCenter + 2, 1);
-            Point point4 = new Point(approximateCenter + 2, 0);
+            Point point1 = new Point(approximateCenter, 0);
+            Point point2 = new Point(approximateCenter, 1);
+            Point point3 = new Point(approximateCenter + 1, 1);
+            Point point4 = new Point(approximateCenter + 1, 2);
 
             GameTest.checkPieceHasTileLocations(piece, point1, point2, point3, point4);
 
             assertTrue(piece.rotate());
 
             point1.x = approximateCenter;
-            point1.y = 1;
+            point1.y = 2;
             point2.x = approximateCenter + 1;
-            point2.y = 1;
+            point2.y = 2;
             point3.x = approximateCenter + 1;
-            point3.y = 2;
+            point3.y = 1;
             point4.x = approximateCenter + 2;
-            point4.y = 2;
+            point4.y = 1;
 
             GameTest.checkPieceHasTileLocations(piece, point1, point2, point3, point4);
         }
@@ -66,7 +67,7 @@ public class ZPieceTest extends PieceTest {
         piece.moveDown();
         assertTrue(piece.rotate());
         for (int i = 0; i < Game.WIDTH; i++) {
-            piece.moveLeft();
+            piece.moveRight();
         }
         assertFalse(piece.rotate());
     }
@@ -78,9 +79,9 @@ public class ZPieceTest extends PieceTest {
             piece.moveDown();
         }
         assertTrue(piece.rotate());
-        piece.moveLeft();
-        piece.moveLeft();
-        piece.moveLeft();
+        piece.moveRight();
+        piece.moveRight();
+        piece.moveRight();
         assertFalse(piece.rotate());
     }
 }

@@ -1,5 +1,7 @@
-package model;
+package test.model;
 
+import model.Scoreboard;
+import model.ScoreboardEntry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
