@@ -164,10 +164,9 @@ public class Game {
             return new SPiece(this);
         } else if (num == PieceEnum.TPIECE.value) {
             return new TPiece(this);
-        } else if (num == PieceEnum.ZPIECE.value) {
+        } else {
             return new ZPiece(this);
         }
-        return null;
     }
 
     // REQUIRES: the tile locations of piece are all on the board (not out of bounds).

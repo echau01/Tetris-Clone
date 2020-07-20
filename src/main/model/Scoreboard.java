@@ -1,29 +1,36 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-// Represents a sorted collection of scoreboard entries.
+// Represents a collection of scoreboard entries.
 public class Scoreboard {
+    // Note: the list is not guaranteed to be sorted
+    private List<ScoreboardEntry> entries;
 
     // EFFECTS: creates an empty scoreboard
     public Scoreboard() {
-
+        entries = new ArrayList<ScoreboardEntry>();
     }
 
     // MODIFIES: this
     // EFFECTS: adds an entry to the scoreboard
     public void add(ScoreboardEntry entry) {
-        //stub
+        entries.add(entry);
     }
 
-    // EFFECTS: returns a list of the entries on this scoreboard, sorted from the "greatest" entry
-    //          to the "least" entry (as given by the compareTo method in the ScoreboardEntry class).
-    public List<ScoreboardEntry> getEntries() {
-        return null;    //stub
+    // MODIFIES: this
+    // EFFECTS: sorts the entries on this scoreboard from the "greatest" entry to the "least" entry
+    //          (where entries are compared with the compareTo method in the ScoreboardEntry class),
+    //          then returns the sorted entries.
+    public List<ScoreboardEntry> getSortedEntries() {
+        entries.sort(Collections.reverseOrder());
+        return entries;
     }
 
     // EFFECTS: returns the number of entries on the scoreboard
     public int getSize() {
-        return 0;   //stub
+        return entries.size();
     }
 }

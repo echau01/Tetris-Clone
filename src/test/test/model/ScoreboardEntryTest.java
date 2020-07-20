@@ -24,22 +24,22 @@ public class ScoreboardEntryTest {
     @Test
     public void testCompareToDifferentScores() {
         ScoreboardEntry entry2 = new ScoreboardEntry(9999, "Alexa", 70);
-        assertEquals(1, entry.compareTo(entry2));
-        assertEquals(-1, entry2.compareTo(entry));
+        assertTrue(entry.compareTo(entry2) > 0);
+        assertTrue(entry2.compareTo(entry) < 0);
     }
 
     @Test
     public void testCompareToSameScoreDifferentLinesCleared() {
         ScoreboardEntry entry2 = new ScoreboardEntry(10000, "Alexa", 65);
-        assertEquals(-1, entry.compareTo(entry2));
-        assertEquals(1, entry2.compareTo(entry));
+        assertTrue(entry.compareTo(entry2) < 0);
+        assertTrue(entry2.compareTo(entry) > 0);
     }
 
     @Test
     public void testCompareToSameScoreSameLinesClearedDifferentName() {
         ScoreboardEntry entry2 = new ScoreboardEntry(10000, "Alexa", 64);
-        assertEquals(-1, entry.compareTo(entry2));
-        assertEquals(1, entry2.compareTo(entry));
+        assertTrue(entry.compareTo(entry2) < 0);
+        assertTrue(entry2.compareTo(entry) > 0);
     }
 
     @Test

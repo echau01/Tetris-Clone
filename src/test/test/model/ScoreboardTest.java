@@ -42,7 +42,7 @@ public class ScoreboardTest {
     }
 
     @Test
-    public void testGetEntries() {
+    public void testGetSortedEntries() {
         ScoreboardEntry entry1 = new ScoreboardEntry(5000, "Test", 36);
         ScoreboardEntry entry2 = new ScoreboardEntry(4000, "Bobby", 36);
         ScoreboardEntry entry3 = new ScoreboardEntry(6000, "Amanda", 36);
@@ -57,7 +57,7 @@ public class ScoreboardTest {
         scoreboard.add(entry5);
         scoreboard.add(entry6);
 
-        List<ScoreboardEntry> entries = scoreboard.getEntries();
+        List<ScoreboardEntry> entries = scoreboard.getSortedEntries();
         assertEquals("Amanda", entries.get(0).getPlayerName());
         assertEquals("Felix", entries.get(1).getPlayerName());
         assertEquals(36, entries.get(1).getLinesCleared());
@@ -65,6 +65,6 @@ public class ScoreboardTest {
         assertEquals(36, entries.get(2).getLinesCleared());
         assertEquals("Test", entries.get(3).getPlayerName());
         assertEquals("Thomas", entries.get(4).getPlayerName());
-        assertEquals("Billy", entries.get(5).getPlayerName());
+        assertEquals("Bobby", entries.get(5).getPlayerName());
     }
 }
