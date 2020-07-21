@@ -13,7 +13,7 @@ import java.util.*;
 public abstract class Piece {
     protected Game game;
 
-    // Maps orientation to locations of tiles relative to rotationReference
+    // Maps orientation to locations of tiles relative to rotationReferencePoint
     protected Map<Integer, Set<Point>> orientationToTileRelativeLocation;
 
     // Every piece rotates inside a box, as seen in these diagrams:
@@ -29,6 +29,8 @@ public abstract class Piece {
     //          If the rotation results in this piece intersecting a wall or an occupied cell,
     //          returns false and does not perform the rotation.
     public boolean rotate() {
+        // The rotation rules I used are found at https://strategywiki.org/wiki/Tetris/Rotation_systems
+        // in the Sega rotation system section.
         Set<Point> previousTileLocations = getTileLocations();
         nextOrientation();
 
