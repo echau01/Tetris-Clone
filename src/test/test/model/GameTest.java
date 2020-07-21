@@ -13,6 +13,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// Unit tests for the Game class
 public class GameTest {
     private Game g;
     private static final int GAME_SEED = 23352;

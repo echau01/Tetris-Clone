@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+// Represents a Tetris application
 public class TetrisApplication {
     private Scanner scanner;
     private Random random;

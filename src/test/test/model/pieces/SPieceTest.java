@@ -11,6 +11,7 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+// Unit tests for the SPiece class
 public class SPieceTest extends PieceTest {
 
     @BeforeEach

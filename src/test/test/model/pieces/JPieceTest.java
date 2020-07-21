@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 
+// Unit tests for the JPiece class
 public class JPieceTest extends PieceTest {
 
     @BeforeEach

@@ -1,7 +1,7 @@
 package model;
 
 // Represents an entry on the scoreboard that is shown at the end of the game.
-// An entry contains the player's score, name, and lines cleared
+// An entry contains the player's score, name, and lines cleared.
 public class ScoreboardEntry implements Comparable<ScoreboardEntry> {
     private int score;
     private String playerName;

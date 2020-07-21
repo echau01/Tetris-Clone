@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.awt.*;
 import java.util.Set;
 
+// Unit tests for the OPiece class
 public class OPieceTest extends PieceTest {
 
     @BeforeEach

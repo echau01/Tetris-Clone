@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// Unit tests for the Scoreboard class
 public class ScoreboardTest {
     private Scoreboard scoreboard;
 

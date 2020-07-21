@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// Unit tests for the ScoreboardEntry class
 public class ScoreboardEntryTest {
     private ScoreboardEntry entry;
 

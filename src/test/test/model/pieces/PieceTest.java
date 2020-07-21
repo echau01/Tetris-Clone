@@ -13,6 +13,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// Unit tests for the Piece class
 public abstract class PieceTest {
     protected static int TEST_GAME_WALL_HEIGHT = Game.HEIGHT / 2;
 
