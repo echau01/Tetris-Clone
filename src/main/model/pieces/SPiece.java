@@ -10,13 +10,10 @@ import java.util.Set;
 public class SPiece extends Piece {
 
     // REQUIRES: game has started and is not over
-    // EFFECTS: creates an "S" piece in given game. The piece is placed at the topmost row.
+    // EFFECTS: creates an "S" piece in given game. The piece is placed at the topmost row
+    //          and spawns in its default orientation.
     public SPiece(Game game) {
-        super.game = game;
-        initOrientationToRelativeLocation();
-
-        orientation = 0;
-        rotationReferencePoint = new Point(Math.floorDiv(Game.WIDTH - 1, 2), -1);
+        super(game, new Point(Math.floorDiv(Game.WIDTH - 1, 2), -1));
     }
 
     // EFFECTS: returns a set of the tile locations of this "S" piece relative to rotationReferencePoint

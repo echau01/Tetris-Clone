@@ -6,10 +6,10 @@ import java.awt.Point;
 import java.util.*;
 
 // Represents a piece (a.k.a. tetromino). In Tetris, there are seven types of
-// pieces: the I, T, O, S, Z, J, and L pieces. When a pieces is instantiated,
+// pieces: the I, T, O, S, Z, J, and L pieces. When a piece is instantiated,
 // its default orientation matches the orientations in the left column of this image:
-// https://strategywiki.org/wiki/File:Tetris_rotation_Sega.png (except for the O piece, which
-// is invariant under rotations).
+// https://strategywiki.org/wiki/File:Tetris_rotation_Sega.png. The O piece is not
+// shown in the left column, but its orientation is always the same.
 public abstract class Piece {
     protected Game game;
 
@@ -23,6 +23,16 @@ public abstract class Piece {
 
     // This is an integer from 0 to 3
     protected int orientation;
+
+    // EFFECTS: creates a piece in the given game with the given rotation reference point.
+    //          The piece is in its default orientation.
+    public Piece(Game game, Point rotationReferencePoint) {
+        this.game = game;
+        initOrientationToRelativeLocation();
+
+        this.orientation = 0;
+        this.rotationReferencePoint = rotationReferencePoint;
+    }
 
     // MODIFIES: this
     // EFFECTS: rotates the piece 90 degrees clockwise. If successful, returns true.
@@ -106,17 +116,6 @@ public abstract class Piece {
         return tileAbsoluteLocations;
     }
 
-    // MODIFIES: this
-    // EFFECTS: initializes Map object that maps orientation to tile location relative to rotationReferencePoint
-    protected void initOrientationToRelativeLocation() {
-        orientationToTileRelativeLocation = new HashMap<Integer, Set<Point>>();
-
-        orientationToTileRelativeLocation.put(0, getOrientation0RelativeLocations());
-        orientationToTileRelativeLocation.put(1, getOrientation1RelativeLocations());
-        orientationToTileRelativeLocation.put(2, getOrientation2RelativeLocations());
-        orientationToTileRelativeLocation.put(3, getOrientation3RelativeLocations());
-    }
-
     // EFFECTS: returns a set of the tile locations of this piece relative to rotationReferencePoint
     //          for orientation 0
     protected abstract Set<Point> getOrientation0RelativeLocations();
@@ -132,6 +131,17 @@ public abstract class Piece {
     // EFFECTS: returns a set of the tile locations of this piece relative to rotationReferencePoint
     //          for orientation 3
     protected abstract Set<Point> getOrientation3RelativeLocations();
+
+    // MODIFIES: this
+    // EFFECTS: initializes Map object that maps orientation to tile location relative to rotationReferencePoint
+    private void initOrientationToRelativeLocation() {
+        orientationToTileRelativeLocation = new HashMap<Integer, Set<Point>>();
+
+        orientationToTileRelativeLocation.put(0, getOrientation0RelativeLocations());
+        orientationToTileRelativeLocation.put(1, getOrientation1RelativeLocations());
+        orientationToTileRelativeLocation.put(2, getOrientation2RelativeLocations());
+        orientationToTileRelativeLocation.put(3, getOrientation3RelativeLocations());
+    }
 
     // MODIFIES: this
     // EFFECTS: changes orientation to next orientation

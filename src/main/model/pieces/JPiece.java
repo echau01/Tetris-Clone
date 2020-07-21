@@ -10,13 +10,10 @@ import java.util.Set;
 public class JPiece extends Piece {
 
     // REQUIRES: game has started and is not over
-    // EFFECTS: creates a "J" piece in given game. The piece is placed at the topmost row.
+    // EFFECTS: creates a "J" piece in given game. The piece is placed at the topmost row
+    //          and spawns in its default orientation.
     public JPiece(Game game) {
-        super.game = game;
-        initOrientationToRelativeLocation();
-
-        orientation = 0;
-        rotationReferencePoint = new Point(Math.floorDiv(Game.WIDTH - 1, 2), -1);
+        super(game, new Point(Math.floorDiv(Game.WIDTH - 1, 2), -1));
     }
 
     // EFFECTS: returns a set of the tile locations of this "J" piece relative to rotationReferencePoint

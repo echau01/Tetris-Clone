@@ -19,6 +19,7 @@ public class OPieceTest extends PieceTest {
     }
 
     @Test
+    @Override
     public void testConstructor() {
         int approximateCenter = Math.floorDiv(Game.WIDTH - 1, 2);
 

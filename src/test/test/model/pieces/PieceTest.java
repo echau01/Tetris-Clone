@@ -49,6 +49,9 @@ public abstract class PieceTest {
     }
 
     @Test
+    public abstract void testConstructor();
+
+    @Test
     public void testMoveLeftNotBoundary() {
         Set<Point> oldTileLocations = piece.getTileLocations();
         assertTrue(piece.moveLeft());
