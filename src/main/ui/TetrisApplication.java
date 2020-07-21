@@ -17,6 +17,9 @@ public class TetrisApplication {
     private boolean running;
     private Scoreboard scoreboard;
     private Game game;
+
+    // This field is true if the game has ended and the user has added
+    // their score to the scoreboard.
     private boolean userAddedScoreToScoreboard;
 
     // This field is true if the game has just ended (i.e. the user has just topped

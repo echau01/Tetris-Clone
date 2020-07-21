@@ -10,7 +10,7 @@ when the player clears more lines at a time. The game ends if the player allows 
 of the board such that there is no space for the piece to fit.
 
 This classic singleplayer game can be played by **anyone**. Tetris is still popular to this day—see [the intensive
-finals of the 2018 Classic Tetris World Championship](https://www.youtube.com/watch?v=L_UPHsGR6fM)). I decided to
+finals of the 2018 Classic Tetris World Championship](https://www.youtube.com/watch?v=L_UPHsGR6fM). I decided to
 re-create Tetris as a personal project because I have played some Tetris myself and am amazed at how such a simple 
 game can be so fun to play.
 
