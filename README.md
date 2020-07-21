@@ -20,6 +20,7 @@ game can be so fun to play.
 the game is over.
 - As a user, I want to be able to move pieces horizontally.
 - As a user, I want to be able to move pieces vertically.
+- As a user, I want to be able to immediately drop a piece as far down as it can go.
 - As a user, I want to be able to rotate pieces.
 - As a user, I want to be able to clear line(s) by completely filling a row with the tiles of tetrominoes.
 - As a user, I want to be able to see my current in-game score.
