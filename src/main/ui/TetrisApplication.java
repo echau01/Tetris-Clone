@@ -82,10 +82,11 @@ public class TetrisApplication {
             }
             System.out.println("scoreboard -> see scoreboard");
         } else {
-            System.out.println("left -> move piece left");
-            System.out.println("right -> move piece right");
-            System.out.println("rotate -> rotate piece");
-            System.out.println("down -> move piece down");
+            System.out.println("left -> move piece left one column");
+            System.out.println("right -> move piece right one column");
+            System.out.println("rotate -> rotate piece 90 degrees clockwise");
+            System.out.println("down -> move piece down one row");
+            System.out.println("drop -> drop piece as far down as possible");
             System.out.println("n -> do nothing; let game advance on its own");
         }
         System.out.println("q -> quit");
@@ -159,6 +160,12 @@ public class TetrisApplication {
             game.getActivePiece().rotate();
         } else if (input.equalsIgnoreCase("down")) {
             game.getActivePiece().moveDown();
+        } else if (input.equalsIgnoreCase("drop")) {
+            boolean movedDown = game.getActivePiece().moveDown();
+            while (movedDown) {
+                movedDown = game.getActivePiece().moveDown();
+            }
+            game.update();
         } else if (input.equalsIgnoreCase("n")) {
             game.update();
         } else {
