@@ -172,7 +172,7 @@ public abstract class Piece {
         return obstructed;
     }
 
-    // MODIFIES: game
+    // MODIFIES: this
     // EFFECTS: removes the tiles at the given locations from the board, and adds current tiles to the board.
     private void nextBoard(Set<Point> tilesToRemove) {
         List<ArrayList<Boolean>> board = game.getBoard();
