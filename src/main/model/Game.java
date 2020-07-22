@@ -116,17 +116,17 @@ public class Game {
 
     // EFFECTS: returns the next piece
     public Piece getNextPiece() {
-        return nextPiece;    //stub
+        return nextPiece;
     }
 
     // EFFECTS: returns the player's score
     public int getScore() {
-        return score;   //stub
+        return score;
     }
 
     // EFFECTS: returns the number of lines cleared so far
     public int getLinesCleared() {
-        return linesCleared;   //stub
+        return linesCleared;
     }
 
     // EFFECTS: returns true if the game is over, false otherwise

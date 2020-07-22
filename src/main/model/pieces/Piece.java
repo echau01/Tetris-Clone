@@ -185,7 +185,7 @@ public abstract class Piece {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes the tiles at the given locations from the board, and adds current tiles to the board.
+    // EFFECTS: removes the tiles at the given locations from the board, and adds this piece's tiles to the board.
     private void nextBoard(Set<Point> tilesToRemove) {
         List<ArrayList<Boolean>> board = game.getBoard();
         for (Point p : tilesToRemove) {
