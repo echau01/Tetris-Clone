@@ -31,7 +31,7 @@ public class Game {
     // Used with the random number generator that chooses which type of piece to make next.
     // Credit to https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html for the tutorial
     // on how to make enums.
-    private enum PieceEnum {
+    private enum PieceType {
         IPIECE(0),
         JPIECE(1),
         LPIECE(2),
@@ -42,7 +42,7 @@ public class Game {
 
         int value;
 
-        PieceEnum(int value) {
+        PieceType(int value) {
             this.value = value;
         }
     }
@@ -148,21 +148,21 @@ public class Game {
         return blankBoard;
     }
 
-    // REQUIRES: 0 <= num <= PieceEnum.values.length - 1
+    // REQUIRES: 0 <= num <= PieceType.values.length - 1
     // EFFECTS: returns a new piece associated with given number (as specified
-    //          in PieceEnum).
+    //          in PieceType).
     private Piece intToPiece(int num) {
-        if (num == PieceEnum.IPIECE.value) {
+        if (num == PieceType.IPIECE.value) {
             return new IPiece(this);
-        } else if (num == PieceEnum.JPIECE.value) {
+        } else if (num == PieceType.JPIECE.value) {
             return new JPiece(this);
-        } else if (num == PieceEnum.LPIECE.value) {
+        } else if (num == PieceType.LPIECE.value) {
             return new LPiece(this);
-        } else if (num == PieceEnum.OPIECE.value) {
+        } else if (num == PieceType.OPIECE.value) {
             return new OPiece(this);
-        } else if (num == PieceEnum.SPIECE.value) {
+        } else if (num == PieceType.SPIECE.value) {
             return new SPiece(this);
-        } else if (num == PieceEnum.TPIECE.value) {
+        } else if (num == PieceType.TPIECE.value) {
             return new TPiece(this);
         } else {
             return new ZPiece(this);
