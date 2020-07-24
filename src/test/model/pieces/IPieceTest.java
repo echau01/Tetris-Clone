@@ -1,9 +1,8 @@
-package test.model.pieces;
+package model.pieces;
 
 import model.Game;
-import model.pieces.IPiece;
 import org.junit.jupiter.api.Assertions;
-import test.model.GameTest;
+import model.GameTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
