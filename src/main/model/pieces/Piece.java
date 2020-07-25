@@ -106,12 +106,8 @@ public abstract class Piece {
     public Set<Point> getTileLocations() {
         Set<Point> tileAbsoluteLocations = new HashSet<>();
         for (Point p : orientationToTileRelativeLocation.get(orientation)) {
-            // For some reason, if we try to use p.x and p.y directly in the Point constructor,
-            // things go crazy.
-            int posX = p.x;
-            int posY = p.y;
-            tileAbsoluteLocations.add(new Point(posX + rotationReferencePoint.x,
-                    posY += rotationReferencePoint.y));
+            tileAbsoluteLocations.add(new Point(p.x + rotationReferencePoint.x,
+                    p.y + rotationReferencePoint.y));
         }
         return tileAbsoluteLocations;
     }
