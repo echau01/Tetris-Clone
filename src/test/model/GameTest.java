@@ -16,18 +16,31 @@ import static org.junit.jupiter.api.Assertions.*;
 // Unit tests for the Game class
 public class GameTest {
     private Game testGame1;
+
+    // Identical to testGame1, except that the first "I" piece is placed upright
+    // at the bottom of the rightmost column.
     private Game testGame2;
-    private static final int GAME_SEED_ONE = 23352;
-    private static final int GAME_SEED_TWO = 9;
+    private static final int GAME_SEED = 5000;
 
     @BeforeEach
     public void setUp() {
-        // First ten numbers that are produced by the random number generator with seed 23352:
-        // 4, 2, 0, 1, 6, 3, 5, 0, 5, 4
-        testGame1 = new Game(GAME_SEED_ONE);
+        // First ten numbers that are produced by the random number generator with seed 5000:
+        // 0, 1, 2, 4, 3, 6, 5, 2, 0, 4
+        testGame1 = new Game(GAME_SEED);
+        testGame2 = new Game(GAME_SEED);
 
-        // The first number randomly generated with seed 9 is 0.
-        testGame2 = new Game(GAME_SEED_TWO);
+        // The random number generator seed is set so that the first piece is an "I" piece.
+        // We now set this "I" piece standing upright at the bottom of the rightmost column.
+        // Calling update on testGame2 will spawn in the next piece (a "J" piece).
+        Piece activePiece = testGame2.getActivePiece();
+        activePiece.moveDown();
+        activePiece.rotate();
+        for (int i = 0; i < Game.WIDTH; i++) {
+            activePiece.moveRight();
+        }
+        for (int i = 0; i < Game.HEIGHT; i++) {
+            activePiece.moveDown();
+        }
     }
 
     @Test
@@ -38,21 +51,21 @@ public class GameTest {
         assertNotNull(testGame1.getActivePiece());
         assertNotNull(testGame1.getNextPiece());
 
-        // The first piece is an S piece
+        // The first piece is an "I" piece
 
-        int point1XPos = Math.floorDiv(Game.WIDTH - 1, 2);
+        int point1XPos = Math.floorDiv(Game.WIDTH - 1, 2) - 1;
 
-        Point point1 = new Point(point1XPos, 1);
-        Point point2 = new Point(point1XPos + 1, 1);
-        Point point3 = new Point(point1XPos + 1, 0);
-        Point point4 = new Point(point1XPos + 2, 0);
+        Point point1 = new Point(point1XPos, 0);
+        Point point2 = new Point(point1XPos + 1, 0);
+        Point point3 = new Point(point1XPos + 2, 0);
+        Point point4 = new Point(point1XPos + 3, 0);
 
         checkPieceHasTileLocations(testGame1.getActivePiece(), point1, point2, point3, point4);
 
-        // Check that the S piece shows up on the board
+        // Check that the "I" piece shows up on the board
         checkBoardContainsPiece(testGame1.getBoard(), testGame1.getActivePiece());
 
-        assertTrue(testGame1.getNextPiece() instanceof LPiece);
+        assertTrue(testGame1.getNextPiece() instanceof JPiece);
     }
 
     @Test
@@ -91,17 +104,17 @@ public class GameTest {
 
     @Test
     public void testUpdatePieceLandsAtBottom() {
-        // The first piece is an S piece.
-        for (int i = 1; i <= Game.HEIGHT - 2; i++) {
+        // The first piece is an "I" piece.
+        for (int i = 0; i <= Game.HEIGHT - 2; i++) {
             testGame1.update();
         }
-        // The S piece should now be just about to land at the bottom
-        int point1XPos = Math.floorDiv(Game.WIDTH - 1, 2);
+        // The "I" piece should now be just about to land at the bottom
+        int point1XPos = Math.floorDiv(Game.WIDTH - 1, 2) - 1;
 
         Point point1 = new Point(point1XPos, Game.HEIGHT - 1);
         Point point2 = new Point(point1XPos + 1, Game.HEIGHT - 1);
-        Point point3 = new Point(point1XPos + 1, Game.HEIGHT - 2);
-        Point point4 = new Point(point1XPos + 2, Game.HEIGHT - 2);
+        Point point3 = new Point(point1XPos + 2, Game.HEIGHT - 1);
+        Point point4 = new Point(point1XPos + 3, Game.HEIGHT - 1);
 
         checkPieceHasTileLocations(testGame1.getActivePiece(), point1, point2, point3, point4);
         checkBoardContainsPiece(testGame1.getBoard(), testGame1.getActivePiece());
@@ -110,49 +123,55 @@ public class GameTest {
 
         testGame1.update();
 
-        // At this point, the S piece should have landed at the bottom, and
-        // the next piece (an L piece) will have just spawned in.
+        // At this point, the "I" piece should have landed at the bottom, and
+        // the next piece (a "J" piece) will have just spawned in.
 
-        point2.x = point1XPos;
-        point1.y = 1;
+        point1.x = Math.floorDiv(Game.WIDTH - 1, 2);
+        point1.y = 0;
+        point2.x = point1.x + 1;
         point2.y = 0;
+        point3.x = point1.x + 2;
         point3.y = 0;
-        point4.y = 0;
+        point4.x = point1.x + 2;
+        point4.y = 1;
 
         checkPieceHasTileLocations(testGame1.getActivePiece(), point1, point2, point3, point4);
         checkBoardContainsPiece(testGame1.getBoard(), testGame1.getActivePiece());
 
-        assertTrue(testGame1.getNextPiece() instanceof IPiece);
+        assertTrue(testGame1.getNextPiece() instanceof LPiece);
     }
 
     @Test
     public void testUpdatePieceLandsOnPiece() {
-        // Get the S piece to land at the bottom, then get the L piece to
-        // be just about to land on the S piece.
-        for (int i = 1; i <= 2 * Game.HEIGHT - 4; i++) {
+        // Get the "I" piece to land at the bottom, then get the "J" piece to
+        // be just about to land on the "I" piece.
+        for (int i = 1; i <= 2 * Game.HEIGHT - 3; i++) {
             testGame1.update();
         }
 
         int point1XPos = Math.floorDiv(Game.WIDTH - 1, 2);
 
-        Point point1 = new Point(point1XPos, Game.HEIGHT - 2);
-        Point point2 = new Point(point1XPos, Game.HEIGHT - 3);
-        Point point3 = new Point(point1XPos + 1, Game.HEIGHT - 3);
-        Point point4 = new Point(point1XPos + 2, Game.HEIGHT - 3);
+        Point point1 = new Point(point1XPos, Game.HEIGHT - 3);
+        Point point2 = new Point(point1XPos + 1, Game.HEIGHT - 3);
+        Point point3 = new Point(point1XPos + 2, Game.HEIGHT - 3);
+        Point point4 = new Point(point1XPos + 2, Game.HEIGHT - 2);
 
         checkPieceHasTileLocations(testGame1.getActivePiece(), point1, point2, point3, point4);
         checkBoardContainsPiece(testGame1.getBoard(), testGame1.getActivePiece());
 
-        // Update the game once more, causing the L piece to land on the S piece:
+        // Update the game once more, causing the "J" piece to land on the "I" piece:
 
         testGame1.update();
 
-        // The "I" piece should have spawned in now.
+        // The "L" piece should have spawned in now.
 
-        point1.x = point1XPos - 1;
-        point1.y = 0;
+        point1.x = point1XPos;
+        point1.y = 1;
+        point2.x = point1.x;
         point2.y = 0;
+        point3.x = point1.x + 1;
         point3.y = 0;
+        point4.x = point1.x + 2;
         point4.y = 0;
 
         checkPieceHasTileLocations(testGame1.getActivePiece(), point1, point2, point3, point4);
@@ -167,23 +186,17 @@ public class GameTest {
             riggedBoard.get(Game.HEIGHT - 1).set(i, true);
         }
 
+        // Fill in the tiles occupied by the upright "I" piece in the bottom right corner
+        for (int i = Game.HEIGHT - 4; i <= Game.HEIGHT - 1; i++) {
+            riggedBoard.get(i).set(Game.WIDTH - 1, true);
+        }
+
         try {
             testGame2.setBoard(riggedBoard);
         } catch (IncorrectBoardSizeException e) {
             fail("IncorrectBoardSizeException was incorrectly thrown.");
         }
 
-        // The random number generator seed is set so that the first piece is an "I" piece.
-        // We now put this "I" piece in the bottom right corner, standing upright.
-        Piece activePiece = testGame2.getActivePiece();
-        activePiece.moveDown();
-        activePiece.rotate();
-        for (int i = 0; i < Game.WIDTH; i++) {
-            activePiece.moveRight();
-        }
-        for (int i = 0; i < Game.HEIGHT; i++) {
-            activePiece.moveDown();
-        }
         testGame2.update();
 
         List<ArrayList<Boolean>> updatedBoard = testGame2.getBoard();
@@ -209,23 +222,17 @@ public class GameTest {
             riggedBoard.get(Game.HEIGHT - 1).set(i, true);
         }
 
+        // Fill in the tiles occupied by the upright "I" piece in the bottom right corner
+        for (int i = Game.HEIGHT - 4; i <= Game.HEIGHT - 1; i++) {
+            riggedBoard.get(i).set(Game.WIDTH - 1, true);
+        }
+
         try {
             testGame2.setBoard(riggedBoard);
         } catch (IncorrectBoardSizeException e) {
             fail("IncorrectBoardSizeException was incorrectly thrown.");
         }
 
-        // The random number generator seed is set so that the first piece is an "I" piece.
-        // We now put this "I" piece in the bottom right corner, standing upright.
-        Piece activePiece = testGame2.getActivePiece();
-        activePiece.moveDown();
-        activePiece.rotate();
-        for (int i = 0; i < Game.WIDTH; i++) {
-            activePiece.moveRight();
-        }
-        for (int i = 0; i < Game.HEIGHT; i++) {
-            activePiece.moveDown();
-        }
         testGame2.update();
 
         List<ArrayList<Boolean>> updatedBoard = testGame2.getBoard();
@@ -253,23 +260,17 @@ public class GameTest {
             riggedBoard.get(Game.HEIGHT - 1).set(i, true);
         }
 
+        // Fill in the tiles occupied by the upright "I" piece in the bottom right corner
+        for (int i = Game.HEIGHT - 4; i <= Game.HEIGHT - 1; i++) {
+            riggedBoard.get(i).set(Game.WIDTH - 1, true);
+        }
+
         try {
             testGame2.setBoard(riggedBoard);
         } catch (IncorrectBoardSizeException e) {
             fail("IncorrectBoardSizeException was incorrectly thrown.");
         }
 
-        // The random number generator seed is set so that the first piece is an "I" piece.
-        // We now put this "I" piece in the bottom right corner, standing upright.
-        Piece activePiece = testGame2.getActivePiece();
-        activePiece.moveDown();
-        activePiece.rotate();
-        for (int i = 0; i < Game.WIDTH; i++) {
-            activePiece.moveRight();
-        }
-        for (int i = 0; i < Game.HEIGHT; i++) {
-            activePiece.moveDown();
-        }
         testGame2.update();
 
         List<ArrayList<Boolean>> updatedBoard = testGame2.getBoard();
@@ -299,23 +300,17 @@ public class GameTest {
             riggedBoard.get(Game.HEIGHT - 1).set(i, true);
         }
 
+        // Fill in the tiles occupied by the upright "I" piece in the bottom right corner
+        for (int i = Game.HEIGHT - 4; i <= Game.HEIGHT - 1; i++) {
+            riggedBoard.get(i).set(Game.WIDTH - 1, true);
+        }
+
         try {
             testGame2.setBoard(riggedBoard);
         } catch (IncorrectBoardSizeException e) {
             fail("IncorrectBoardSizeException was incorrectly thrown.");
         }
 
-        // The random number generator seed is set so that the first piece is an "I" piece.
-        // We now put this "I" piece in the bottom right corner, standing upright.
-        Piece activePiece = testGame2.getActivePiece();
-        activePiece.moveDown();
-        activePiece.rotate();
-        for (int i = 0; i < Game.WIDTH; i++) {
-            activePiece.moveRight();
-        }
-        for (int i = 0; i < Game.HEIGHT; i++) {
-            activePiece.moveDown();
-        }
         testGame2.update();
 
         List<ArrayList<Boolean>> updatedBoard = testGame2.getBoard();
@@ -334,7 +329,7 @@ public class GameTest {
     public void testUpdateLineClearsWithLinesAbove() {
         List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
 
-        // riggedBoard is set to a board that satisfies the following:
+        // First, we set riggedBoard to be a board that satisfies the following:
         // - The 2nd and 4th rows from the bottom are completely filled, save for
         //   the rightmost column.
         // - The leftmost 3 columns of the bottom 5 rows are filled.
@@ -353,25 +348,19 @@ public class GameTest {
         }
         riggedBoard.get(Game.HEIGHT - 6).set(5, true);
 
+        // Now we fill in the tiles occupied by the upright "I" piece in the bottom right corner.
+        // As a result, the 2nd and 4th rows from the bottom get completely filled, and
+        // the 1st and 3rd rows from the bottom now have a tile in the rightmost column.
+        for (int i = Game.HEIGHT - 4; i <= Game.HEIGHT - 1; i++) {
+            riggedBoard.get(i).set(Game.WIDTH - 1, true);
+        }
+
         try {
             testGame2.setBoard(riggedBoard);
         } catch (IncorrectBoardSizeException e) {
             fail("IncorrectBoardSizeException was incorrectly thrown.");
         }
 
-        // The random number generator seed is set so that the first piece is an "I" piece.
-        // We now put this "I" piece in the bottom right corner, standing upright.
-        // The 2nd and 4th rows from the bottom get completely filled, and
-        // the 1st and 3rd rows from the bottom now have a tile in the rightmost column.
-        Piece activePiece = testGame2.getActivePiece();
-        activePiece.moveDown();
-        activePiece.rotate();
-        for (int i = 0; i < Game.WIDTH; i++) {
-            activePiece.moveRight();
-        }
-        for (int i = 0; i < Game.HEIGHT; i++) {
-            activePiece.moveDown();
-        }
         testGame2.update();
 
         List<ArrayList<Boolean>> updatedBoard = testGame2.getBoard();
@@ -400,6 +389,10 @@ public class GameTest {
     @Test
     public void testUpdateGameOver() {
         List<ArrayList<Boolean>> board = testGame1.getBoard();
+
+        // For every row of the board except the top row, fill every column except
+        // the leftmost column with tiles. We don't fill the leftmost column because
+        // we want to avoid line clears.
         for (int r = 2; r < Game.HEIGHT; r++) {
             ArrayList<Boolean> row = new ArrayList<Boolean>();
             for (int c = 0; c < Game.WIDTH; c++) {
@@ -412,10 +405,14 @@ public class GameTest {
             board.set(r, row);
         }
 
+        // Updating the game now will cause the "I" piece to move down one row.
+        // The subsequent update will cause the "I" piece to land on the second-highest
+        // row and the "J" piece to spawn. The "J" piece will intersect the "I" piece
+        // and cause the player to top out.
         testGame1.update();
+        assertFalse(testGame1.isGameOver());
 
-        // The S piece landed at the top, and the newly-spawned L piece intersects the S piece
-        // Hence, the player tops out.
+        testGame1.update();
         assertTrue(testGame1.isGameOver());
 
         board = testGame1.getBoard();
@@ -455,9 +452,8 @@ public class GameTest {
         boolean seenTPiece = false;
         boolean seenZPiece = false;
 
-        // With the specific rng seed 23352, we will have seen all the different
-        // piece types after 7 * Game.HEIGHT - 39 game updates.
-        for (int i = 0; i < 7 * Game.HEIGHT - 39; i++) {
+        // We will have seen all the different piece types after 7 * Game.HEIGHT game updates.
+        for (int i = 0; i < 7 * Game.HEIGHT; i++) {
             testGame1.update();
 
             Piece activePiece = testGame1.getActivePiece();
