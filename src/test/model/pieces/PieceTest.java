@@ -1,5 +1,6 @@
 package model.pieces;
 
+import exceptions.IncorrectBoardSizeException;
 import model.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,8 +26,7 @@ public abstract class PieceTest {
     // tells us that this behaviour will happen.
     @BeforeEach
     public void setUpTestGame() {
-        testGame = new Game();
-        // Do NOT start the game. We do not want an active piece in the game.
+        testGame = new Game(0);
 
         List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
         int approximateCenter = Math.floorDiv(Game.WIDTH - 1, 2);
@@ -43,7 +43,11 @@ public abstract class PieceTest {
             }
         }
 
-        testGame.setBoard(riggedBoard);
+        try {
+            testGame.setBoard(riggedBoard);
+        } catch (IncorrectBoardSizeException e) {
+            fail("IncorrectBoardSizeException was incorrectly thrown.");
+        }
     }
 
     @Test

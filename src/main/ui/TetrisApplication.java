@@ -66,8 +66,7 @@ public class TetrisApplication {
         random = new Random();
         running = true;
         scoreboard = new Scoreboard();
-        game = new Game();
-        game.startNewGame(random.nextInt());
+        game = new Game(random.nextInt());
         userAddedScoreToScoreboard = false;
         gameJustEnded = false;
     }
@@ -136,7 +135,7 @@ public class TetrisApplication {
     // EFFECTS: handles given user input
     private void handleUserInputGameOver(String input) {
         if (input.equalsIgnoreCase("replay")) {
-            game.startNewGame(random.nextInt());
+            game = new Game(random.nextInt());
             userAddedScoreToScoreboard = false;
             gameJustEnded = false;
         } else if (!userAddedScoreToScoreboard && input.equalsIgnoreCase("add")) {
