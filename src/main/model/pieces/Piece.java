@@ -26,6 +26,7 @@ public abstract class Piece {
 
     // EFFECTS: creates a piece in the given game with the given rotation reference point.
     //          The piece is in its default orientation.
+    //          Note: the constructor does not put the piece on the game board.
     public Piece(Game game, Point rotationReferencePoint) {
         this.game = game;
         initOrientationToRelativeLocation();

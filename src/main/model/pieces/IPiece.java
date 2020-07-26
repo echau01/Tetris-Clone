@@ -9,9 +9,9 @@ import java.util.Set;
 // Represents an "I" piece
 public class IPiece extends Piece {
 
-    // REQUIRES: game has started and is not over
     // EFFECTS: creates an "I" piece in given game. The piece is placed at the topmost row
-    //          and spawns in its default orientation.
+    //          in its default orientation.
+    //          Note: the constructor does not put the piece on the game board.
     public IPiece(Game game) {
         super(game, new Point(Math.floorDiv(Game.WIDTH - 1, 2) - 1, -1));
     }
