@@ -109,6 +109,7 @@ public class ScoreboardEntryTest {
 
     @Test
     public void testHashCode() {
-        assertEquals(((31 + 10000) * 31 + "My Name".hashCode()) * 31 + 64, entry.hashCode());
+        ScoreboardEntry entry2 = new ScoreboardEntry(10000, "My Name", 64);
+        assertEquals(entry.hashCode(), entry2.hashCode());
     }
 }
