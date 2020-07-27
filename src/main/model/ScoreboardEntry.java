@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 // Represents an entry on the scoreboard that is shown at the end of the game.
 // An entry contains the player's score, name, and lines cleared.
 public class ScoreboardEntry implements Comparable<ScoreboardEntry> {
@@ -39,6 +41,28 @@ public class ScoreboardEntry implements Comparable<ScoreboardEntry> {
                 return -1 * this.playerName.compareTo(otherEntry.playerName);
             }
         }
+    }
+
+    // EFFECTS: returns true if obj's actual type is ScoreboardEntry and the fields of this
+    //          equal the fields of obj.
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
+        ScoreboardEntry otherEntry = (ScoreboardEntry) obj;
+        return score == otherEntry.score
+                && linesCleared == otherEntry.linesCleared
+                && playerName.equals(otherEntry.playerName);
+    }
+
+    // EFFECTS: returns the hash code for this scoreboard entry.
+    @Override
+    public int hashCode() {
+        return Objects.hash(score, playerName, linesCleared);
     }
 
     // EFFECTS: returns the player's score
