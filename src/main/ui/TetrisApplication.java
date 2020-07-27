@@ -60,7 +60,7 @@ public class TetrisApplication {
         }
     }
 
-    // EFFECTS: initializes all the fields of this object to default values
+    // EFFECTS: initializes all the fields of this object to their default values
     private void initFields() {
         scanner = new Scanner(System.in);
         random = new Random();
@@ -91,7 +91,7 @@ public class TetrisApplication {
         System.out.println("q -> quit");
     }
 
-    // EFFECTS: handle user input
+    // EFFECTS: handle user input in general
     private void handleUserInput() {
         String input = scanner.next();
         scanner.nextLine();
@@ -106,8 +106,7 @@ public class TetrisApplication {
         }
     }
 
-    // EFFECTS: prints the tetris board onto the console, with X's marking
-    //          tile locations
+    // EFFECTS: prints the tetris board onto the console, with X's marking tile locations
     private void printBoard() {
         for (int i = 0; i < Game.WIDTH + 2; i++) {
             System.out.print("-");
@@ -131,8 +130,7 @@ public class TetrisApplication {
         System.out.println();
     }
 
-    // REQUIRES: game is over, and user did not decide to quit
-    // EFFECTS: handles given user input
+    // EFFECTS: handles given user input for when the game is over
     private void handleUserInputGameOver(String input) {
         if (input.equalsIgnoreCase("replay")) {
             game = new Game(random.nextInt());
@@ -148,8 +146,7 @@ public class TetrisApplication {
         }
     }
 
-    // REQUIRES: game is not over, and user did not decide to quit
-    // EFFECTS: handles given user input
+    // EFFECTS: handles given user input for when the game is not over
     private void handleUserInputGameNotOver(String input) {
         if (input.equalsIgnoreCase("left")) {
             game.getActivePiece().moveLeft();
@@ -173,8 +170,12 @@ public class TetrisApplication {
     }
 
     // MODIFIES: this
-    // EFFECTS: guide the user in adding an entry to the scoreboard
+    // EFFECTS: guides the user in adding an entry to the scoreboard
     private void helpUserAddScore() {
+        if (!game.isGameOver()) {
+            System.err.println("Error: the game is not over.");
+            return;
+        }
         System.out.println("Please enter your name:");
         String name = scanner.nextLine();
 
@@ -203,25 +204,34 @@ public class TetrisApplication {
         }
     }
 
-    // REQUIRES: game is not over
-    // EFFECTS: print the name of the next piece
+    // EFFECTS: prints a message telling the user what the next piece is.
+    //          Prints an error message if the game has ended -- this method should
+    //          not be called in that situation.
     private void printNextPiece() {
+        if (game.isGameOver()) {
+            System.err.println("Error: the game is over.");
+            return;
+        }
         Piece nextPiece = game.getNextPiece();
-        System.out.print("The next piece is a(n) ");
-        if (nextPiece instanceof IPiece) {
-            System.out.println("I piece.");
-        } else if (nextPiece instanceof JPiece) {
-            System.out.println("J piece.");
-        } else if (nextPiece instanceof LPiece) {
-            System.out.println("L piece.");
-        } else if (nextPiece instanceof OPiece) {
-            System.out.println("O piece.");
-        } else if (nextPiece instanceof SPiece) {
-            System.out.println("S piece.");
-        } else if (nextPiece instanceof TPiece) {
-            System.out.println("T piece.");
+        System.out.println("The next piece is a(n) " + getPieceName(nextPiece) + ".");
+    }
+
+    // EFFECTS: returns the name of the given piece in the form "I/J/L/O/S/T/Z piece".
+    private String getPieceName(Piece piece) {
+        if (piece instanceof IPiece) {
+            return "I piece";
+        } else if (piece instanceof JPiece) {
+            return "J piece";
+        } else if (piece instanceof LPiece) {
+            return "L piece";
+        } else if (piece instanceof OPiece) {
+            return "O piece";
+        } else if (piece instanceof SPiece) {
+            return "S piece";
+        } else if (piece instanceof TPiece) {
+            return "T piece";
         } else {
-            System.out.println("Z piece.");
+            return "Z piece";
         }
     }
 }
