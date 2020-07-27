@@ -110,6 +110,9 @@ public class ScoreboardEntryTest {
     @Test
     public void testHashCode() {
         ScoreboardEntry entry2 = new ScoreboardEntry(10000, "My Name", 64);
+        assertTrue(entry.equals(entry2));
+
+        // Equal objects must have equal hashcodes
         assertEquals(entry.hashCode(), entry2.hashCode());
     }
 }
