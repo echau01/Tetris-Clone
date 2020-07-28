@@ -18,6 +18,9 @@ game can be so fun to play.
 
 - As a user, I want to be able to add an entry (containing my score, name, and lines cleared) to a scoreboard after
 the game is over.
+- As a user, after I add entries to the scoreboard, I want to be able to optionally save the *unsaved* entries to a 
+file.
+- As a user, I want to be able to load in previously-saved scoreboard entries from file so that I can view them.
 - As a user, I want to be able to move pieces horizontally.
 - As a user, I want to be able to move pieces vertically.
 - As a user, I want to be able to immediately drop a piece as far down as it can go.
