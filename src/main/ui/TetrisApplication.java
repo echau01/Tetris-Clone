@@ -27,9 +27,9 @@ public class TetrisApplication {
     // false otherwise.
     private boolean gameJustEnded;
 
-    // Code for the initialization of the class, and the reading in and
-    // processing of input is based on the example Teller app
-    // from https://github.students.cs.ubc.ca/CPSC210/TellerApp
+    // Code for the initialization of the class and the reading in and
+    // processing of input is based on the TellerApp class in the TellerApp repository.
+    // https://github.students.cs.ubc.ca/CPSC210/TellerApp/blob/master/src/main/ca/ubc/cpsc210/bank/ui/TellerApp.java
 
     // EFFECTS: makes and starts a new tetris application
     public TetrisApplication() {

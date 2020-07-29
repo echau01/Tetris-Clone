@@ -1,10 +1,13 @@
 package model;
 
+import persistence.Saveable;
+
+import java.io.PrintWriter;
 import java.util.Objects;
 
 // Represents an entry on the scoreboard that is shown at the end of the game.
 // An entry contains the player's score, name, and lines cleared.
-public class ScoreboardEntry implements Comparable<ScoreboardEntry> {
+public class ScoreboardEntry implements Comparable<ScoreboardEntry>, Saveable {
     private int score;
     private String playerName;
     private int linesCleared;
@@ -43,8 +46,8 @@ public class ScoreboardEntry implements Comparable<ScoreboardEntry> {
         }
     }
 
-    // EFFECTS: returns true if obj's actual type is ScoreboardEntry and the fields of this
-    //          equal the fields of obj.
+    // EFFECTS: returns true if obj's actual type is ScoreboardEntry and the score, player name, and
+    //          lines cleared of this object and obj are equal.
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -78,5 +81,16 @@ public class ScoreboardEntry implements Comparable<ScoreboardEntry> {
     // EFFECTS: returns the number of lines cleared by the player
     public int getLinesCleared() {
         return linesCleared;
+    }
+
+    // MODIFIES: printWriter
+    // EFFECTS: writes the fields of this scoreboard entry to the given printWriter.
+    // NOTE: does not close the printWriter.
+    @Override
+    public void saveTo(PrintWriter printWriter) {
+        // https://stackoverflow.com/a/2885224/3335320 taught me how to write to a PrintWriter
+        printWriter.println(score);
+        printWriter.println(playerName);
+        printWriter.println(linesCleared);
     }
 }

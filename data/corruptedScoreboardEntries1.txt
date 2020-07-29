@@ -1,0 +1,6 @@
+1000
+John Smith
+12
+This string should not be here; it should be the score instead.
+My Name
+4

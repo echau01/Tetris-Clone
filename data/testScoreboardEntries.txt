@@ -1,0 +1,6 @@
+1000
+John Smith
+12
+25400
+Jane Doe
+40
