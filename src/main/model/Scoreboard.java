@@ -29,6 +29,12 @@ public class Scoreboard {
         return entries;
     }
 
+    // EFFECTS: returns a list containing all the entries on this scoreboard. The entries
+    //          do not come in any particular order.
+    public List<ScoreboardEntry> getEntries() {
+        return entries;
+    }
+
     // EFFECTS: returns the number of entries on the scoreboard
     public int getSize() {
         return entries.size();

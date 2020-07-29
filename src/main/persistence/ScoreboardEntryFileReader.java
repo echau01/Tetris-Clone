@@ -12,8 +12,7 @@ import java.util.List;
 // This class can read scoreboard entry information from file.
 public class ScoreboardEntryFileReader {
     /* Code adapted from
-     * https://github.students.cs.ubc.ca/CPSC210/TellerApp/blob/master/src/main/ca/ubc/cpsc210/bank
-     * /persistence/Reader.java
+     * https://github.students.cs.ubc.ca/CPSC210/TellerApp/blob/master/src/main/ca/ubc/cpsc210/bank/persistence/Reader.java
      */
 
     // EFFECTS: returns a scoreboard containing all scoreboard entries in given file.

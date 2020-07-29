@@ -231,4 +231,9 @@ public class ScoreboardEntryTest {
         // Now delete the file to reset everything to how it was before the test ran.
         assertTrue(file.delete());
     }
+
+    @Test
+    public void testToString() {
+        assertEquals("Name: My Name; Score: 10000; Lines cleared: 64", entry.toString());
+    }
 }

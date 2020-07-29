@@ -1,10 +1,14 @@
 package ui;
 
+import exceptions.CorruptedFileException;
 import model.Game;
 import model.Scoreboard;
 import model.ScoreboardEntry;
 import model.pieces.*;
+import persistence.ScoreboardEntryFileReader;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,10 +16,13 @@ import java.util.Scanner;
 
 // Represents a Tetris application
 public class TetrisApplication {
+    // The file path of the file containing all saved scoreboard entries.
+    private static final String SCOREBOARD_ENTRIES_FILE_PATH = "./data/scoreboardEntries.txt";
+
     private Scanner scanner;
     private Random random;
     private boolean running;
-    private Scoreboard scoreboard;
+    private Scoreboard tempScoreboard;
     private Game game;
 
     // This field is true if the game has ended and the user has added
@@ -65,7 +72,7 @@ public class TetrisApplication {
         scanner = new Scanner(System.in);
         random = new Random();
         running = true;
-        scoreboard = new Scoreboard();
+        tempScoreboard = new Scoreboard();
         game = new Game(random.nextInt());
         userAddedScoreToScoreboard = false;
         gameJustEnded = false;
@@ -77,9 +84,11 @@ public class TetrisApplication {
         if (game.isGameOver()) {
             System.out.println("replay -> start a new game");
             if (!userAddedScoreToScoreboard) {
-                System.out.println("add -> add your score to the scoreboard");
+                System.out.println("add -> add your score to a temporary scoreboard.");
             }
-            System.out.println("scoreboard -> see scoreboard");
+            System.out.println("view-temp-scores -> view temporary scoreboard");
+            System.out.println("save-temp-scores -> permanently save all entries on the temporary scoreboard to file");
+            System.out.println("view-saved-scores -> view all permanently-saved scoreboard entries");
         } else {
             System.out.println("left -> move piece left one column");
             System.out.println("right -> move piece right one column");
@@ -88,14 +97,18 @@ public class TetrisApplication {
             System.out.println("drop -> drop piece as far down as possible");
             System.out.println("n -> do nothing; let game advance on its own");
         }
-        System.out.println("q -> quit");
+        System.out.println("q-save -> quit and save temporary scoreboard to file");
+        System.out.println("q-no-save -> quit without saving temporary scoreboard to file");
     }
 
     // EFFECTS: handle user input in general
     private void handleUserInput() {
         String input = scanner.next();
         scanner.nextLine();
-        if (input.equalsIgnoreCase("q")) {
+        if (input.equalsIgnoreCase("q-save")) {
+            saveTempScoreboard();
+            running = false;
+        } else if (input.equalsIgnoreCase("q-no-save")) {
             running = false;
         } else {
             if (game.isGameOver()) {
@@ -137,12 +150,15 @@ public class TetrisApplication {
             userAddedScoreToScoreboard = false;
             gameJustEnded = false;
         } else if (!userAddedScoreToScoreboard && input.equalsIgnoreCase("add")) {
-            helpUserAddScore();
-            userAddedScoreToScoreboard = true;
-        } else if (input.equalsIgnoreCase("scoreboard")) {
-            printScoreboard();
+            userAddedScoreToScoreboard = addScoreToTempScoreboard();
+        } else if (input.equalsIgnoreCase("view-temp-scores")) {
+            printTempScoreboard();
+        } else if (input.equalsIgnoreCase("save-temp-scores")) {
+            saveTempScoreboard();
+        } else if (input.equalsIgnoreCase("view-saved-scores")) {
+            printSavedScores();
         } else {
-            System.out.println("Command not recognized.");
+            System.out.println("Command not recognized.\n");
         }
     }
 
@@ -165,42 +181,89 @@ public class TetrisApplication {
         } else if (input.equalsIgnoreCase("n")) {
             game.update();
         } else {
-            System.out.println("Command not recognized.");
+            System.out.println("Command not recognized.\n");
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: guides the user in adding an entry to the scoreboard
-    private void helpUserAddScore() {
+    // EFFECTS: guides the user in adding an entry to the temporary scoreboard. Returns true if
+    //          score was successfully added, false otherwise.
+    private boolean addScoreToTempScoreboard() {
         if (!game.isGameOver()) {
-            System.err.println("Error: the game is not over.");
-            return;
+            System.err.println("Error: the game is not over.\n");
+            return false;
         }
         System.out.println("Please enter your name:");
         String name = scanner.nextLine();
 
         ScoreboardEntry entry = new ScoreboardEntry(game.getScore(), name, game.getLinesCleared());
-        scoreboard.add(entry);
+        tempScoreboard.add(entry);
 
-        System.out.println("Your score was successfully added to the scoreboard!");
+        System.out.println("Your score was successfully added to the scoreboard!\n");
+        return true;
     }
 
-    // EFFECTS: prints all entries on the scoreboard, sorted from greatest to least
-    private void printScoreboard() {
-        List<ScoreboardEntry> sortedEntries = scoreboard.getSortedEntries();
-        if (sortedEntries.size() == 0) {
-            System.out.println("Scoreboard is empty!");
+    // EFFECTS: prints all entries on the temporary scoreboard sorted from greatest to least
+    private void printTempScoreboard() {
+        if (tempScoreboard.getSize() == 0) {
+            System.out.println("You do not have any scores on the temporary scoreboard.\n");
+            return;
         }
-        for (int i = 0; i < sortedEntries.size(); i++) {
-            ScoreboardEntry entry = sortedEntries.get(i);
-            String output = "";
-            output += (i + 1) + ". Name: ";
-            output += entry.getPlayerName();
-            output += "; Score: ";
-            output += entry.getScore();
-            output += "; Lines cleared: ";
-            output += entry.getLinesCleared();
-            System.out.println(output);
+        System.out.println("Temporary scoreboard entries:");
+        printScoreboard(tempScoreboard);
+        System.out.println();
+    }
+
+    // EFFECTS: saves all entries on the temporary scoreboard to the file at SCOREBOARD_ENTRIES_FILE_PATH.
+    //          Clears the temporary scoreboard.
+    private void saveTempScoreboard() {
+        // The printed messages are based on the messages found in the saveAccounts() method of
+        // the TellerApp class of the TellerApp repository.
+        // https://github.students.cs.ubc.ca/CPSC210/TellerApp/blob/master/src/main/ca/ubc/cpsc210/bank/ui/TellerApp.java
+        List<ScoreboardEntry> entries = tempScoreboard.getEntries();
+        if (entries.size() == 0) {
+            System.out.println("There are no scores on the temporary scoreboard to save.\n");
+            return;
+        }
+        try {
+            for (ScoreboardEntry entry : entries) {
+                entry.appendTo(new File(SCOREBOARD_ENTRIES_FILE_PATH));
+            }
+            System.out.println("Saved all entries on temporary scoreboard to file "
+                    + SCOREBOARD_ENTRIES_FILE_PATH + "\n");
+            entries.clear();
+        } catch (IOException e) {
+            System.err.println("Could not save scoreboard to file " + SCOREBOARD_ENTRIES_FILE_PATH + "\n");
+        }
+    }
+
+    // EFFECTS: prints all permanently-saved scoreboard entries in the file at SCOREBOARD_ENTRIES_FILE_PATH,
+    //          sorted from greatest to least
+    private void printSavedScores() {
+        // The printed messages are based on the messages found in the saveAccounts() method of
+        // the TellerApp class of the TellerApp repository.
+        // https://github.students.cs.ubc.ca/CPSC210/TellerApp/blob/master/src/main/ca/ubc/cpsc210/bank/ui/TellerApp.java
+
+        File file = new File(SCOREBOARD_ENTRIES_FILE_PATH);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            System.err.println("An error occurred when trying to create file " + SCOREBOARD_ENTRIES_FILE_PATH + "\n");
+        }
+
+        try {
+            Scoreboard savedScoresAsScoreboard = ScoreboardEntryFileReader.readInScoreboardEntries(file);
+            if (savedScoresAsScoreboard.getSize() == 0) {
+                System.out.println("You do not have any permanently-saved scores.\n");
+                return;
+            }
+            System.out.println("Permanently-saved scoreboard entries:");
+            printScoreboard(savedScoresAsScoreboard);
+            System.out.println();
+        } catch (CorruptedFileException e) {
+            System.err.println("Scoreboard entry file " + SCOREBOARD_ENTRIES_FILE_PATH + " is corrupted.\n");
+        } catch (IOException e) {
+            System.err.println("Could not read from scoreboard entry file " + SCOREBOARD_ENTRIES_FILE_PATH + "\n");
         }
     }
 
@@ -232,6 +295,16 @@ public class TetrisApplication {
             return "T piece";
         } else {
             return "Z piece";
+        }
+    }
+
+    // EFFECTS: prints all entries on the given scoreboard sorted from greatest to least
+    private void printScoreboard(Scoreboard scoreboard) {
+        List<ScoreboardEntry> sortedEntries = scoreboard.getSortedEntries();
+        for (int i = 0; i < sortedEntries.size(); i++) {
+            ScoreboardEntry entry = sortedEntries.get(i);
+            String output = (i + 1) + ". " + entry.toString();
+            System.out.println(output);
         }
     }
 }
