@@ -42,7 +42,7 @@ public class ScoreboardEntryFileReaderTest {
             ScoreboardEntryFileReader.readInScoreboardEntries(file);
             fail("CorruptedFileException should be thrown");
         } catch (CorruptedFileException e) {
-            // expected
+            assertEquals("Line 6 could not be parsed into an integer.", e.getMessage());
         } catch (IOException e) {
             fail("IOException should not be thrown");
         }
@@ -56,7 +56,21 @@ public class ScoreboardEntryFileReaderTest {
             ScoreboardEntryFileReader.readInScoreboardEntries(file);
             fail("CorruptedFileException should be thrown");
         } catch (CorruptedFileException e) {
-            // expected
+            assertEquals("File is badly formatted.", e.getMessage());
+        } catch (IOException e) {
+            fail("IOException should not be thrown");
+        }
+    }
+
+    @Test
+    public void testReadInScoreboardEntriesCorrupted3() {
+        File file = new File("./data/corruptedScoreboardEntries3.txt");
+
+        try {
+            ScoreboardEntryFileReader.readInScoreboardEntries(file);
+            fail("CorruptedFileException should be thrown");
+        } catch (CorruptedFileException e) {
+            assertEquals("Line 4 could not be parsed into an integer.", e.getMessage());
         } catch (IOException e) {
             fail("IOException should not be thrown");
         }

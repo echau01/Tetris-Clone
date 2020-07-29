@@ -1,6 +1,6 @@
 1000
 John Smith
 12
-This string should not be here; it should be the score instead.
+2000
 My Name
-4
+This string should not be here; it should be the lines cleared instead.

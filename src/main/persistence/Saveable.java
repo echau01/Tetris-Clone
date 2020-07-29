@@ -11,5 +11,6 @@ import java.io.PrintWriter;
 public interface Saveable {
     // MODIFIES: printWriter
     // EFFECTS: writes this Saveable object to the given printWriter.
+    // NOTE: The printWriter might not be closed afterwards.
     void saveTo(PrintWriter printWriter);
 }

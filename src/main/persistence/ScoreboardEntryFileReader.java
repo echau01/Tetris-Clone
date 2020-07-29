@@ -25,19 +25,21 @@ public class ScoreboardEntryFileReader {
         List<String> lines = Files.readAllLines(file.toPath());
 
         if (lines.size() % 3 != 0) {
-            throw new CorruptedFileException("At least one part of a scoreboard entry is missing.");
+            throw new CorruptedFileException("File is badly formatted.");
         }
 
         Scoreboard scoreboard = new Scoreboard();
-        for (int i = 0; i < lines.size(); i += 3) {
+        for (int i = 0; i < lines.size(); i++) {
             try {
                 int score = Integer.parseInt(lines.get(i));
-                String playerName = lines.get(i + 1);
-                int linesCleared = Integer.parseInt(lines.get(i + 2));
+                i++;
+                String playerName = lines.get(i);
+                i++;
+                int linesCleared = Integer.parseInt(lines.get(i));
 
                 scoreboard.add(new ScoreboardEntry(score, playerName, linesCleared));
             } catch (NumberFormatException e) {
-                throw new CorruptedFileException("Line " + i + " could not be parsed into an integer.");
+                throw new CorruptedFileException("Line " + (i + 1) + " could not be parsed into an integer.");
             }
         }
 
