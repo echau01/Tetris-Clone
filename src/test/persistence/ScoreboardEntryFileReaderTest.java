@@ -14,6 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ScoreboardEntryFileReaderTest {
 
     @Test
+    public void testConstructor() {
+        // A dummy test -- ScoreboardEntryFileReader isn't meant to be instantiated anyway.
+        ScoreboardEntryFileReader reader = new ScoreboardEntryFileReader();
+    }
+
+    @Test
     public void testReadInScoreboardEntriesNonCorrupted() {
         File file = new File("./data/testScoreboardEntries.txt");
 
