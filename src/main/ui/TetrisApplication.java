@@ -65,6 +65,11 @@ public class TetrisApplication {
             displayCommands();
             handleUserInput();
         }
+
+        // I got the idea to close the scanner from the module C7 lecture lab.
+        // See the end of the processCommands method at:
+        // https://github.students.cs.ubc.ca/CPSC210/CourseRecommender/blob/master/src/main/ca/ubc/cpsc210/courseRecommender/CourseRecommenderApp.java
+        scanner.close();
     }
 
     // EFFECTS: initializes all the fields of this object to their default values
