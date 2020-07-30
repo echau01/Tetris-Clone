@@ -491,7 +491,7 @@ public class GameTest {
             fail("IncorrectBoardSizeException was incorrectly thrown.");
         }
 
-        assertTrue(boardsEqual(testGame1.getBoard(), Game.getBlankBoard()));
+        assertTrue(listsOfArrayListsEqual(testGame1.getBoard(), Game.getBlankBoard()));
     }
 
     @Test
@@ -515,7 +515,7 @@ public class GameTest {
         }
 
         List<ArrayList<Boolean>> currentBoard = testGame1.getBoard();
-        assertTrue(boardsEqual(previousBoard, currentBoard));
+        assertTrue(listsOfArrayListsEqual(previousBoard, currentBoard));
     }
 
     @Test
@@ -539,7 +539,7 @@ public class GameTest {
         }
 
         List<ArrayList<Boolean>> currentBoard = testGame1.getBoard();
-        assertTrue(boardsEqual(previousBoard, currentBoard));
+        assertTrue(listsOfArrayListsEqual(previousBoard, currentBoard));
     }
 
     @Test
@@ -563,7 +563,7 @@ public class GameTest {
         }
 
         List<ArrayList<Boolean>> currentBoard = testGame1.getBoard();
-        assertTrue(boardsEqual(previousBoard, currentBoard));
+        assertTrue(listsOfArrayListsEqual(previousBoard, currentBoard));
     }
 
     @Test
@@ -593,7 +593,7 @@ public class GameTest {
         }
 
         List<ArrayList<Boolean>> currentBoard = testGame1.getBoard();
-        assertTrue(boardsEqual(previousBoard, currentBoard));
+        assertTrue(listsOfArrayListsEqual(previousBoard, currentBoard));
     }
 
     @Test
@@ -614,6 +614,32 @@ public class GameTest {
         for (Point p : piece.getTileLocations()) {
             assertTrue(boardCells.get(p.y).get(p.x));
         }
+    }
+
+    // EFFECTS: returns true if list1 and list2 have the same size, and if each ArrayList in
+    //          list1 is equal to the ArrayList at the same index in list2. Returns false otherwise.
+    //
+    //          Two arraylists are equal if and only if they have the same size and contain equal
+    //          elements at equal indices.
+    public static boolean listsOfArrayListsEqual(List<ArrayList<Boolean>> list1, List<ArrayList<Boolean>> list2) {
+        if (list1.size() != list2.size()) {
+            return false;
+        }
+
+        for (int r = 0; r < list1.size(); r++) {
+            ArrayList<Boolean> rowFromBoard1 = list1.get(r);
+            ArrayList<Boolean> rowFromBoard2 = list2.get(r);
+            if (rowFromBoard1.size() != rowFromBoard2.size()) {
+                return false;
+            }
+            for (int c = 0; c < rowFromBoard1.size(); c++) {
+                if (rowFromBoard1.get(c) != rowFromBoard2.get(c)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     // EFFECTS: Ensures that the piece's tiles are located at the four given points
@@ -641,28 +667,5 @@ public class GameTest {
             }
         }
         return numTiles;
-    }
-
-    // EFFECTS: returns true if the two boards have the same number of rows and columns,
-    //          and if all cells are equal. Returns false otherwise.
-    private boolean boardsEqual(List<ArrayList<Boolean>> board1, List<ArrayList<Boolean>> board2) {
-        if (board1.size() != board2.size()) {
-            return false;
-        }
-
-        for (int r = 0; r < board1.size(); r++) {
-            ArrayList<Boolean> rowFromBoard1 = board1.get(r);
-            ArrayList<Boolean> rowFromBoard2 = board2.get(r);
-            if (rowFromBoard1.size() != rowFromBoard2.size()) {
-                return false;
-            }
-            for (int c = 0; c < rowFromBoard1.size(); c++) {
-                if (rowFromBoard1.get(c) != rowFromBoard2.get(c)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 }

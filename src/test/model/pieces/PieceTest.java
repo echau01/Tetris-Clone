@@ -2,6 +2,7 @@ package model.pieces;
 
 import exceptions.IncorrectBoardSizeException;
 import model.Game;
+import model.GameTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +30,10 @@ public abstract class PieceTest {
         testGame = new Game(0);
 
         List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
+
+        // riggedBoard will have the following properties:
+        // The top half of the board is left empty.
+        // The bottom half of the board is filled with tiles, except for the middle 5 columns.
         int approximateCenter = Math.floorDiv(Game.WIDTH - 1, 2);
         for (int i = Game.HEIGHT / 2; i < Game.HEIGHT; i++) {
             ArrayList<Boolean> row = riggedBoard.get(i);
@@ -72,7 +77,7 @@ public abstract class PieceTest {
             piece.moveLeft();
         }
 
-        // By now, t is guaranteed to be at the left wall
+        // By now, piece is guaranteed to be at the left wall
 
         Set<Point> oldTileLocations = piece.getTileLocations();
         assertFalse(piece.moveLeft());
@@ -118,7 +123,7 @@ public abstract class PieceTest {
             piece.moveRight();
         }
 
-        // By now, t is guaranteed to be at the right wall
+        // By now, piece is guaranteed to be at the right wall
 
         Set<Point> oldTileLocations = piece.getTileLocations();
         assertFalse(piece.moveRight());
@@ -163,7 +168,7 @@ public abstract class PieceTest {
             piece.moveDown();
         }
 
-        // By now, t is guaranteed to be at the floor
+        // By now, piece is guaranteed to be at the floor
 
         Set<Point> oldTileLocations = piece.getTileLocations();
         assertFalse(piece.moveDown());
@@ -185,11 +190,23 @@ public abstract class PieceTest {
             piece.moveDown();
         }
 
-        // t is guaranteed to be directly above a tile now.
+        // piece is guaranteed to be directly above a tile now.
 
         Set<Point> tileLocations = piece.getTileLocations();
         assertFalse(piece.moveDown());
         assertEquals(tileLocations, piece.getTileLocations());
+    }
+
+    @Test
+    public void testGetTileLocations() {
+        Set<Point> tileLocations = piece.getTileLocations();
+        Set<Point> tileLocationsCopy = piece.getTileLocations();
+        tileLocations.add(new Point(2 * Game.WIDTH, 2 * Game.HEIGHT));
+
+        // Changing tileLocations should not change the actual locations
+        // of the tiles of piece.
+        assertNotEquals(tileLocations, piece.getTileLocations());
+        assertEquals(tileLocationsCopy, piece.getTileLocations());
     }
 
     @Test
@@ -201,16 +218,6 @@ public abstract class PieceTest {
             assertFalse(piece.rotate());
         }
         assertEquals(tileLocations, piece.getTileLocations());
-    }
-
-    @Test
-    public void testGetTileLocationsChangingReturnedSet() {
-        Set<Point> tileLocations = piece.getTileLocations();
-        tileLocations.add(new Point(2 * Game.WIDTH, 2 * Game.HEIGHT));
-
-        // Changing tileLocations should not change the actual locations
-        // of the tiles of t.
-        assertNotEquals(tileLocations, piece.getTileLocations());
     }
 
     @Test

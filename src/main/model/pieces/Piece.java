@@ -1,5 +1,6 @@
 package model.pieces;
 
+import exceptions.IncorrectBoardSizeException;
 import model.Game;
 
 import java.awt.Point;
@@ -111,6 +112,39 @@ public abstract class Piece {
                     p.y + rotationReferencePoint.y));
         }
         return tileAbsoluteLocations;
+    }
+
+    // EFFECTS: returns a set containing the locations (as points) of each of the piece's tiles
+    //          if the piece were to be "hard-dropped" (i.e. if the piece were dropped straight
+    //          down as far as it can go).
+    // NOTE: this method does not actually hard drop the piece. It is only meant to give a preview
+    //       of where the piece would land if it were hard dropped.
+    public Set<Point> getHardDropTileLocations() {
+        Point rotationReferencePointCopy = new Point(rotationReferencePoint);
+        Set<Point> oldTileLocations = this.getTileLocations();
+
+        // Move the piece as far down as possible.
+        boolean canMoveDown;
+        do {
+            canMoveDown = this.moveDown();
+        } while (canMoveDown);
+
+        Set<Point> hardDropTileLocations = this.getTileLocations();
+
+        // Reset rotationReferencePoint to what it was before (thus resetting the piece's position).
+        this.rotationReferencePoint = rotationReferencePointCopy;
+
+        // We now make sure the game board is reset to how it was before this method was called, since the
+        // moveDown() method modifies the board. We need to delete the tiles at hardDropTileLocations, then fill
+        // in the cells at oldTileLocations.
+        for (Point point : hardDropTileLocations) {
+            game.getBoard().get(point.y).set(point.x, false);
+        }
+        for (Point point : oldTileLocations) {
+            game.getBoard().get(point.y).set(point.x, true);
+        }
+
+        return hardDropTileLocations;
     }
 
     // EFFECTS: returns a set of the tile locations of this piece relative to rotationReferencePoint
