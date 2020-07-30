@@ -262,6 +262,7 @@ public class TetrisApplication {
             System.out.println();
         } catch (CorruptedFileException e) {
             System.err.println("Scoreboard entry file " + SCOREBOARD_ENTRIES_FILE_PATH + " is corrupted.\n");
+            System.err.println(e.getMessage());
         } catch (IOException e) {
             System.err.println("Could not read from scoreboard entry file " + SCOREBOARD_ENTRIES_FILE_PATH + "\n");
         }
