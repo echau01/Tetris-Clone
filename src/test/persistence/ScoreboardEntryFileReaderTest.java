@@ -16,6 +16,7 @@ public class ScoreboardEntryFileReaderTest {
     @Test
     public void testConstructor() {
         // A dummy test -- ScoreboardEntryFileReader isn't meant to be instantiated anyway.
+        // This is allowed. See Piazza post @448_f1
         ScoreboardEntryFileReader reader = new ScoreboardEntryFileReader();
     }
 
