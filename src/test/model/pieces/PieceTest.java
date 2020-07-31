@@ -1,5 +1,6 @@
 package model.pieces;
 
+import exceptions.IllegalStartingLevelException;
 import exceptions.IncorrectBoardSizeException;
 import model.Game;
 import model.GameTest;
@@ -27,7 +28,11 @@ public abstract class PieceTest {
     // tells us that this behaviour will happen.
     @BeforeEach
     public void setUpTestGame() {
-        testGame = new Game(0);
+        try {
+            testGame = new Game(0, 0);
+        } catch (IllegalStartingLevelException e) {
+            fail("IllegalStartingLevelException should not be thrown");
+        }
 
         List<ArrayList<Boolean>> riggedBoard = Game.getBlankBoard();
 

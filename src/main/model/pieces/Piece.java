@@ -1,6 +1,5 @@
 package model.pieces;
 
-import exceptions.IncorrectBoardSizeException;
 import model.Game;
 
 import java.awt.Point;

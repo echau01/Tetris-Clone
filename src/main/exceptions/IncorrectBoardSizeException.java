@@ -1,4 +1,4 @@
 package exceptions;
 
-public class IncorrectBoardSizeException extends Exception {
+public class IncorrectBoardSizeException extends RuntimeException {
 }

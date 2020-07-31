@@ -1,6 +1,8 @@
 package model;
 
+import exceptions.IllegalStartingLevelException;
 import exceptions.IncorrectBoardSizeException;
+import exceptions.NegativeLinesException;
 import model.pieces.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,8 +28,12 @@ public class GameTest {
     public void setUp() {
         // First ten numbers that are produced by the random number generator with seed 5000:
         // 0, 1, 2, 4, 3, 6, 5, 2, 0, 4
-        testGame1 = new Game(GAME_SEED);
-        testGame2 = new Game(GAME_SEED);
+        try {
+            testGame1 = new Game(GAME_SEED, 0);
+            testGame2 = new Game(GAME_SEED, 0);
+        } catch (IllegalStartingLevelException e) {
+            fail("IllegalStartingLevelException should not be thrown");
+        }
 
         // The random number generator seed is set so that the first piece is an "I" piece.
         // We now set this "I" piece standing upright at the bottom of the rightmost column.
@@ -44,7 +50,7 @@ public class GameTest {
     }
 
     @Test
-    public void testConstructor() {
+    public void testConstructorStartingLevelZero() {
         assertEquals(0, testGame1.getScore());
         assertEquals(0, testGame1.getLinesCleared());
         assertFalse(testGame1.isGameOver());
@@ -66,6 +72,35 @@ public class GameTest {
         checkBoardContainsPiece(testGame1.getBoard(), testGame1.getActivePiece());
 
         assertTrue(testGame1.getNextPiece() instanceof JPiece);
+    }
+
+    @Test
+    public void testConstructorStartingLevelNoException() {
+        try {
+            Game myGame = new Game(0, 4);
+            Game myGame2 = new Game(0, 18);
+            assertEquals(4, myGame.getLevel());
+            assertEquals(18, myGame2.getLevel());
+        } catch (IllegalStartingLevelException e) {
+            fail("IllegalStartingLevelException should not be thrown.");
+        }
+    }
+
+    @Test
+    public void testConstructorStartingLevelExceptionalCases() {
+        try {
+            Game myGame = new Game(0, -1);
+            fail("IllegalStartingLevelException should be thrown.");
+        } catch (IllegalStartingLevelException e) {
+            // this is expected
+        }
+
+        try {
+            Game myGame = new Game(0, 19);
+            fail("IllegalStartingLevelException should be thrown.");
+        } catch (IllegalStartingLevelException e) {
+            // this is expected
+        }
     }
 
     @Test
@@ -594,6 +629,107 @@ public class GameTest {
 
         List<ArrayList<Boolean>> currentBoard = testGame1.getBoard();
         assertTrue(listsOfArrayListsEqual(previousBoard, currentBoard));
+    }
+
+    @Test
+    public void testSetLinesClearedPositiveLines() {
+        Game myGame = new Game(0, 0);
+
+        try {
+            myGame.setLinesCleared(100);
+        } catch (NegativeLinesException e) {
+            fail("NegativeLinesException should not be thrown.");
+        }
+
+        assertEquals(100, myGame.getLinesCleared());
+        assertEquals(10, myGame.getLevel());
+        assertEquals(0, myGame.getScore());
+    }
+
+    @Test
+    public void testSetLinesClearedZeroLines() {
+        Game myGame = new Game(0, 0);
+
+        try {
+            myGame.setLinesCleared(0);
+        } catch (NegativeLinesException e) {
+            fail("NegativeLinesException should not be thrown.");
+        }
+
+        assertEquals(0, myGame.getLinesCleared());
+        assertEquals(0, myGame.getLevel());
+        assertEquals(0, myGame.getScore());
+    }
+
+    @Test
+    public void testSetLinesClearedNegativeLines() {
+        Game myGame = new Game(0, 0);
+
+        try {
+            myGame.setLinesCleared(-100);
+            fail("NegativeLinesException should be thrown.");
+        } catch (NegativeLinesException e) {
+            // this is expected
+        }
+
+        assertEquals(0, myGame.getLinesCleared());
+        assertEquals(0, myGame.getLevel());
+        assertEquals(0, myGame.getScore());
+    }
+
+    @Test
+    public void testGetLevelStartingLevelZero() {
+        Game myGame = new Game(0, 0);
+        myGame.setLinesCleared(129);
+        assertEquals(12, myGame.getLevel());
+
+        myGame.setLinesCleared(90);
+        assertEquals(9, myGame.getLevel());
+    }
+
+    @Test
+    public void testGetLevelStartingLevelNotZero() {
+        // myGame has starting level 8 and will increase to level 9 at 90 lines
+        Game myGame = new Game(0, 8);
+        myGame.setLinesCleared(10);
+        assertEquals(8, myGame.getLevel());
+
+        myGame.setLinesCleared(89);
+        assertEquals(8, myGame.getLevel());
+
+        myGame.setLinesCleared(90);
+        assertEquals(9, myGame.getLevel());
+
+        myGame.setLinesCleared(100);
+        assertEquals(10, myGame.getLevel());
+
+        // myGame2 has starting level 12 and will increase to level 13 at 100 lines
+        Game myGame2 = new Game(0, 12);
+        myGame2.setLinesCleared(30);
+        assertEquals(12, myGame2.getLevel());
+
+        myGame2.setLinesCleared(99);
+        assertEquals(12, myGame2.getLevel());
+
+        myGame2.setLinesCleared(100);
+        assertEquals(13, myGame2.getLevel());
+
+        myGame2.setLinesCleared(140);
+        assertEquals(17, myGame2.getLevel());
+
+        // myGame2 has starting level 18 and will increase to level 19 at 130 lines
+        Game myGame3 = new Game(0, 18);
+        myGame2.setLinesCleared(30);
+        assertEquals(18, myGame3.getLevel());
+
+        myGame3.setLinesCleared(129);
+        assertEquals(18, myGame3.getLevel());
+
+        myGame3.setLinesCleared(130);
+        assertEquals(19, myGame3.getLevel());
+
+        myGame3.setLinesCleared(140);
+        assertEquals(20, myGame3.getLevel());
     }
 
     @Test

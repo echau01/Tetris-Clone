@@ -1,6 +1,7 @@
 package ui;
 
 import exceptions.CorruptedFileException;
+import exceptions.IllegalStartingLevelException;
 import model.Game;
 import model.Scoreboard;
 import model.ScoreboardEntry;
@@ -54,6 +55,7 @@ public class TetrisApplication {
                 if (!game.isGameOver()) {
                     System.out.println("Score: " + game.getScore());
                     System.out.println("Lines cleared: " + game.getLinesCleared());
+                    System.out.println("Level: " + game.getLevel());
                     printNextPiece();
                 } else {
                     System.out.println("Game over!");
@@ -78,7 +80,7 @@ public class TetrisApplication {
         random = new Random();
         running = true;
         tempScoreboard = new Scoreboard();
-        game = new Game(random.nextInt());
+        game = new Game(random.nextInt(), 0);
         userAddedScoreToScoreboard = false;
         gameJustEnded = false;
     }
@@ -151,7 +153,7 @@ public class TetrisApplication {
     // EFFECTS: handles given user input for when the game is over
     private void handleUserInputGameOver(String input) {
         if (input.equalsIgnoreCase("replay")) {
-            game = new Game(random.nextInt());
+            game = new Game(random.nextInt(), 0);
             userAddedScoreToScoreboard = false;
             gameJustEnded = false;
         } else if (!userAddedScoreToScoreboard && input.equalsIgnoreCase("add")) {

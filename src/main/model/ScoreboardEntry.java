@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Objects;
 
 // Represents an entry on the scoreboard that is shown at the end of the game.
-// An entry contains the player's score, name, and lines cleared.
+// An entry contains a player's score, name, and lines cleared. The level
+// that the player reached is not included in the entry -- score and lines cleared
+// are much better measures of skill.
 public class ScoreboardEntry implements Comparable<ScoreboardEntry>, Saveable {
     private int score;
     private String playerName;

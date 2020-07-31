@@ -1,6 +1,8 @@
 package model;
 
+import exceptions.IllegalStartingLevelException;
 import exceptions.IncorrectBoardSizeException;
+import exceptions.NegativeLinesException;
 import model.pieces.*;
 
 import java.awt.*;
@@ -30,6 +32,7 @@ public class Game {
     private List<ArrayList<Boolean>> board;
     private int score;
     private int linesCleared;
+    private int startingLevel;
     private boolean gameOver;
 
     // Initializes the RANDOM_INT_TO_PIECE_TYPE map
@@ -52,21 +55,28 @@ public class Game {
     }
 
     // EFFECTS: creates a new Tetris game, where the pieces are randomly generated with
-    //          the given seed. Randomly generates an active piece and a next piece. The
-    //          active piece spawns at the top of the board.
-    public Game(long seed) {
-        // Note: this method has a "seed" argument just so we can test the Game class
-        // without the randomness of the tetromino generator. I got this idea from the following answer
+    //          the given seed. The player starts at the given startingLevel.
+    //          Randomly generates an active piece and a next piece, then spawns the
+    //          active piece at the top of the board.
+    //          Throws IllegalStartingLevelException if startingLevel < 0 or startingLevel > 18.
+    public Game(long seed, int startingLevel) throws IllegalStartingLevelException {
+        // Note: this method has a "seed" argument just so we can test the Game class while controlling
+        // the randomness of the tetromino generator. I got this idea from the following answer
         // on StackOverflow by the user Parappa: https://stackoverflow.com/a/88110/3335320
 
+        if (startingLevel < 0 || startingLevel > 18) {
+            throw new IllegalStartingLevelException();
+        }
+
+        this.startingLevel = startingLevel;
         startNewGame(seed);
     }
 
     // MODIFIES: this
     // EFFECTS: updates the state of the game.
     //          Moves the active piece down one row if there is space.
-    //          Otherwise, if the game is not over, clears any filled rows and awards points accordingly.
-    //          Then, begins dropping a new piece from the top of the board.
+    //          Otherwise, if the game is not over, clears any filled rows and modifies points earned, lines
+    //          cleared, and level accordingly. Then, begins dropping a new piece from the top of the board.
     //          If the game is over (because the player topped out), ends the game.
     //          Note: if the game is already over, calling this method does nothing.
     public void update() {
@@ -125,6 +135,29 @@ public class Game {
     // EFFECTS: returns the number of lines cleared so far
     public int getLinesCleared() {
         return linesCleared;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the lines cleared to linesCleared.
+    //          Throws NegativeLinesException if linesCleared < 0.
+    public void setLinesCleared(int linesCleared) throws NegativeLinesException {
+        if (linesCleared < 0) {
+            throw new NegativeLinesException();
+        }
+        this.linesCleared = linesCleared;
+    }
+
+    // EFFECTS: returns the current level of the game. The level increases with line clears according to the
+    //          rules given at the bottom of the Details section at https://tetris.wiki/Tetris_(NES,_Nintendo)
+    public int getLevel() {
+        int firstLevelIncreaseLines = Math.min(10 * startingLevel + 10, Math.max(100, 10 * startingLevel - 50));
+
+        int normalizedLinesCleared = linesCleared - firstLevelIncreaseLines + 10;
+        if (normalizedLinesCleared < 0) {
+            return startingLevel;
+        } else {
+            return startingLevel + normalizedLinesCleared / 10;
+        }
     }
 
     // EFFECTS: returns true if the game is over, false otherwise
