@@ -25,6 +25,8 @@ public class Scoreboard {
     //          (where entries are compared with the compareTo method in the ScoreboardEntry class),
     //          then returns the sorted entries.
     public List<ScoreboardEntry> getSortedEntries() {
+        // I discovered Collections.reverseOrder() from the JavaDocs:
+        // https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#reverseOrder-java.util.Comparator-
         entries.sort(Collections.reverseOrder());
         return entries;
     }
