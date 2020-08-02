@@ -43,14 +43,14 @@ public abstract class Piece {
         // The rotation rules I used are found at https://strategywiki.org/wiki/Tetris/Rotation_systems
         // in the Sega rotation system section.
         Set<Point> previousTileLocations = getTileLocations();
-        nextOrientation();
+        changeToNextOrientation();
 
         if (cannotExecuteMove(previousTileLocations)) {
-            previousOrientation();
+            changeToPreviousOrientation();
             return false;
         }
 
-        nextBoard(previousTileLocations);
+        updateBoard(previousTileLocations);
         return true;
     }
 
@@ -66,7 +66,7 @@ public abstract class Piece {
             return false;
         }
 
-        nextBoard(previousTileLocations);
+        updateBoard(previousTileLocations);
         return true;
     }
 
@@ -82,7 +82,7 @@ public abstract class Piece {
             return false;
         }
 
-        nextBoard(previousTileLocations);
+        updateBoard(previousTileLocations);
         return true;
     }
 
@@ -98,7 +98,7 @@ public abstract class Piece {
             return false;
         }
 
-        nextBoard(previousTileLocations);
+        updateBoard(previousTileLocations);
         return true;
     }
 
@@ -175,7 +175,7 @@ public abstract class Piece {
 
     // MODIFIES: this
     // EFFECTS: changes orientation to next orientation
-    private void nextOrientation() {
+    private void changeToNextOrientation() {
         if (orientation == 3) {
             orientation = 0;
         } else {
@@ -185,7 +185,7 @@ public abstract class Piece {
 
     // MODIFIES: this
     // EFFECTS: changes orientation to previous orientation
-    private void previousOrientation() {
+    private void changeToPreviousOrientation() {
         if (orientation == 0) {
             orientation = 3;
         } else {
@@ -216,7 +216,7 @@ public abstract class Piece {
 
     // MODIFIES: this
     // EFFECTS: removes the tiles at the given locations from the board, and adds this piece's tiles to the board.
-    private void nextBoard(Set<Point> tilesToRemove) {
+    private void updateBoard(Set<Point> tilesToRemove) {
         List<ArrayList<Boolean>> board = game.getBoard();
         for (Point p : tilesToRemove) {
             board.get(p.y).set(p.x, false);

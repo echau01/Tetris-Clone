@@ -1,7 +1,6 @@
 package ui;
 
 import exceptions.CorruptedFileException;
-import exceptions.IllegalStartingLevelException;
 import model.Game;
 import model.Scoreboard;
 import model.ScoreboardEntry;
@@ -27,8 +26,8 @@ public class TetrisApplication {
     private Game game;
 
     // This field is true if the game has ended and the user has added
-    // their score to the scoreboard.
-    private boolean userAddedScoreToScoreboard;
+    // their score to the temporary scoreboard.
+    private boolean userAddedToTempScoreboard;
 
     // This field is true if the game has just ended (i.e. the user has just topped
     // out and is seeing the game over commands for the first time after the game),
@@ -81,7 +80,7 @@ public class TetrisApplication {
         running = true;
         tempScoreboard = new Scoreboard();
         game = new Game(random.nextInt(), 0);
-        userAddedScoreToScoreboard = false;
+        userAddedToTempScoreboard = false;
         gameJustEnded = false;
     }
 
@@ -89,25 +88,39 @@ public class TetrisApplication {
     private void displayCommands() {
         System.out.println("Type one of the following commands:");
         if (game.isGameOver()) {
-            System.out.println("replay -> start a new game");
-            if (!userAddedScoreToScoreboard) {
-                System.out.println("add -> add your score to a temporary scoreboard.");
-            }
-            System.out.println("view-temp-scores -> view temporary scoreboard");
-            System.out.println("save-temp-scores -> permanently save all entries on the temporary scoreboard to file");
-            System.out.println("view-saved-scores -> view all permanently-saved scoreboard entries");
+            displayGameOverCommands();
         } else {
-            System.out.println("left -> move piece left one column");
-            System.out.println("right -> move piece right one column");
-            System.out.println("rotate -> rotate piece 90 degrees clockwise");
-            System.out.println("down -> move piece down one row");
-            System.out.println("drop -> drop piece as far down as possible");
-            System.out.println("n -> do nothing; let game advance on its own");
+            displayInGameCommands();
         }
         System.out.println("q-save -> quit and save temporary scoreboard to file");
         System.out.println("q-no-save -> quit without saving temporary scoreboard to file");
     }
 
+    // EFFECTS: prints a list of commands the user can perform only when the game is over
+    private void displayGameOverCommands() {
+        System.out.println("replay -> start a new game");
+        if (!userAddedToTempScoreboard) {
+            System.out.println("add -> add your score to a temporary scoreboard");
+        }
+        if (tempScoreboard.getSize() > 0) {
+            System.out.println("remove -> remove a score from the temporary scoreboard");
+        }
+        System.out.println("view-temp-scores -> view temporary scoreboard");
+        System.out.println("save-temp-scores -> permanently save all entries on the temporary scoreboard to file");
+        System.out.println("view-saved-scores -> view all permanently-saved scoreboard entries");
+    }
+
+    // EFFECTS: prints a list of commands the user can perform only when they are playing the Tetris game
+    private void displayInGameCommands() {
+        System.out.println("left -> move piece left one column");
+        System.out.println("right -> move piece right one column");
+        System.out.println("rotate -> rotate piece 90 degrees clockwise");
+        System.out.println("down -> move piece down one row");
+        System.out.println("drop -> drop piece as far down as possible");
+        System.out.println("n -> do nothing; let game advance on its own");
+    }
+
+    // MODIFIES: this
     // EFFECTS: handle user input in general
     private void handleUserInput() {
         String input = scanner.next();
@@ -150,14 +163,17 @@ public class TetrisApplication {
         System.out.println();
     }
 
+    // MODIFIES: this
     // EFFECTS: handles given user input for when the game is over
     private void handleUserInputGameOver(String input) {
         if (input.equalsIgnoreCase("replay")) {
             game = new Game(random.nextInt(), 0);
-            userAddedScoreToScoreboard = false;
+            userAddedToTempScoreboard = false;
             gameJustEnded = false;
-        } else if (!userAddedScoreToScoreboard && input.equalsIgnoreCase("add")) {
-            userAddedScoreToScoreboard = addScoreToTempScoreboard();
+        } else if (!userAddedToTempScoreboard && input.equalsIgnoreCase("add")) {
+            userAddedToTempScoreboard = addScoreToTempScoreboard();
+        } else if (tempScoreboard.getSize() > 0 && input.equalsIgnoreCase("remove")) {
+            removeScoreboardEntry();
         } else if (input.equalsIgnoreCase("view-temp-scores")) {
             printTempScoreboard();
         } else if (input.equalsIgnoreCase("save-temp-scores")) {
@@ -169,6 +185,7 @@ public class TetrisApplication {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: handles given user input for when the game is not over
     private void handleUserInputGameNotOver(String input) {
         if (input.equalsIgnoreCase("left")) {
@@ -210,17 +227,66 @@ public class TetrisApplication {
         return true;
     }
 
-    // EFFECTS: prints all entries on the temporary scoreboard sorted from greatest to least
+    // MODIFIES: this
+    // EFFECTS: guides the user in removing an entry from the temporary scoreboard. The user can
+    //          cancel the removal operation if they want.
+    private void removeScoreboardEntry() {
+        if (tempScoreboard.getSize() == 0) {
+            System.out.println("There are no entries on the temporary scoreboard to remove.");
+            return;
+        }
+        boolean removing = true;
+        while (removing) {
+            System.out.println("Type the number of the scoreboard entry you want to remove, or type \"cancel\" "
+                    + "(without the quotes) to cancel this operation.");
+            System.out.println("Temporary scoreboard entries:");
+            printSortedScoreboard(tempScoreboard);
+            String input = scanner.next();
+            scanner.nextLine();
+            removing = !handleRemoveScoreboardEntryInput(input);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: handles input that the user gives when they are removing an entry from the temporary scoreboard.
+    //          Returns true if the case-insensitive input is "cancel" (without the quotes), or if the user
+    //          successfully removes an entry from the temporary scoreboard by inputting a valid scoreboard entry
+    //          number. In other words, returns true if the user's input causes the remove operation to finish.
+    //          Returns false otherwise.
+    private boolean handleRemoveScoreboardEntryInput(String input) {
+        if (input.equalsIgnoreCase("cancel")) {
+            return true;
+        } else {
+            try {
+                int index = Integer.parseInt(input) - 1;
+                if (0 <= index && index < tempScoreboard.getSize()) {
+                    tempScoreboard.getSortedEntries().remove(index);
+                    System.out.println("Successfully removed scoreboard entry " + (index + 1) + ".\n");
+                    return true;
+                } else {
+                    System.out.println("The number of the entry to remove must be between 1 and "
+                            + tempScoreboard.getSize() + " inclusive. Please try again.\n");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Input not recognized. Please try a different input.\n");
+            }
+        }
+        return false;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: prints all entries on the temporary scoreboard sorted from greatest to least.
     private void printTempScoreboard() {
         if (tempScoreboard.getSize() == 0) {
             System.out.println("You do not have any scores on the temporary scoreboard.\n");
             return;
         }
         System.out.println("Temporary scoreboard entries:");
-        printScoreboard(tempScoreboard);
+        printSortedScoreboard(tempScoreboard);
         System.out.println();
     }
 
+    // MODIFIES: this
     // EFFECTS: saves all entries on the temporary scoreboard to the file at SCOREBOARD_ENTRIES_FILE_PATH.
     //          Clears the temporary scoreboard.
     private void saveTempScoreboard() {
@@ -265,7 +331,7 @@ public class TetrisApplication {
                 return;
             }
             System.out.println("Permanently-saved scoreboard entries:");
-            printScoreboard(savedScoresAsScoreboard);
+            printSortedScoreboard(savedScoresAsScoreboard);
             System.out.println();
         } catch (CorruptedFileException e) {
             System.err.println("Scoreboard entry file " + SCOREBOARD_ENTRIES_FILE_PATH + " is corrupted.\n");
@@ -306,8 +372,9 @@ public class TetrisApplication {
         }
     }
 
+    // MODIFIES: scoreboard
     // EFFECTS: prints all entries on the given scoreboard sorted from greatest to least
-    private void printScoreboard(Scoreboard scoreboard) {
+    private void printSortedScoreboard(Scoreboard scoreboard) {
         List<ScoreboardEntry> sortedEntries = scoreboard.getSortedEntries();
         for (int i = 0; i < sortedEntries.size(); i++) {
             ScoreboardEntry entry = sortedEntries.get(i);
