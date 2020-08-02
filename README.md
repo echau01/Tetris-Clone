@@ -16,9 +16,10 @@ game can be so fun to play.
 
 ## User Stories
 
-- As a user, I want to be able to add an entry (containing my score, name, and lines cleared) to a scoreboard after
-the game is over.
-- As a user, after I add entries to the scoreboard, I want to be able to optionally save the *unsaved* entries to a 
+- As a user, I want to be able to add an entry (containing my score, name, and lines cleared) to a temporary
+scoreboard after the game is over.
+- As a user, I want to be able to remove entries from the temporary scoreboard.
+- As a user, after I add entries to the temporary scoreboard, I want to be able to optionally save the entries to a 
 file.
 - As a user, I want to be able to load in previously-saved scoreboard entries from file so that I can view them.
 - As a user, I want to be able to move pieces horizontally.
@@ -28,5 +29,6 @@ file.
 - As a user, I want to be able to clear line(s) by completely filling a row with the tiles of tetrominoes.
 - As a user, I want to be able to see my current in-game score.
 - As a user, I want to be able to see the number of lines I have cleared so far.
+- As a user, I want to be able to see my current in-game level.
 - As a user, I want to be able to see the next piece that will come after I place the current piece.
 - As a user, I want to be able to replay the game after it ends.
