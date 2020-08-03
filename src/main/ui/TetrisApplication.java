@@ -73,6 +73,7 @@ public class TetrisApplication {
         scanner.close();
     }
 
+    // MODIFIES: this
     // EFFECTS: initializes all the fields of this object to their default values
     private void initFields() {
         scanner = new Scanner(System.in);
