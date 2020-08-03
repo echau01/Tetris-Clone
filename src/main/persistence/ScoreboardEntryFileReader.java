@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-// This class can read scoreboard entry information from file.
+// This class is used for reading scoreboard entry information from file.
 public class ScoreboardEntryFileReader {
-    /* Code adapted from
+    /* Code adapted from TellerApp's Reader:
      * https://github.students.cs.ubc.ca/CPSC210/TellerApp/blob/master/src/main/ca/ubc/cpsc210/bank/persistence/Reader.java
      */
 
