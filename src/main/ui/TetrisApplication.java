@@ -223,7 +223,7 @@ public class TetrisApplication {
         ScoreboardEntry entry = new ScoreboardEntry(game.getScore(), name, game.getLinesCleared());
         tempScoreboard.add(entry);
 
-        System.out.println("Your score was successfully added to the scoreboard!\n");
+        System.out.println("Your score was successfully added to the temporary scoreboard!\n");
         return true;
     }
 
@@ -306,7 +306,7 @@ public class TetrisApplication {
                     + SCOREBOARD_ENTRIES_FILE_PATH + "\n");
             entries.clear();
         } catch (IOException e) {
-            System.err.println("Could not save scoreboard to file " + SCOREBOARD_ENTRIES_FILE_PATH + "\n");
+            System.err.println("Could not save temporary scoreboard to file " + SCOREBOARD_ENTRIES_FILE_PATH + "\n");
         }
     }
 
@@ -322,6 +322,7 @@ public class TetrisApplication {
             file.createNewFile();
         } catch (IOException e) {
             System.err.println("An error occurred when trying to create file " + SCOREBOARD_ENTRIES_FILE_PATH + "\n");
+            return;
         }
 
         try {
