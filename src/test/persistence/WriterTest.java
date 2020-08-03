@@ -34,7 +34,7 @@ public class WriterTest {
     }
 
     @Test
-    public void testSaveTo() {
+    public void testWrite() {
         assertEquals(2, scoreboardInTestFile.getSize());
 
         for (ScoreboardEntry entryInFile : scoreboardInTestFile.getEntries()) {
