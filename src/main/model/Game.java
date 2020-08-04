@@ -9,11 +9,12 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-// Represents a Tetris game
-public class Game {
+// Represents a Tetris game. This class is a "subject" in the observer design pattern.
+// Observers are notified whenever a piece cannot move down.
+public class Game extends Observable {
     public static final int NUM_TETRIS_PIECES = 7;
 
-    // Width and height of the board
+    // Width and height of the board (measured in number of tiles)
     public static final int WIDTH = 10;
     public static final int HEIGHT = 20;
 
@@ -78,6 +79,8 @@ public class Game {
     //          Otherwise, if the game is not over, clears any filled rows and modifies points earned, lines
     //          cleared, and level accordingly. Then, begins dropping a new piece from the top of the board.
     //          If the game is over (because the player topped out), ends the game.
+    //          Notifies observers if the active piece could not move down one row.
+    //
     //          Note: if the game is already over, calling this method does nothing.
     public void update() {
         if (!gameOver) {
@@ -90,6 +93,9 @@ public class Game {
                 }
                 PieceType nextPieceType = RANDOM_INT_TO_PIECE_TYPE.get(random.nextInt(NUM_TETRIS_PIECES));
                 nextPiece = makePiece(nextPieceType);
+
+                super.setChanged();
+                super.notifyObservers();
             }
         }
     }
