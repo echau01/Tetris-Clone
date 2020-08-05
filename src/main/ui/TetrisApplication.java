@@ -384,4 +384,8 @@ public class TetrisApplication {
             System.out.println(output);
         }
     }
+
+    public static void main(String[] args) {
+        new TetrisApplication();
+    }
 }

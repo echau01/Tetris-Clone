@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
@@ -20,12 +23,12 @@ public class TetrisGUI extends JFrame implements Observer {
     private Random random;
     private BoardPanel boardPanel;
     private GameInfoPanel gameInfoPanel;
+    private TemporaryScoreboardManager tempScoreboardManager = TemporaryScoreboardManager.getInstance();
 
-    // EFFECTS: makes a new Tetris GUI window
+    // EFFECTS: makes a new Tetris GUI window and starts a new Tetris game
     public TetrisGUI() {
         super("Tetris");
-        initFields();
-        initGraphics();
+        startNewGame();
 
         // The following sources helped me create this key listener:
         // -> https://docs.oracle.com/javase/tutorial/uiswing/events/keylistener.html
@@ -36,6 +39,41 @@ public class TetrisGUI extends JFrame implements Observer {
             @Override
             public void keyPressed(KeyEvent e) {
                 boardPanel.handleKeyPressed(e.getKeyCode());
+            }
+        });
+
+        setUpClosingBehaviour();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: tells the window what to do when the user tries to close the window with the "X" button.
+    //          The user should be prompted to save their unsaved scoreboard entries upon closing the window.
+    private void setUpClosingBehaviour() {
+        // The following code, which prompts the user to save their temporary scoreboard before exiting
+        // the program, is adapted from this StackOverflow post: https://stackoverflow.com/a/34039602/3335320
+        // In addition, https://docs.oracle.com/javase/tutorial/uiswing/components/dialog.html taught me
+        // how to make dialog popup windows.
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (tempScoreboardManager.getTempScoreboardSize() != 0) {
+                    if (JOptionPane.showConfirmDialog(null,
+                            "You have unsaved scoreboard entries. Do you want to permanently save them to file?",
+                            "Save Scoreboard", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        try {
+                            tempScoreboardManager.saveTempScoreboard();
+                            JOptionPane.showMessageDialog(null,
+                                    "Successfully saved scoreboard entries to file.");
+                        } catch (IOException ioException) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Could not save scoreboard entries to file!",
+                                    "An Error Occurred", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
+                TetrisGUI.this.dispose();
+                System.exit(0);
             }
         });
     }
@@ -53,14 +91,20 @@ public class TetrisGUI extends JFrame implements Observer {
             Game observedGame = (Game) observable;
 
             if (observedGame.isGameOver()) {
-                makeGameOverDialog();
+                new GameOverDialog(observedGame, this);
             }
         }
     }
 
-    // EFFECTS: returns the game instance running in this TetrisGUI
-    public Game getGame() {
-        return game;
+    // MODIFIES: this
+    // EFFECTS: starts a new Tetris game
+    public void startNewGame() {
+        // https://stackoverflow.com/questions/9347076/how-to-remove-all-components-from-a-jframe-in-java taught me
+        // how to remove all components from the window
+        this.getContentPane().removeAll();
+        initFields();
+        initGraphics();
+        this.repaint();
     }
 
     // MODIFIES: this
@@ -84,14 +128,5 @@ public class TetrisGUI extends JFrame implements Observer {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-    }
-
-    // EFFECTS: creates and shows a dialog that:
-    //          - tells the user that the game is over
-    //          - shows the user their final score and number of lines cleared
-    //          - displays buttons that the user can press to indicate their next action
-    private void makeGameOverDialog() {
-        // TODO
-
     }
 }

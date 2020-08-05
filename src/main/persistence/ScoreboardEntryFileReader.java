@@ -18,7 +18,7 @@ public class ScoreboardEntryFileReader {
     // EFFECTS: returns a scoreboard containing all scoreboard entries in given file.
     //          Throws CorruptedFileException if given file has been corrupted (for example,
     //          if parts of scoreboard entries are missing, or are in the wrong places).
-    //          Throws IOException if an I/O error occurs.
+    //          Throws IOException if an I/O error occurs (for example, if given file does not exist).
     public static Scoreboard readInScoreboardEntries(File file) throws CorruptedFileException, IOException {
         // https://stackoverflow.com/a/15512246/3335320 taught me how to convert a File to a Path object
         List<String> lines = Files.readAllLines(file.toPath());

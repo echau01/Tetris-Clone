@@ -8,21 +8,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 // Unit tests for the Game class
-public class GameTest {
+public class GameTest implements Observer {
     private Game testGame1;
 
     // Identical to testGame1, except that the first "I" piece is placed upright
     // at the bottom of the rightmost column.
     private Game testGame2;
     private static final int GAME_SEED = 5000;
+
+    private int numNotificationsReceived;
 
     @BeforeEach
     public void setUp() {
@@ -34,6 +33,9 @@ public class GameTest {
         } catch (IllegalStartingLevelException e) {
             fail("IllegalStartingLevelException should not be thrown");
         }
+
+        testGame1.addObserver(this);
+        numNotificationsReceived = 0;
 
         // The random number generator seed is set so that the first piece is an "I" piece.
         // We now set this "I" piece standing upright at the bottom of the rightmost column.
@@ -425,7 +427,7 @@ public class GameTest {
     public void testUpdateGameOver() {
         List<ArrayList<Boolean>> board = testGame1.getBoard();
 
-        // For every row of the board except the top row, fill every column except
+        // For every row of the board except the top 2 rows, fill every column except
         // the leftmost column with tiles. We don't fill the leftmost column because
         // we want to avoid line clears.
         for (int r = 2; r < Game.HEIGHT; r++) {
@@ -440,15 +442,17 @@ public class GameTest {
             board.set(r, row);
         }
 
-        // Updating the game now will cause the "I" piece to move down one row.
-        // The subsequent update will cause the "I" piece to land on the second-highest
-        // row and the "J" piece to spawn. The "J" piece will intersect the "I" piece
+        // The first game update will cause the "I" piece to move down one row.
+        // The update after that will cause the "I" piece to land on the second-highest
+        // row and will spawn in the "J" piece. The "J" piece will intersect the "I" piece
         // and cause the player to top out.
         testGame1.update();
         assertFalse(testGame1.isGameOver());
+        assertEquals(0, numNotificationsReceived);
 
         testGame1.update();
         assertTrue(testGame1.isGameOver());
+        assertEquals(1, numNotificationsReceived);
 
         board = testGame1.getBoard();
         List<ArrayList<Boolean>> boardCopy = new ArrayList<ArrayList<Boolean>>();
@@ -516,6 +520,27 @@ public class GameTest {
         assertTrue(seenSPiece);
         assertTrue(seenTPiece);
         assertTrue(seenZPiece);
+    }
+
+    @Test
+    public void testUpdateNotifyObservers() {
+        for (int i = 0; i < Game.HEIGHT - 1; i++) {
+            testGame1.update();
+        }
+
+        assertEquals(0, numNotificationsReceived);
+        testGame1.update();
+        assertEquals(1, numNotificationsReceived);
+
+        // The next piece is a "J" piece.
+
+        for (int i = 0; i < Game.HEIGHT - 3; i++) {
+            testGame1.update();
+        }
+
+        assertEquals(1, numNotificationsReceived);
+        testGame1.update();
+        assertEquals(2, numNotificationsReceived);
     }
 
     @Test
@@ -803,5 +828,11 @@ public class GameTest {
             }
         }
         return numTiles;
+    }
+
+    // EFFECTS: increments the number of notifications this class has received from observables by 1.
+    @Override
+    public void update(Observable observable, Object arg) {
+        numNotificationsReceived++;
     }
 }

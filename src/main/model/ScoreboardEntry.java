@@ -104,6 +104,7 @@ public class ScoreboardEntry implements Comparable<ScoreboardEntry>, Saveable {
     // EFFECTS: appends the fields of this scoreboard entry to the end of the given file.
     //          The file is created if it does not already exist.
     //          Throws IOException if an I/O error occurs.
+    @Deprecated
     public void appendTo(File file) throws IOException {
         file.createNewFile();   // creates the file if it does not already exist
         List<String> existingLines = Files.readAllLines(file.toPath());

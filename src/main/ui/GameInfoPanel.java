@@ -25,7 +25,11 @@ public class GameInfoPanel extends JPanel implements Observer {
 
     // EFFECTS: constructs a new GameInfoPanel for the given game
     public GameInfoPanel(Game game) {
+        // The idea to use a GridLayout with 0 rows and 1 column comes from the SimpleDrawingPlayer-Complete project.
+        // The buttons in that project's GUI are placed vertically because of such a GridLayout.
+        // https://github.students.cs.ubc.ca/CPSC210/SimpleDrawingPlayer-Complete/blob/master/src/ui/DrawingEditor.java
         super(new GridLayout(0, 1));
+
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         this.game = game;
