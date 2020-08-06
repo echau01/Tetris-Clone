@@ -28,7 +28,7 @@ public class TetrisGUI extends JFrame implements Observer {
     // EFFECTS: makes a new Tetris GUI window and starts a new Tetris game
     public TetrisGUI() {
         super("Tetris");
-        startNewGame();
+        new PreGameDialog(this);
 
         // The following sources helped me create this key listener:
         // -> https://docs.oracle.com/javase/tutorial/uiswing/events/keylistener.html
@@ -43,6 +43,37 @@ public class TetrisGUI extends JFrame implements Observer {
         });
 
         setUpClosingBehaviour();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: starts a new Tetris game with the given starting level
+    public void startNewGame(int startingLevel) {
+        // https://stackoverflow.com/questions/9347076/how-to-remove-all-components-from-a-jframe-in-java taught me
+        // how to remove all components from the window
+        this.getContentPane().removeAll();
+        initFields(startingLevel);
+        initGraphics();
+        this.repaint();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: if observable is an instance of Game, checks to see if the game is over.
+    //          If the game is over, then creates and shows a dialog that:
+    //           - tells the user that the game is over
+    //           - shows the user their final score and number of lines cleared
+    //           - displays buttons that the user can press to indicate their next action
+    //          The arg parameter is ignored.
+    @Override
+    public void update(Observable observable, Object arg) {
+        if (observable instanceof Game) {
+            Game observedGame = (Game) observable;
+
+            if (observedGame.isGameOver()) {
+                // Repaints all components of the JFrame, according to https://stackoverflow.com/a/11708728/3335320
+                repaint();
+                new GameOverDialog(observedGame, this);
+            }
+        }
     }
 
     // MODIFIES: this
@@ -79,41 +110,11 @@ public class TetrisGUI extends JFrame implements Observer {
     }
 
     // MODIFIES: this
-    // EFFECTS: if observable is an instance of Game, checks to see if the game is over.
-    //          If the game is over, then creates and shows a dialog that:
-    //           - tells the user that the game is over
-    //           - shows the user their final score and number of lines cleared
-    //           - displays buttons that the user can press to indicate their next action
-    //          The arg parameter is ignored.
-    @Override
-    public void update(Observable observable, Object arg) {
-        if (observable instanceof Game) {
-            Game observedGame = (Game) observable;
-
-            if (observedGame.isGameOver()) {
-                // Repaints all components of the JFrame, according to https://stackoverflow.com/a/11708728/3335320
-                repaint();
-                new GameOverDialog(observedGame, this);
-            }
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: starts a new Tetris game
-    public void startNewGame() {
-        // https://stackoverflow.com/questions/9347076/how-to-remove-all-components-from-a-jframe-in-java taught me
-        // how to remove all components from the window
-        this.getContentPane().removeAll();
-        initFields();
-        initGraphics();
-        this.repaint();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: initializes all the fields of this GUI to their default values
-    private void initFields() {
+    // EFFECTS: initializes all the fields of this GUI to their default values. The game
+    //          is initialized to have the specified starting level.
+    private void initFields(int gameStartingLevel) {
         random = new Random();
-        game = new Game(random.nextInt(), 0);
+        game = new Game(random.nextInt(), gameStartingLevel);
         boardPanel = new BoardPanel(game);
         gameInfoPanel = new GameInfoPanel(game);
         game.addObserver(this);

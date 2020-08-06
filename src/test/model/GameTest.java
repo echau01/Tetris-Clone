@@ -80,9 +80,9 @@ public class GameTest implements Observer {
     public void testConstructorStartingLevelNoException() {
         try {
             Game myGame = new Game(0, 4);
-            Game myGame2 = new Game(0, 18);
+            Game myGame2 = new Game(0, Game.MAXIMUM_STARTING_LEVEL);
             assertEquals(4, myGame.getLevel());
-            assertEquals(18, myGame2.getLevel());
+            assertEquals(Game.MAXIMUM_STARTING_LEVEL, myGame2.getLevel());
         } catch (IllegalStartingLevelException e) {
             fail("IllegalStartingLevelException should not be thrown.");
         }
@@ -98,7 +98,7 @@ public class GameTest implements Observer {
         }
 
         try {
-            Game myGame = new Game(0, 19);
+            Game myGame = new Game(0, Game.MAXIMUM_STARTING_LEVEL + 1);
             fail("IllegalStartingLevelException should be thrown.");
         } catch (IllegalStartingLevelException e) {
             // this is expected

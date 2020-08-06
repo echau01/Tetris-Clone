@@ -123,6 +123,7 @@ public class BoardPanel extends JPanel implements Observer {
         };
 
         timer = new Timer(getMillisecondsPerUpdate(), gameUpdater);
+        timer.setInitialDelay(2000);
         timer.start();
     }
 

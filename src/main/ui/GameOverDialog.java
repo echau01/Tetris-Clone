@@ -48,7 +48,7 @@ public class GameOverDialog extends JDialog {
         setLayout(new GridLayout(0, 1));
         initComponents();
 
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
 
@@ -103,7 +103,7 @@ public class GameOverDialog extends JDialog {
                 // https://stackoverflow.com/a/1235283/3335320 taught me how to close the GameOverDialog
                 // https://stackoverflow.com/a/2731729/3335320 taught me how to access "this" instance
                 // of GameOverDialog from inside the anonymous class
-                owner.startNewGame();
+                new PreGameDialog(owner);
                 GameOverDialog.this.dispose();
             }
         });
