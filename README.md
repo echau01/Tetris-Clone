@@ -21,6 +21,7 @@ scoreboard after the game is over.
 - As a user, I want to be able to remove entries from the temporary scoreboard.
 - As a user, after I add entries to the temporary scoreboard, I want to be able to optionally save the entries to a 
 file.
+- As a user, I want to be able to see any unsaved entries that I have added to the temporary scoreboard.
 - As a user, I want to be able to load in previously-saved scoreboard entries from file so that I can view them.
 - As a user, I want to be able to move pieces horizontally.
 - As a user, I want to be able to move pieces vertically.

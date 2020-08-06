@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 // Represents the window that appears when the game ends.
 // According to the linked StackOverflow post below, having multiple JFrames in a program is considered bad practice.
@@ -144,6 +143,17 @@ public class GameOverDialog extends JDialog {
     // EFFECTS: adds a button to buttonPanel that lets the user remove scores on the temporary scoreboard.
     private void addRemoveTempScoresButton() {
         JButton removeTempScoresButton = new JButton("Remove scores from the temporary scoreboard");
+        removeTempScoresButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Scoreboard tempScoreboard = tempScoreboardManager.getTempScoreboard();
+                if (tempScoreboard.getSize() == 0) {
+                    JOptionPane.showMessageDialog(null, "Temporary scoreboard is empty.");
+                    return;
+                }
+                new RemoveScoresDialog(tempScoreboard, "Remove Scores").display();
+            }
+        });
         buttonPanel.add(removeTempScoresButton);
     }
 
@@ -154,7 +164,7 @@ public class GameOverDialog extends JDialog {
         saveTempScoresButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (tempScoreboardManager.getTempScoreboardSize() == 0) {
+                if (tempScoreboardManager.getTempScoreboard().getSize() == 0) {
                     JOptionPane.showMessageDialog(null, "You have no unsaved scoreboard entries.");
                     return;
                 }
@@ -180,11 +190,11 @@ public class GameOverDialog extends JDialog {
         viewTempScoresButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<ScoreboardEntry> sortedEntries = tempScoreboardManager.getSortedTempScoreboardEntries();
-                if (sortedEntries.size() == 0) {
+                Scoreboard tempScoreboard = tempScoreboardManager.getTempScoreboard();
+                if (tempScoreboard.getSize() == 0) {
                     JOptionPane.showMessageDialog(null, "You have no unsaved scoreboard entries.");
                 } else {
-                    displayScoreboardEntries(sortedEntries, "Unsaved Scoreboard Entries");
+                    new ScoreboardDialog(tempScoreboard, "Unsaved Scoreboard Entries").display();
                 }
             }
         });
@@ -206,7 +216,7 @@ public class GameOverDialog extends JDialog {
                     if (scoreboardFromFile.getSize() == 0) {
                         JOptionPane.showMessageDialog(null, "You have no permanently-saved scores.");
                     } else {
-                        displayScoreboardEntries(scoreboardFromFile.getSortedEntries(),"Permanently-Saved Scoreboard");
+                        new ScoreboardDialog(scoreboardFromFile,"Permanently-Saved Scoreboard").display();
                     }
                 } catch (CorruptedFileException ex) {
                     JOptionPane.showMessageDialog(null, TemporaryScoreboardManager.ENTRIES_FILE_PATH
@@ -238,37 +248,5 @@ public class GameOverDialog extends JDialog {
             }
         });
         buttonPanel.add(quitButton);
-    }
-
-    // EFFECTS: creates and shows a new window that displays the scoreboard entries in the given list.
-    //          The window will have the given title. The scoreboard entries are shown in the order that
-    //          they appear in the list; they are *not* sorted first.
-    private void displayScoreboardEntries(List<ScoreboardEntry> entries, String title) {
-        JDialog dialog = new JDialog(owner, true);
-
-        JPanel panel = new JPanel(new GridLayout(0, 4, 10, 0));
-        panel.add(new JLabel("Rank"));
-        panel.add(new JLabel("Name"));
-        panel.add(new JLabel("Score"));
-        panel.add(new JLabel("Lines cleared"));
-
-        for (int i = 0; i < entries.size(); i++) {
-            ScoreboardEntry entry = entries.get(i);
-            panel.add(new JLabel(String.valueOf(i + 1)));
-            panel.add(new JLabel(entry.getPlayerName()));
-            panel.add(new JLabel(String.valueOf(entry.getScore())));
-            panel.add(new JLabel(String.valueOf(entry.getLinesCleared())));
-        }
-
-        // https://docs.oracle.com/javase/tutorial/uiswing/components/scrollpane.html#scrollbars taught me
-        // how to make a scroll pane
-        JScrollPane scrollPane = new JScrollPane(panel);
-
-        dialog.setTitle(title);
-        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        dialog.add(scrollPane);
-        dialog.pack();
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
     }
 }

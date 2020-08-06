@@ -57,7 +57,7 @@ public class TetrisGUI extends JFrame implements Observer {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (tempScoreboardManager.getTempScoreboardSize() != 0) {
+                if (tempScoreboardManager.getTempScoreboard().getSize() != 0) {
                     if (JOptionPane.showConfirmDialog(null,
                             "You have unsaved scoreboard entries. Do you want to permanently save them to file?",
                             "Save Scoreboard", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -91,6 +91,8 @@ public class TetrisGUI extends JFrame implements Observer {
             Game observedGame = (Game) observable;
 
             if (observedGame.isGameOver()) {
+                // Repaints all components of the JFrame, according to https://stackoverflow.com/a/11708728/3335320
+                repaint();
                 new GameOverDialog(observedGame, this);
             }
         }

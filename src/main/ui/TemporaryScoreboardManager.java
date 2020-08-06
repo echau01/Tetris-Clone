@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Set;
 
 // This class stores the temporary scoreboard (a scoreboard that the user can add their
 // scores to before permanently saving them to file).
@@ -40,31 +39,9 @@ public class TemporaryScoreboardManager {
         tempScoreboard.add(entry);
     }
 
-    // MODIFIES: this
-    // EFFECTS: sorts the temporary scoreboard from greatest to least entry, then removes the entries
-    //          at the given indices. Any index i such that i < 0 or i >= getTempScoreboardSize() is ignored.
-    public void removeSortedTempScoreboardEntries(Set<Integer> indices) {
-        List<ScoreboardEntry> entries = tempScoreboard.getSortedEntries();
-
-        // The following algorithm for removing multiple elements of a List given their indices comes
-        // from this StackOverflow post:
-        // https://stackoverflow.com/a/29656309/3335320
-        for (int i = entries.size() - 1; i >= 0; i--) {
-            if (indices.contains(i)) {
-                entries.remove(i);
-            }
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: returns a list of the temporary scoreboard entries sorted from greatest to least entry.
-    public List<ScoreboardEntry> getSortedTempScoreboardEntries() {
-        return tempScoreboard.getSortedEntries();
-    }
-
-    // EFFECTS: returns the number of entries in the temporary scoreboard
-    public int getTempScoreboardSize() {
-        return tempScoreboard.getSize();
+    // EFFECTS: returns the temporary scoreboard
+    public Scoreboard getTempScoreboard() {
+        return tempScoreboard;
     }
 
     // MODIFIES: this
