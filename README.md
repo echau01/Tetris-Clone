@@ -34,3 +34,24 @@ filling multiple rows should result in all the filled rows being cleared at once
 - As a user, I want to be able to see my current in-game level.
 - As a user, I want to be able to see the next piece that will come after I place the current piece.
 - As a user, I want to be able to replay the game after it ends.
+
+# Instructions for Grader
+
+- When you first open the application, read through the instructions, set the starting level, then click "Start Game!"
+- You can generate the first required event by playing the game until the game is over, then clicking
+the "Add your score to the temporary scoreboard" button. Enter your name and click "OK". *[Note: once you have
+added your score, you cannot add it again. Play another Tetris game (using the "Start a new game" button) to completion
+ to add another score.]*
+- You can generate the second required event by adding a score (or multiple scores) to the temporary scoreboard 
+as described in the above bullet point, then clicking the "Remove scores from the temporary scoreboard" button. Check
+the scoreboard entries that you want to remove, then click the "Remove selected entries" button.
+- You can locate my visual component by starting a Tetris game. The Tetris board with all its tiles is the visual 
+component.
+- You can save the state of my application by clicking the "Permanently save temporary scoreboard to file" button
+in the game-over dialog window.
+- You can reload the state of my application by clicking the "View permanently-saved scoreboard entries stored in file"
+button in the game-over dialog window.
+
+Note: you can verify that you have successfully added/removed scores from the temporary scoreboard by clicking
+the "View unsaved scoreboard entries" button in the game-over dialog window. That button lets you view the temporary 
+scoreboard.

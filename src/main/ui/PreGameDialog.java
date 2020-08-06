@@ -9,12 +9,12 @@ import java.awt.event.ActionListener;
 
 // Represents a dialog window that appears before the user starts a new game.
 public class PreGameDialog extends JDialog {
-    private TetrisGUI gui;
+    private TetrisGui gui;
     private JComboBox<Integer> levelOptions;
 
     // EFFECTS: creates and shows a new PreGameDialog that guides the user to set up a new game. The game
     //          will run in the given gui.
-    public PreGameDialog(TetrisGUI gui) {
+    public PreGameDialog(TetrisGui gui) {
         this.gui = gui;
 
         setModal(true);
@@ -89,7 +89,9 @@ public class PreGameDialog extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 PreGameDialog.this.dispose();
-                gui.startNewGame((int) levelOptions.getSelectedItem());
+                // The code for getting the selected combo box option
+                // comes from https://stackoverflow.com/a/7026724/3335320
+                gui.startNewGame(levelOptions.getItemAt(levelOptions.getSelectedIndex()));
             }
         });
 

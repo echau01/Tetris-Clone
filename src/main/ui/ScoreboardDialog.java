@@ -15,6 +15,7 @@ public class ScoreboardDialog extends JDialog {
     protected Scoreboard scoreboard;
 
     // EFFECTS: creates a ScoreboardDialog that displays the given scoreboard. The dialog has the given title.
+    //          The dialog is not resizable and is set to be modal. Upon closing, the dialog is disposed.
     //          Note: to display the dialog, call the display() method after invoking the constructor.
     public ScoreboardDialog(Scoreboard scoreboard, String title) {
         setModal(true);
@@ -28,6 +29,7 @@ public class ScoreboardDialog extends JDialog {
     // EFFECTS: displays this ScoreboardDialog. The entries on the scoreboard are sorted from greatest to least.
     public void display() {
         JPanel scoreboardPanel = makeScoreboardPanel(scoreboard);
+        scoreboardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // https://docs.oracle.com/javase/tutorial/uiswing/components/scrollpane.html#scrollbars taught me
         // how to make a scroll pane
@@ -41,7 +43,12 @@ public class ScoreboardDialog extends JDialog {
 
     // MODIFIES: scoreboard
     // EFFECTS: sorts the entries on the scoreboard from greatest to least, then returns a JPanel that displays
-    //          the sorted entries.
+    //          the sorted entries. The scoreboard entries are shown in a grid with four columns. The first row
+    //          of the grid contains the headers for each column. Each entry then appears below on its own row, where:
+    //          - Column 1 contains the rank of the entry (compared to the other entries).
+    //          - Column 2 contains the player's name.
+    //          - Column 3 contains the player's score.
+    //          - Column 4 contains the number of lines cleared by the player.
     protected JPanel makeScoreboardPanel(Scoreboard scoreboard) {
         List<ScoreboardEntry> sortedEntries = scoreboard.getSortedEntries();
 

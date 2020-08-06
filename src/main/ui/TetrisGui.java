@@ -14,19 +14,18 @@ import java.util.Observer;
 import java.util.Random;
 
 // Represents the main GUI window.
-public class TetrisGUI extends JFrame implements Observer {
+public class TetrisGui extends JFrame implements Observer {
     /* Code adapted from SimpleDrawingPlayer-Complete's DrawingEditor class.
      * https://github.students.cs.ubc.ca/CPSC210/SimpleDrawingPlayer-Complete/blob/master/src/ui/DrawingEditor.java
      */
 
     private Game game;
-    private Random random;
     private BoardPanel boardPanel;
     private GameInfoPanel gameInfoPanel;
     private TemporaryScoreboardManager tempScoreboardManager = TemporaryScoreboardManager.getInstance();
 
     // EFFECTS: makes a new Tetris GUI window and starts a new Tetris game
-    public TetrisGUI() {
+    public TetrisGui() {
         super("Tetris");
         new PreGameDialog(this);
 
@@ -103,7 +102,7 @@ public class TetrisGUI extends JFrame implements Observer {
                         }
                     }
                 }
-                TetrisGUI.this.dispose();
+                TetrisGui.this.dispose();
                 System.exit(0);
             }
         });
@@ -113,8 +112,7 @@ public class TetrisGUI extends JFrame implements Observer {
     // EFFECTS: initializes all the fields of this GUI to their default values. The game
     //          is initialized to have the specified starting level.
     private void initFields(int gameStartingLevel) {
-        random = new Random();
-        game = new Game(random.nextInt(), gameStartingLevel);
+        game = new Game(new Random().nextInt(), gameStartingLevel);
         boardPanel = new BoardPanel(game);
         gameInfoPanel = new GameInfoPanel(game);
         game.addObserver(this);

@@ -23,7 +23,7 @@ public class GameOverDialog extends JDialog {
     private Game game;
     private JPanel gameStatsPanel;
     private JPanel buttonPanel;
-    private TetrisGUI owner;
+    private TetrisGui owner;
 
     // This field true if the user has added their score to the temporary scoreboard; false otherwise.
     private boolean addedToTempScoreboard;
@@ -33,7 +33,7 @@ public class GameOverDialog extends JDialog {
     // EFFECTS: creates and shows a new GameOverDialog with given owner. The GameOverDialog displays information
     //          about the given game, and displays buttons that the user can press to indicate the action(s) they
     //          want to take.
-    public GameOverDialog(Game game, TetrisGUI owner) {
+    public GameOverDialog(Game game, TetrisGui owner) {
         super(owner, true);
         super.setTitle("Game Over!");
 
@@ -63,6 +63,8 @@ public class GameOverDialog extends JDialog {
         gameStatsPanel.add(new JLabel("Score: " + game.getScore()));
         gameStatsPanel.add(new JLabel("Lines cleared: " + game.getLinesCleared()));
         gameStatsPanel.add(new JLabel("Choose an option below by clicking the appropriate button:"));
+
+        gameStatsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         buttonPanel = new JPanel(new GridLayout(0, 1));
         addButtonsToButtonPanel();

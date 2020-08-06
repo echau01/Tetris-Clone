@@ -37,9 +37,14 @@ public class RemoveScoresDialog extends ScoreboardDialog {
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         JPanel headerPanel = new JPanel();
-        headerPanel.add(new JLabel("Select entries to remove below:"));
+        headerPanel.add(new JLabel("Select entries to remove below (click a checkbox to select the entry):"));
 
         JPanel checkBoxAndScoreboardPanel = makeCheckBoxAndScoreboardPanel();
+
+        // The border makes the panel look nicer. https://docs.oracle.com/javase/tutorial/uiswing/layout/box.html has
+        // an example of a project that uses borders, which is where I got this line of code from:
+        checkBoxAndScoreboardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         JPanel bottomButtonPanel = makeBottomButtonPanel();
         JScrollPane scrollPane = new JScrollPane(checkBoxAndScoreboardPanel);
 
