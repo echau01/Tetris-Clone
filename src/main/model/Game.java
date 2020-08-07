@@ -20,6 +20,7 @@ public class Game extends Observable {
     public static final int HEIGHT = 20;
 
     // Points awarded for line clears
+    // The values come from the table in the "Original BPS scoring system" section of https://tetris.wiki/Scoring
     public static final int SINGLE_POINTS = 40;
     public static final int DOUBLE_POINTS = 100;
     public static final int TRIPLE_POINTS = 300;
