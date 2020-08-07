@@ -15,8 +15,11 @@ public class PreGameDialog extends JDialog {
     // EFFECTS: creates and shows a new PreGameDialog that guides the user to set up a new game. The game
     //          will run in the given gui.
     public PreGameDialog(TetrisGui gui) {
-        this.gui = gui;
+        // This call to super with a null parent will make the dialog show up in the Windows taskbar.
+        // Citation: https://stackoverflow.com/a/25533860/3335320
+        super((Dialog) null);
 
+        this.gui = gui;
         setModal(true);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
