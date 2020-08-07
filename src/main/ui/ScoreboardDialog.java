@@ -49,6 +49,7 @@ public class ScoreboardDialog extends JDialog {
     //          - Column 2 contains the player's name.
     //          - Column 3 contains the player's score.
     //          - Column 4 contains the number of lines cleared by the player.
+    //          There is a horizontal gap of 10 pixels between each column.
     protected JPanel makeScoreboardPanel(Scoreboard scoreboard) {
         List<ScoreboardEntry> sortedEntries = scoreboard.getSortedEntries();
 
