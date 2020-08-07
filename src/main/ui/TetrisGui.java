@@ -24,10 +24,16 @@ public class TetrisGui extends JFrame implements Observer {
     private GameInfoPanel gameInfoPanel;
     private TemporaryScoreboardManager tempScoreboardManager = TemporaryScoreboardManager.getInstance();
 
-    // EFFECTS: makes a new Tetris GUI window and starts a new Tetris game
+    // EFFECTS: Creates a new TetrisGui object. The GUI will have the title "Tetris".
+    //          Makes a dialog window that tells the player to set the game's starting level. The GUI will only
+    //          be fully initialized after the user has set the starting level in the dialog window.
+    //
+    //          When fully initialized, the GUI will be visible. It will have a key listener for handling keyboard
+    //          controls. If the user closes the window while having at least one unsaved scoreboard entry, the user
+    //          will be prompted to save any unsaved scoreboard entries they have.
     public TetrisGui() {
         super("Tetris");
-        new PreGameDialog(this);
+        startNewGame();
 
         // The following sources helped me create this key listener:
         // -> https://docs.oracle.com/javase/tutorial/uiswing/events/keylistener.html
@@ -45,7 +51,15 @@ public class TetrisGui extends JFrame implements Observer {
     }
 
     // MODIFIES: this
-    // EFFECTS: starts a new Tetris game with the given starting level
+    // EFFECTS: creates and shows a dialog window that tells the player to set the game's starting level.
+    //          After the player has set the starting level, a new Tetris game with a random seed will start.
+    public void startNewGame() {
+        new PreGameDialog(this);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: starts a new Tetris game with the given starting level and a random seed.
+    //          No dialog window appears if this method is called.
     public void startNewGame(int startingLevel) {
         // https://stackoverflow.com/questions/9347076/how-to-remove-all-components-from-a-jframe-in-java taught me
         // how to remove all components from the window
@@ -77,7 +91,8 @@ public class TetrisGui extends JFrame implements Observer {
 
     // MODIFIES: this
     // EFFECTS: tells the window what to do when the user tries to close the window with the "X" button.
-    //          The user should be prompted to save their unsaved scoreboard entries upon closing the window.
+    //          If the user has any unsaved scoreboard entries and tries to close the window, the user is prompted to
+    //          save their unsaved entries.
     private void setUpClosingBehaviour() {
         // The following code, which prompts the user to save their temporary scoreboard before exiting
         // the program, is adapted from this StackOverflow post: https://stackoverflow.com/a/34039602/3335320
