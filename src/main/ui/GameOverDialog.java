@@ -34,6 +34,10 @@ public class GameOverDialog extends JDialog {
     //          about the given game, and displays buttons that the user can press to indicate the action(s) they
     //          want to take.
     public GameOverDialog(Game game, TetrisGui owner) {
+        // Sources of inspiration in making the window:
+        // The Dialog Demo project at https://docs.oracle.com/javase/tutorial/uiswing/components/dialog.html
+        // https://docs.oracle.com/javase/tutorial/uiswing/examples/components/DialogDemoProject/src/components/DialogDemo.java
+
         super(owner, true);
         super.setTitle("Game Over!");
 
@@ -41,10 +45,9 @@ public class GameOverDialog extends JDialog {
         this.owner = owner;
         this.addedToTempScoreboard = false;
 
-        // Sources of inspiration for making the window:
-        // The Dialog Demo project at https://docs.oracle.com/javase/tutorial/uiswing/components/dialog.html
-        // https://docs.oracle.com/javase/tutorial/uiswing/examples/components/DialogDemoProject/src/components/DialogDemo.java
-
+        // The idea to use a GridLayout with 0 rows and 1 column comes from the SimpleDrawingPlayer-Complete project.
+        // The buttons in that project's GUI are placed vertically because of such a GridLayout.
+        // https://github.students.cs.ubc.ca/CPSC210/SimpleDrawingPlayer-Complete/blob/master/src/ui/DrawingEditor.java
         setLayout(new GridLayout(0, 1));
         initComponents();
 

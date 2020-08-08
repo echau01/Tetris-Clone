@@ -12,9 +12,6 @@ import java.util.Observer;
 // panel tells the user their current score, level, and lines cleared, as well as
 // what the next piece is.
 public class GameInfoPanel extends JPanel implements Observer {
-    public static final int WIDTH = 200;
-    public static final int HEIGHT = BoardPanel.HEIGHT / 2;
-
     private Game game;
 
     private JLabel scoreLabel;
@@ -25,26 +22,36 @@ public class GameInfoPanel extends JPanel implements Observer {
 
     // EFFECTS: constructs a new GameInfoPanel for the given game
     public GameInfoPanel(Game game) {
-        // The idea to use a GridLayout with 0 rows and 1 column comes from the SimpleDrawingPlayer-Complete project.
-        // The buttons in that project's GUI are placed vertically because of such a GridLayout.
-        // https://github.students.cs.ubc.ca/CPSC210/SimpleDrawingPlayer-Complete/blob/master/src/ui/DrawingEditor.java
-        super(new GridLayout(0, 1));
+        super();
 
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.game = game;
         game.addObserver(this);
 
         scoreLabel = new JLabel("Score: " + game.getScore());
+        scoreLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         linesClearedLabel = new JLabel("Lines cleared: " + game.getLinesCleared());
+        linesClearedLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         levelLabel = new JLabel("Level: " + game.getLevel());
+        levelLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         nextPieceLabel = new JLabel("Next piece: ");
+        nextPieceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         nextPiecePanel = new NextPiecePanel(game.getNextPiece());
+        nextPiecePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         add(scoreLabel);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(linesClearedLabel);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(levelLabel);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(nextPieceLabel);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(nextPiecePanel);
     }
 

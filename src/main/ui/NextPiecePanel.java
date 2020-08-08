@@ -14,6 +14,7 @@ public class NextPiecePanel extends JPanel {
     // EFFECTS: constructs a NextPiecePanel to display the given next piece
     public NextPiecePanel(Piece nextPiece) {
         this.nextPiece = nextPiece;
+        setPreferredSize(new Dimension(BoardPanel.TILE_SIDE_LENGTH * 4 + 5, BoardPanel.TILE_SIDE_LENGTH * 4 + 5));
     }
 
     // EFFECTS: sets the next piece to the given nextPiece
