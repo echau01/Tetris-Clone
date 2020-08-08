@@ -26,7 +26,7 @@ public class PreGameDialog extends JDialog {
         initComponents();
 
         setResizable(false);
-        setTitle("Tetris Instructions and Setup");
+        setTitle("Instructions and Setup");
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
