@@ -43,8 +43,9 @@ public class ScoreboardDialog extends JDialog {
 
     // MODIFIES: scoreboard
     // EFFECTS: sorts the entries on the scoreboard from greatest to least, then returns a JPanel that displays
-    //          the sorted entries. The scoreboard entries are shown in a grid with four columns. The first row
-    //          of the grid contains the headers for each column. Each entry then appears below on its own row, where:
+    //          the sorted entries. The scoreboard entries are shown in a grid with four columns of equal width. The
+    //          first row of the grid contains the headers for each column. Each entry then appears below on its own
+    //          row, where:
     //          - Column 1 contains the rank of the entry (compared to the other entries).
     //          - Column 2 contains the player's name.
     //          - Column 3 contains the player's score.
