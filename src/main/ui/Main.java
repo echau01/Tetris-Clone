@@ -1,6 +1,7 @@
 package ui;
 
 import javax.swing.*;
+import java.io.File;
 
 // This is the class that the main method is located in.
 public class Main {
@@ -12,6 +13,11 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // If we export the application to a JAR file and put it in a directory that does not have a data
+        // folder, the application must create a data folder in order to save the user's scores.
+        // I got the code for making a data folder from https://stackoverflow.com/a/3634879/3335320.
+        new File("./data").mkdirs();
 
         // See https://stackoverflow.com/a/3551578/3335320 for why we need to run the GUI
         // using SwingUtilities.invokeLater.
