@@ -9,18 +9,20 @@ import java.util.List;
 
 // Represents a dialog that displays a scoreboard.
 public class ScoreboardDialog extends JDialog {
+    // Maximum preferred width and height
+    // The actual width and height could exceed these values because the user can resize the window themselves.
     private static final int MAXIMUM_WIDTH = 700;
     private static final int MAXIMUM_HEIGHT = 500;
 
     protected Scoreboard scoreboard;
 
     // EFFECTS: creates a ScoreboardDialog that displays the given scoreboard. The dialog has the given title.
-    //          The dialog is not resizable and is set to be modal. Upon closing, the dialog is disposed.
+    //          The dialog is resizable and is set to be modal. Upon closing, the dialog is disposed.
     //          Note: to display the dialog, call the display() method after invoking the constructor.
     public ScoreboardDialog(Scoreboard scoreboard, String title) {
         setModal(true);
         setTitle(title);
-        setResizable(false);
+        setResizable(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.scoreboard = scoreboard;
     }
