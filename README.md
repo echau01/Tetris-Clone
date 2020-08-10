@@ -45,8 +45,7 @@ added your score, you cannot add it again. Play another Tetris game (using the "
 - You can generate the second required event by adding a score (or multiple scores) to the temporary scoreboard 
 as described in the above bullet point, then clicking the "Remove scores from the temporary scoreboard" button. Check
 the scoreboard entries that you want to remove, then click the "Remove selected entries" button.
-- You can locate my visual component by starting a Tetris game. The Tetris board with all its tiles is the visual 
-component.
+- You can trigger my audio component by starting a Tetris game. The Tetris theme song will then play.
 - You can save the state of my application by clicking the "Permanently save temporary scoreboard to file" button
 in the game-over dialog window.
 - You can reload the state of my application by clicking the "View permanently-saved scoreboard entries stored in file"
