@@ -53,4 +53,13 @@ button in the game-over dialog window.
 
 Note: you can verify that you have successfully added/removed scores from the temporary scoreboard by clicking
 the "View unsaved scoreboard entries" button in the game-over dialog window. That button lets you view the temporary 
-scoreboard.
+scoreboard (and is, coincidentally, how the GUI fulfills the "displays the Xs that have been added to the Y" 
+requirement).
+
+If the first event (adding a score to the scoreboard) does not suffice, then here's another event you can generate:
+
+- If you have any unsaved scoreboard entries, then the program will prompt you to save the entries if you choose to
+exit the program. To try this yourself, add a score to the temporary scoreboard but do not save it. Then exit the
+program using the "Quit the program" button (this is the event). The program will handle the button click event by
+prompting you to save your unsaved scoreboard entries. On the other hand, if you have no unsaved entries, the prompt 
+will not appear.
