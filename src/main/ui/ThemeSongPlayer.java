@@ -44,7 +44,7 @@ public class ThemeSongPlayer {
     }
 
     // MODIFIES: this
-    // EFFECTS: stops playing the theme song, if it was playing
+    // EFFECTS: stops playing the theme song, if it is playing
     public void stop() {
         if (clip != null) {
             clip.stop();
