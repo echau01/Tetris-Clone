@@ -11,7 +11,7 @@ public class ThemeSongPlayer {
     // I converted the MP3 to WAV.
     private static final String THEME_SONG_FILE_PATH = "./data/tetrisTheme.wav";
 
-    // This class uses the singleton pattern
+    // This class uses the singleton pattern. This is the singleton instance.
     private static ThemeSongPlayer instance;
 
     private Clip clip;

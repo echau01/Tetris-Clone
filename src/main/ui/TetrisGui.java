@@ -61,6 +61,7 @@ public class TetrisGui extends JFrame implements Observer {
     // MODIFIES: this
     // EFFECTS: starts a new Tetris game with the given starting level and a random seed.
     //          No dialog window appears if this method is called.
+    //          The Tetris theme song will play on loop.
     public void startNewGame(int startingLevel) {
         // https://stackoverflow.com/questions/9347076/how-to-remove-all-components-from-a-jframe-in-java taught me
         // how to remove all components from the window
@@ -80,7 +81,7 @@ public class TetrisGui extends JFrame implements Observer {
 
     // MODIFIES: this
     // EFFECTS: if observable is an instance of Game, checks to see if the game is over.
-    //          If the game is over, then creates and shows a dialog that:
+    //          If the game is over, then stops playing the Tetris theme, and creates and shows a dialog that:
     //           - tells the user that the game is over
     //           - shows the user their final score and number of lines cleared
     //           - displays buttons that the user can press to indicate their next action
