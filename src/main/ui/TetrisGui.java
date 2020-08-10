@@ -24,7 +24,6 @@ public class TetrisGui extends JFrame implements Observer {
     private GameInfoPanel gameInfoPanel;
     private TemporaryScoreboardManager tempScoreboardManager = TemporaryScoreboardManager.getInstance();
     private ThemeSongPlayer player = ThemeSongPlayer.getInstance();
-    private boolean themeSongPlayable = true;
 
     // EFFECTS: Creates a new TetrisGui object. The GUI will have the title "Tetris".
     //          Makes a dialog window that tells the player to set the game's starting level. The GUI will only
@@ -72,11 +71,9 @@ public class TetrisGui extends JFrame implements Observer {
 
         try {
             player.startThemeOnLoop();
-            themeSongPlayable = true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: theme song cannot be played!",
                     "Music Error", JOptionPane.ERROR_MESSAGE);
-            themeSongPlayable = false;
         }
 
         this.repaint();
@@ -97,9 +94,7 @@ public class TetrisGui extends JFrame implements Observer {
             if (observedGame.isGameOver()) {
                 // Repaints all components of the JFrame, according to https://stackoverflow.com/a/11708728/3335320
                 repaint();
-                if (themeSongPlayable) {
-                    player.stop();
-                }
+                player.stop();
                 new GameOverDialog(observedGame, this);
             }
         }
