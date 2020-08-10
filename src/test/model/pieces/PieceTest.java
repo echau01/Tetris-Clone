@@ -3,7 +3,6 @@ package model.pieces;
 import exceptions.IllegalStartingLevelException;
 import exceptions.IncorrectBoardSizeException;
 import model.Game;
-import model.GameTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

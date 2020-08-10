@@ -2,11 +2,7 @@ package model;
 
 import persistence.Saveable;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.util.List;
 import java.util.Objects;
 
 // Represents an entry on the scoreboard that is shown at the end of the game.
