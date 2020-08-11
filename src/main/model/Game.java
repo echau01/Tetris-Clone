@@ -129,6 +129,32 @@ public class Game extends Observable {
         return board;
     }
 
+    // EFFECTS: returns true if the board cell at coordinates (x, y) is occupied by a tile. The cell in the upper-left
+    //          corner has coordinates (0, 0), and the x-coordinate increases as one travels to the right, while the
+    //          y-coordinate increases as one travels down.
+    //          Throws IndexOutOfBoundsException if the coordinates (x, y) do not represent a cell on the board.
+    public boolean isCellOccupied(int x, int y) {
+        return board.get(y).get(x);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: fills the cell at coordinates (x, y) on the board with a tile. The cell in the upper-left corner has
+    //          coordinates (0, 0), and the x-coordinate increases as one travels to the right, while the y-coordinate
+    //          increases as one travels down.
+    //          Throws IndexOutOfBoundsException if the coordinates (x, y) do not represent a cell on the board.
+    public void placeTileAt(int x, int y) {
+        board.get(y).set(x, true);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes the tile at coordinates (x, y) on the board, if there is a tile there. Otherwise, do nothing.
+    //          The cell in the upper-left corner has coordinates (0, 0), and the x-coordinate increases as one travels
+    //          to the right, while the y-coordinate increases as one travels down.
+    //          Throws IndexOutOfBoundsException if the coordinates (x, y) do not represent a cell on the board.
+    public void removeTileAt(int x, int y) {
+        board.get(y).set(x, false);
+    }
+
     // EFFECTS: returns the active piece
     public Piece getActivePiece() {
         return activePiece;

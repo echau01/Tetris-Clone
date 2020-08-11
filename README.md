@@ -70,3 +70,16 @@ I use the Map interface in the Piece class in the model.pieces package. The map 
 Each piece has four possible orientations (represented with the integers 0, 1, 2, 3), and each orientation number is
 mapped to a tile configuration. Rotation is very simple using the map: simply calculate the next orientation
 number, then obtain the next tile configuration from the map.
+
+# Phase 4: Task 3
+
+Problem 1: the Piece class in the model.pieces package also deals with the Tetris board. For example, if a piece
+rotates, then the board is updated from within the Piece class. However, the Tetris board itself is stored in the
+Game class in the model package. As a result, there is too much coupling between the Piece and Game classes—the
+Piece class has to know about how the board is stored in the Game class. One could also argue that the cohesiveness
+of the Piece class can be improved, because dealing with the game board should not be a responsibility of
+the Piece class.
+
+Solution to problem 1: I refactored all board-handling logic in the Piece class to be in the Game class instead.
+The Piece class now calls the appropriate methods from the Game class instead of dealing with the board directly.
+The Piece class is now more cohesive and has less coupling with the Game class.

@@ -120,7 +120,6 @@ public abstract class Piece {
     //       of where the piece would land if it were hard dropped.
     public Set<Point> getHardDropTileLocations() {
         Point rotationReferencePointCopy = new Point(rotationReferencePoint);
-        Set<Point> oldTileLocations = this.getTileLocations();
 
         // Move the piece as far down as possible.
         boolean canMoveDown;
@@ -134,14 +133,10 @@ public abstract class Piece {
         this.rotationReferencePoint = rotationReferencePointCopy;
 
         // We now make sure the game board is reset to how it was before this method was called, since the
-        // moveDown() method modifies the board. We need to delete the tiles at hardDropTileLocations, then fill
-        // in the cells at oldTileLocations.
-        for (Point point : hardDropTileLocations) {
-            game.getBoard().get(point.y).set(point.x, false);
-        }
-        for (Point point : oldTileLocations) {
-            game.getBoard().get(point.y).set(point.x, true);
-        }
+        // moveDown() method modifies the board. We have reset this piece's tile locations to where they were before,
+        // but the piece tiles still appear at the hardDropTileLocations on the game's board. We update the board
+        // to reflect this piece's current tile locations.
+        updateBoard(hardDropTileLocations);
 
         return hardDropTileLocations;
     }
@@ -205,7 +200,7 @@ public abstract class Piece {
                 } else if (p.y < 0 || p.y >= Game.HEIGHT) {
                     obstructed = true;
                     break;
-                } else if (game.getBoard().get(p.y).get(p.x)) {
+                } else if (game.isCellOccupied(p.x, p.y)) {
                     obstructed = true;
                     break;
                 }
@@ -217,12 +212,11 @@ public abstract class Piece {
     // MODIFIES: this
     // EFFECTS: removes the tiles at the given locations from the board, and adds this piece's tiles to the board.
     private void updateBoard(Set<Point> tilesToRemove) {
-        List<ArrayList<Boolean>> board = game.getBoard();
         for (Point p : tilesToRemove) {
-            board.get(p.y).set(p.x, false);
+            game.removeTileAt(p.x, p.y);
         }
         for (Point p : getTileLocations()) {
-            board.get(p.y).set(p.x, true);
+            game.placeTileAt(p.x, p.y);
         }
     }
 }

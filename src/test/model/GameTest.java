@@ -657,6 +657,142 @@ public class GameTest implements Observer {
     }
 
     @Test
+    public void testIsCellOccupiedNoException() {
+        List<ArrayList<Boolean>> board = Game.getBlankBoard();
+        board.get(1).set(2, true);
+        testGame1.setBoard(board);
+
+        for (int r = 0; r < Game.HEIGHT; r++) {
+            for (int c = 0; c < Game.WIDTH; c++) {
+                if (r == 1 && c == 2) {
+                    assertTrue(testGame1.isCellOccupied(c, r));
+                } else {
+                    assertFalse(testGame1.isCellOccupied(c, r));
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testIsCellOccupiedThrowsException() {
+        try {
+            testGame1.isCellOccupied(-1, 0);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+
+        try {
+            testGame1.isCellOccupied(0, -1);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+
+        try {
+            testGame1.isCellOccupied(Game.WIDTH, 0);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+
+        try {
+            testGame1.isCellOccupied(0, Game.HEIGHT);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+    }
+
+    @Test
+    public void testPlaceTileAtNoException() {
+        List<ArrayList<Boolean>> board = Game.getBlankBoard();
+        testGame1.setBoard(board);
+
+        assertFalse(testGame1.isCellOccupied(0, 0));
+
+        testGame1.placeTileAt(0, 0);
+
+        assertTrue(testGame1.isCellOccupied(0, 0));
+    }
+
+    @Test
+    public void testPlaceTileAtThrowsException() {
+        try {
+            testGame1.placeTileAt(-1, 0);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+
+        try {
+            testGame1.placeTileAt(0, -1);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+
+        try {
+            testGame1.placeTileAt(Game.WIDTH, 0);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+
+        try {
+            testGame1.placeTileAt(0, Game.HEIGHT);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+    }
+
+    @Test
+    public void testRemoveTileAtNoException() {
+        List<ArrayList<Boolean>> board = Game.getBlankBoard();
+        testGame1.setBoard(board);
+
+        testGame1.placeTileAt(Game.WIDTH / 2, Game.HEIGHT / 2);
+
+        assertTrue(testGame1.isCellOccupied(Game.WIDTH / 2, Game.HEIGHT / 2));
+
+        testGame1.removeTileAt(Game.WIDTH / 2, Game.HEIGHT / 2);
+
+        assertFalse(testGame1.isCellOccupied(Game.WIDTH / 2, Game.HEIGHT / 2));
+    }
+
+    @Test
+    public void testRemoveTileAtThrowsException() {
+        try {
+            testGame1.removeTileAt(-1, 0);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+
+        try {
+            testGame1.removeTileAt(0, -1);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+
+        try {
+            testGame1.removeTileAt(Game.WIDTH, 0);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+
+        try {
+            testGame1.removeTileAt(0, Game.HEIGHT);
+            fail("IndexOutOfBoundsException should be thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // this is expected
+        }
+    }
+
+    @Test
     public void testSetLinesClearedPositiveLines() {
         Game myGame = new Game(0, 0);
 
