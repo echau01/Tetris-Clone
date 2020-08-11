@@ -115,9 +115,4 @@ public class ScoreboardEntryTest {
         // Equal objects must have equal hashcodes
         assertEquals(entry.hashCode(), entry2.hashCode());
     }
-
-    @Test
-    public void testToString() {
-        assertEquals("Name: My Name; Score: 10000; Lines cleared: 64", entry.toString());
-    }
 }

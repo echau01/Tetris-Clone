@@ -95,13 +95,4 @@ public class ScoreboardEntry implements Comparable<ScoreboardEntry>, Saveable {
         printWriter.println(playerName);
         printWriter.println(linesCleared);
     }
-
-    // EFFECTS: returns a String of the form "Name: <player name>; Score: <score>; Lines cleared: <lines cleared>"
-    @Override
-    public String toString() {
-        // I got the idea to override toString() from the toString() method of the Account class of the
-        // TellerApp repository.
-        // https://github.students.cs.ubc.ca/CPSC210/TellerApp/blob/master/src/main/ca/ubc/cpsc210/bank/model/Account.java
-        return "Name: " + playerName + "; Score: " + score + "; Lines cleared: " + linesCleared;
-    }
 }
