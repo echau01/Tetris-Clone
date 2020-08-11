@@ -63,3 +63,10 @@ exit the program. To try this yourself, add a score to the temporary scoreboard 
 program using the "Quit the program" button (this is the event). The program will handle the button click event by
 prompting you to save your unsaved scoreboard entries. On the other hand, if you have no unsaved entries, the prompt 
 will not appear.
+
+# Phase 4: Task 2
+
+I use the Map interface in the Piece class in the model.pieces package. The map is central to how each piece rotates.
+Each piece has four possible orientations (represented with the integers 0, 1, 2, 3), and each orientation number is
+mapped to a tile configuration. Rotation is very simple using the map: simply calculate the next orientation
+number, then obtain the next tile configuration from the map.
