@@ -20,6 +20,7 @@ public class PlainScoreboardDisplay extends ScoreboardDialog {
     // MODIFIES: this
     // EFFECTS: sorts the entries on the scoreboard from greatest to least, then displays this PlainScoreboardDisplay,
     //          showing the entries in their sorted order.
+    @Override
     public void display() {
         JPanel scoreboardPanel = makeScoreboardPanel();
         scoreboardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
