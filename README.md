@@ -109,3 +109,11 @@ PlainScoreboardDisplay or RemoveScoresDialog does not change the other. Making o
 now a lot easier, especially if I want them to display scoreboards in different layouts. For that reason (easiness of
 making different scoreboard layouts), I actually consider the code duplication to be a non-issue. These changes have 
 therefore improved the overall design of the code.
+
+## UML Class Diagram: references
+- A bidirectional dependency is represented as shown in https://stackoverflow.com/a/29732581/3335320
+- An inner class is represented as shown in https://www.uml-diagrams.org/nested-classifier.html
+- An enumeration is represented by putting \<\<enumeration\>\> above the type name, as shown in 
+https://www.ibm.com/support/knowledgecenter/SS8PJ7_9.7.0/com.ibm.xtools.modeler.doc/topics/cenum.html
+- UML diagram of a class that uses the singleton pattern: https://www.oodesign.com/singleton-pattern.html
+- How to represent Maps in UML diagrams: https://stackoverflow.com/a/1197147/3335320
