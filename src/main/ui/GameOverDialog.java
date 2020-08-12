@@ -199,7 +199,7 @@ public class GameOverDialog extends JDialog {
                 if (tempScoreboard.getSize() == 0) {
                     JOptionPane.showMessageDialog(null, "You have no unsaved scoreboard entries.");
                 } else {
-                    new ScoreboardDialog(tempScoreboard, "Unsaved Scoreboard Entries").display();
+                    new PlainScoreboardDisplay(tempScoreboard, "Unsaved Scoreboard Entries").display();
                 }
             }
         });
@@ -221,7 +221,7 @@ public class GameOverDialog extends JDialog {
                     if (scoreboardFromFile.getSize() == 0) {
                         JOptionPane.showMessageDialog(null, "You have no permanently-saved scores.");
                     } else {
-                        new ScoreboardDialog(scoreboardFromFile,"Permanently-Saved Scoreboard").display();
+                        new PlainScoreboardDisplay(scoreboardFromFile,"Permanently-Saved Scoreboard").display();
                     }
                 } catch (CorruptedFileException ex) {
                     JOptionPane.showMessageDialog(null, TemporaryScoreboardManager.ENTRIES_FILE_PATH

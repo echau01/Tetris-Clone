@@ -73,12 +73,39 @@ number, then obtain the next tile configuration from the map.
 
 # Phase 4: Task 3
 
-Problem 1: the Piece class in the model.pieces package also deals with the Tetris board. For example, if a piece
+**Problem 1:** the Piece class in the model.pieces package also deals with the Tetris board. For example, if a piece
 rotates, then the board is updated from within the Piece class. However, the Tetris board itself is stored in the
 Game class in the model package. As a result, there is too much coupling between the Piece and Game classes—the
 Piece class has to know about how the board is stored in the Game class. The cohesiveness of the Piece class can also
 be improved because dealing with the game board should not be a responsibility of the Piece class.
 
-Solution to problem 1: I refactored all board-handling logic in the Piece class to be in the Game class instead.
+**Solution to problem 1:** I refactored all board-handling logic in the Piece class to be in the Game class instead.
 The Piece class now calls the appropriate methods from the Game class instead of dealing with the board directly.
 The Piece class is now more cohesive and has less coupling with the Game class.
+
+**Problem 2:** there is too much coupling between ScoreboardDialog and RemoveScoresDialog in the ui package. In
+particular, RemoveScoresDialog depends on ScoreboardDialog's makeScoreboardPanel(Scoreboard s) method, which returns a
+JPanel that displays the given scoreboard. RemoveScoresDialog shows a panel of checkboxes beside the returned JPanel 
+so that the user can select the scoreboard entries that they want to remove. Right now, the checkboxes are all 
+correctly aligned with the scoreboard entries, but this is by coincidence. If the makeScoreboardPanel method 
+changes, the alignment will be broken.
+
+**Solution to problem 2:** my desire to avoid code duplication led to this problem. The scoreboard displays 
+for ScoreboardDialog and RemoveScoresDialog look very similar—the only differences are the checkboxes. However,
+abstracting out the common elements of the displays results in the very problem I am trying to fix. To
+reduce coupling and increase the extensibility of the code, I have made the following changes:
+- I made ScoreboardDialog an abstract class with an abstract method, display(), which displays the dialog window.
+It is up to the subclasses to display the dialog (and the scoreboard) how they want.
+- I removed the makeScoreboardPanel method from ScoreboardDialog so that RemoveScoresDialog no longer inherits it.
+- I rewrote the display method in RemoveScoresDialog to ensure that checkboxes and scoreboard entries are a part
+of the same panel.
+- I created a new class called PlainScoreboardDisplay. This class extends ScoreboardDialog and does what
+ScoreboardDialog used to do: display a plain scoreboard with no checkboxes.
+
+As a result of these changes, there seems to be some minor code duplication in PlainScoreboardDisplay and 
+RemoveScoresDialog, since both classes use the same layout in displaying scoreboards. However, the benefits of the
+decreased coupling brought about by these changes far outweighs the negatives of the code duplication. Changing either
+PlainScoreboardDisplay or RemoveScoresDialog does not change the other. Making other kinds of scoreboard dialogs is 
+now a lot easier, especially if I want them to display scoreboards in different layouts. For that reason (easiness of
+making different scoreboard layouts), I actually consider the code duplication to be a non-issue. These changes have 
+therefore improved the overall design of the code.

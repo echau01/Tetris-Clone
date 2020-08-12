@@ -17,7 +17,8 @@ public class RemoveScoresDialog extends ScoreboardDialog {
     // Maps checkboxes that the user can select to their associated scoreboard entries.
     private Map<JCheckBox, ScoreboardEntry> checkBoxToEntryMap;
 
-    // EFFECTS: creates a RemoveScoresDialog that displays the given scoreboard. The dialog has the given title.
+    // EFFECTS: creates a RemoveScoresDialog that displays the given scoreboard. The dialog has the given title,
+    //          is resizable, and is set to be modal. Upon closing, the dialog is disposed.
     //          Note: to display the dialog, call the display() method after invoking the constructor.
     public RemoveScoresDialog(Scoreboard scoreboard, String title) {
         super(scoreboard, title);
@@ -39,14 +40,14 @@ public class RemoveScoresDialog extends ScoreboardDialog {
         JPanel headerPanel = new JPanel();
         headerPanel.add(new JLabel("Select entries to remove below (click a checkbox to select the entry):"));
 
-        JPanel checkBoxAndScoreboardPanel = makeCheckBoxAndScoreboardPanel();
+        JPanel scoreboardPanel = makeScoreboardPanel();
 
         // The border makes the panel look nicer. https://docs.oracle.com/javase/tutorial/uiswing/layout/box.html has
         // an example of a project that uses borders, which is where I got this line of code from:
-        checkBoxAndScoreboardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        scoreboardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JPanel bottomButtonPanel = makeBottomButtonPanel();
-        JScrollPane scrollPane = new JScrollPane(checkBoxAndScoreboardPanel);
+        JScrollPane scrollPane = new JScrollPane(scoreboardPanel);
 
         add(headerPanel);
         add(scrollPane);
@@ -60,31 +61,27 @@ public class RemoveScoresDialog extends ScoreboardDialog {
     // MODIFIES: this
     // EFFECTS: returns a JPanel showing entries on the temporary scoreboard sorted from greatest to least.
     //          There is a checkbox to the left of each entry.
-    private JPanel makeCheckBoxAndScoreboardPanel() {
-        JPanel checkBoxAndScoreboardPanel = new JPanel();
-        checkBoxAndScoreboardPanel.setLayout(new BoxLayout(checkBoxAndScoreboardPanel, BoxLayout.X_AXIS));
+    private JPanel makeScoreboardPanel() {
+        List<ScoreboardEntry> sortedEntries = super.scoreboard.getSortedEntries();
 
-        JPanel checkBoxPanel = new JPanel();
-        checkBoxPanel.setLayout(new GridLayout(0, 1));
+        JPanel panel = new JPanel(new GridLayout(0, 4, 10, 0));
+        panel.add(new JLabel("Rank"));
+        panel.add(new JLabel("Name"));
+        panel.add(new JLabel("Score"));
+        panel.add(new JLabel("Lines cleared"));
 
-        JPanel scoreboardPanel = super.makeScoreboardPanel(super.scoreboard);
+        for (int i = 0; i < sortedEntries.size(); i++) {
+            ScoreboardEntry entry = sortedEntries.get(i);
+            JCheckBox checkBox = new JCheckBox(String.valueOf(i + 1));
+            checkBoxToEntryMap.put(checkBox, entry);
 
-        JCheckBox invisibleCheckBox = new JCheckBox();
-        invisibleCheckBox.setVisible(false);
-        checkBoxPanel.add(invisibleCheckBox);
-
-        List<ScoreboardEntry> entries = super.scoreboard.getEntries();
-
-        for (int i = 0; i < entries.size(); i++) {
-            JCheckBox checkBox = new JCheckBox();
-            checkBoxPanel.add(checkBox);
-            checkBoxToEntryMap.put(checkBox, entries.get(i));
+            panel.add(checkBox);
+            panel.add(new JLabel(entry.getPlayerName()));
+            panel.add(new JLabel(String.valueOf(entry.getScore())));
+            panel.add(new JLabel(String.valueOf(entry.getLinesCleared())));
         }
 
-        checkBoxAndScoreboardPanel.add(checkBoxPanel);
-        checkBoxAndScoreboardPanel.add(scoreboardPanel);
-
-        return checkBoxAndScoreboardPanel;
+        return panel;
     }
 
     // MODIFIES: this
