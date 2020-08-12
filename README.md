@@ -83,7 +83,7 @@ be improved because dealing with the game board should not be a responsibility o
 The Piece class now calls the appropriate methods from the Game class instead of dealing with the board directly.
 The Piece class is now more cohesive and has less coupling with the Game class.
 
-**Problem 2:** there is too much coupling between ScoreboardDialog and RemoveScoresDialog in the ui package. In
+**Problem 2:** there is too much coupling between ScoreboardDialog and RemoveScoresDialog in the ui.dialog package. In
 particular, RemoveScoresDialog depends on ScoreboardDialog's makeScoreboardPanel(Scoreboard s) method, which returns a
 JPanel that displays the given scoreboard. RemoveScoresDialog shows a panel of checkboxes beside the returned JPanel 
 so that the user can select the scoreboard entries that they want to remove. Right now, the checkboxes are all 
