@@ -1,5 +1,7 @@
 package ui;
 
+import ui.graphics.TetrisGui;
+
 import javax.swing.*;
 import java.io.File;
 

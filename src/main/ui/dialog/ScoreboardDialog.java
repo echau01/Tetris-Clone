@@ -1,4 +1,4 @@
-package ui;
+package ui.dialog;
 
 import model.Scoreboard;
 

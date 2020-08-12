@@ -1,6 +1,10 @@
-package ui;
+package ui.graphics;
 
 import model.Game;
+import ui.dialog.GameOverDialog;
+import ui.dialog.PreGameDialog;
+import ui.util.TemporaryScoreboardManager;
+import ui.sound.ThemeSongPlayer;
 
 import javax.swing.*;
 import java.awt.*;

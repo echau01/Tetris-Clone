@@ -1,10 +1,12 @@
-package ui;
+package ui.dialog;
 
 import exceptions.CorruptedFileException;
 import model.Game;
 import model.Scoreboard;
 import model.ScoreboardEntry;
 import persistence.ScoreboardEntryFileReader;
+import ui.util.TemporaryScoreboardManager;
+import ui.graphics.TetrisGui;
 
 import javax.swing.*;
 import java.awt.*;

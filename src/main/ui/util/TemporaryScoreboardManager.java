@@ -1,4 +1,4 @@
-package ui;
+package ui.util;
 
 import model.Scoreboard;
 import model.ScoreboardEntry;
