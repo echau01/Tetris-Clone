@@ -6,6 +6,8 @@ import ui.dialog.PreGameDialog;
 import ui.util.TemporaryScoreboardManager;
 import ui.sound.ThemeSongPlayer;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -75,8 +77,17 @@ public class TetrisGui extends JFrame implements Observer {
 
         try {
             player.startThemeOnLoop();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error: theme song cannot be played!",
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "An I/O error occurred when loading the theme song.",
+                    "Music Error", JOptionPane.ERROR_MESSAGE);
+        } catch (LineUnavailableException e) {
+            JOptionPane.showMessageDialog(null, "Error: no line is available to play the theme song.",
+                    "Music Error", JOptionPane.ERROR_MESSAGE);
+        } catch (UnsupportedAudioFileException e) {
+            JOptionPane.showMessageDialog(null, "Error: theme song file is not a valid audio file.",
+                    "Music Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Error: theme song file was not found.",
                     "Music Error", JOptionPane.ERROR_MESSAGE);
         }
 
