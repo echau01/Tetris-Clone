@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class WriterTest {
     private Writer testWriter;
     private ScoreboardEntry entry;
-    private static final String TEST_SCOREBOARD_FILE = "./data/testScoreboardEntries.txt";
+    private static final String TEST_SCOREBOARD_FILE = "./data/test/testScoreboardEntries.txt";
     private Scoreboard scoreboardInTestFile;
 
     @BeforeEach

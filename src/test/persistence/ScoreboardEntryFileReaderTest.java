@@ -22,7 +22,7 @@ public class ScoreboardEntryFileReaderTest {
 
     @Test
     public void testReadInScoreboardEntriesNonCorrupted() {
-        File file = new File("./data/testScoreboardEntries.txt");
+        File file = new File("./data/test/testScoreboardEntries.txt");
 
         try {
             Scoreboard scoreboard = ScoreboardEntryFileReader.readInScoreboardEntries(file);
@@ -43,7 +43,7 @@ public class ScoreboardEntryFileReaderTest {
 
     @Test
     public void testReadInScoreboardEntriesCorrupted1() {
-        File file = new File("./data/corruptedScoreboardEntries1.txt");
+        File file = new File("./data/test/corruptedScoreboardEntries1.txt");
 
         try {
             ScoreboardEntryFileReader.readInScoreboardEntries(file);
@@ -57,7 +57,7 @@ public class ScoreboardEntryFileReaderTest {
 
     @Test
     public void testReadInScoreboardEntriesCorrupted2() {
-        File file = new File("./data/corruptedScoreboardEntries2.txt");
+        File file = new File("./data/test/corruptedScoreboardEntries2.txt");
 
         try {
             ScoreboardEntryFileReader.readInScoreboardEntries(file);
@@ -71,7 +71,7 @@ public class ScoreboardEntryFileReaderTest {
 
     @Test
     public void testReadInScoreboardEntriesCorrupted3() {
-        File file = new File("./data/corruptedScoreboardEntries3.txt");
+        File file = new File("./data/test/corruptedScoreboardEntries3.txt");
 
         try {
             ScoreboardEntryFileReader.readInScoreboardEntries(file);
