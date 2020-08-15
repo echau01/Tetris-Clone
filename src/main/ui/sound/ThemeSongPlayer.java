@@ -9,6 +9,8 @@ import java.io.InputStream;
 public class ThemeSongPlayer {
     // The music file comes from https://commons.wikimedia.org/wiki/File:Tetris_theme.ogg (CC BY-SA 3.0).
     // The file was originally an MP3 file. I converted the MP3 to WAV using https://online-audio-converter.com/.
+    // We do not include "resources" in the file path because the resources folder is considered the root folder. See
+    // https://stackoverflow.com/questions/29887524/how-to-add-resource-file-to-jar-in-intellij#comment47899065_29887558
     private static final String THEME_SONG_FILE_PATH = "/tetrisTheme.wav";
 
     // This class uses the singleton pattern. This is the singleton instance.
