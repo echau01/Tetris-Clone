@@ -19,7 +19,13 @@ public class Main {
         // If we export the application to a JAR file and put it in a directory that does not have a data
         // folder, the application must create a data folder in order to save the user's scores.
         // I got the code for making a data folder from https://stackoverflow.com/a/3634879/3335320.
-        new File("./data").mkdirs();
+        try {
+            new File("./data").mkdirs();
+        } catch (SecurityException e) {
+            JOptionPane.showMessageDialog(null, "Caught SecurityException: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         // See https://stackoverflow.com/a/3551578/3335320 for why we need to run the GUI
         // using SwingUtilities.invokeLater.
