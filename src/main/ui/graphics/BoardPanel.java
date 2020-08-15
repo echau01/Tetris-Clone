@@ -130,7 +130,7 @@ public class BoardPanel extends JPanel implements Observer {
     // EFFECTS: returns true if the cell at the given row and column is occupied by a tile, or is the
     //          location of a point in game.getActivePiece().getHardDropTileLocations(). Returns false otherwise.
     private boolean cellShouldBeFilledWithColour(int row, int column) {
-        return game.getBoard().get(row).get(column)
+        return game.isCellOccupied(column, row)
                 || game.getActivePiece().getHardDropTileLocations().contains(new Point(column, row));
     }
 
