@@ -2,6 +2,7 @@ package ui.util;
 
 import model.Scoreboard;
 import model.ScoreboardEntry;
+import ui.Main;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.util.List;
 // This class stores the temporary scoreboard (a scoreboard that the user can add their
 // scores to before permanently saving them to file).
 public class TemporaryScoreboardManager {
-    public static final String ENTRIES_FILE_PATH = "./data/scoreboardEntries.txt";
+    public static final String ENTRIES_FILE_PATH = Main.TETRIS_DIRECTORY + "\\data\\scoreboardEntries.txt";
 
     // We are using the singleton design pattern for this class.
     private static TemporaryScoreboardManager instance;

@@ -10,6 +10,9 @@ import java.util.Enumeration;
 
 // This is the class that the main method is located in.
 public class Main {
+    // This is the parent directory for all files the application needs to access (e.g. scoreboard files)
+    public static final String TETRIS_DIRECTORY = System.getProperty("user.home") + "\\Tetris";
+
     public static void main(String[] args) {
         // This try-catch block comes from https://stackoverflow.com/a/2076309/3335320 and
         // https://stackoverflow.com/a/9682048/3335320. It makes text look nicer on different computers.
@@ -54,13 +57,15 @@ public class Main {
         }
     }
 
-    // EFFECTS: makes a data folder in the directory that this program was launched in.
+    // EFFECTS: creates a data folder inside the folder at TETRIS_DIRECTORY.
     //          Returns false if the folder does not exist and cannot be created, or if a SecurityException is caught.
     //          In both of these cases, a dialog window appears telling the user what happened.
     //          Otherwise, returns true.
     private static boolean makeDataFolder() {
+        String directory = TETRIS_DIRECTORY + "\\data";
+
         // I got the code for making a data folder from https://stackoverflow.com/a/3634879/3335320.
-        File folder = new File("./data");
+        File folder = new File(directory);
         boolean folderExists = folder.exists();
         try {
             boolean folderCreated = folder.mkdirs();
