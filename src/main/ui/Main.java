@@ -3,7 +3,10 @@ package ui;
 import ui.graphics.TetrisGui;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import java.awt.*;
 import java.io.File;
+import java.util.Enumeration;
 
 // This is the class that the main method is located in.
 public class Main {
@@ -22,6 +25,10 @@ public class Main {
             return;
         }
 
+        // Code to scale font size according to screen size comes from https://stackoverflow.com/a/32550596/3335320
+        setDefaultFont(new Font("Sans Serif", Font.PLAIN,
+                Toolkit.getDefaultToolkit().getScreenSize().width / 140));
+
         // See https://stackoverflow.com/a/3551578/3335320 for why we need to run the GUI
         // using SwingUtilities.invokeLater.
         // We want to run the GUI on the event dispatching thread to avoid the problem of
@@ -32,6 +39,19 @@ public class Main {
                 new TetrisGui();
             }
         });
+    }
+
+    // EFFECTS: sets the default font of all text in the program to given font
+    private static void setDefaultFont(Font font) {
+        // Code to set a default font comes from https://stackoverflow.com/a/7434935/3335320
+        Enumeration<Object> keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if (value instanceof FontUIResource) {
+                UIManager.put(key, font);
+            }
+        }
     }
 
     // EFFECTS: makes a data folder in the directory that this program was launched in.
