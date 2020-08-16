@@ -27,7 +27,7 @@ public class Main {
 
         // Code to scale font size according to screen size comes from https://stackoverflow.com/a/32550596/3335320
         setDefaultFont(new Font("Sans Serif", Font.PLAIN,
-                Toolkit.getDefaultToolkit().getScreenSize().width / 140));
+                Math.max(14, Toolkit.getDefaultToolkit().getScreenSize().width / 140)));
 
         // See https://stackoverflow.com/a/3551578/3335320 for why we need to run the GUI
         // using SwingUtilities.invokeLater.
