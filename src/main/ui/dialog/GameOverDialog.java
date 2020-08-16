@@ -177,9 +177,6 @@ public class GameOverDialog extends JDialog {
                 }
                 try {
                     tempScoreboardManager.saveTempScoreboard();
-                    JOptionPane.showMessageDialog(null,
-                            "Successfully saved scoreboard entries to " + TemporaryScoreboardManager.ENTRIES_FILE_PATH,
-                            "Success", JOptionPane.INFORMATION_MESSAGE);
                 } catch (IOException ioException) {
                     JOptionPane.showMessageDialog(null, "Could not save scoreboard entries to "
                             + TemporaryScoreboardManager.ENTRIES_FILE_PATH, "Error", JOptionPane.ERROR_MESSAGE);

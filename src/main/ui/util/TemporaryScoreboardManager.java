@@ -4,6 +4,7 @@ import model.Scoreboard;
 import model.ScoreboardEntry;
 import ui.Main;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -47,7 +48,9 @@ public class TemporaryScoreboardManager {
 
     // MODIFIES: this
     // EFFECTS: appends all the entries in the temporary scoreboard to file with path ENTRIES_FILE_PATH,
-    //          then clears the temporary scoreboard. The file is created if it does not already exist.
+    //          then clears the temporary scoreboard. The file is created if it does not already exist. If
+    //          the scoreboard was saved successfully, a dialog window is displayed telling the user that the
+    //          save operation was successful.
     //          Throws IOException if an I/O error occurs.
     public void saveTempScoreboard() throws IOException {
         File file = new File(ENTRIES_FILE_PATH);
@@ -64,5 +67,7 @@ public class TemporaryScoreboardManager {
         }
         entries.clear();
         printWriter.close();
+        JOptionPane.showMessageDialog(null, "Successfully saved scoreboard entries to "
+                        + ENTRIES_FILE_PATH, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 }

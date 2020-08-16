@@ -134,11 +134,9 @@ public class TetrisGui extends JFrame implements Observer {
                             "Save Scoreboard", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         try {
                             tempScoreboardManager.saveTempScoreboard();
-                            JOptionPane.showMessageDialog(null,
-                                    "Successfully saved scoreboard entries to file.");
                         } catch (IOException ioException) {
-                            JOptionPane.showMessageDialog(null,
-                                    "Could not save scoreboard entries to file!",
+                            JOptionPane.showMessageDialog(null, "Could not save scoreboard entries to "
+                                    + TemporaryScoreboardManager.ENTRIES_FILE_PATH,
                                     "An Error Occurred", JOptionPane.ERROR_MESSAGE);
                         }
                     }
