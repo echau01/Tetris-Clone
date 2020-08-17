@@ -187,8 +187,8 @@ public class GameOverDialog extends JDialog {
                 try {
                     tempScoreboardManager.saveTempScoreboard();
                 } catch (IOException ioException) {
-                    JOptionPane.showMessageDialog(null, "Could not save scoreboard entries to "
-                            + TemporaryScoreboardManager.ENTRIES_FILE_PATH, "Error", JOptionPane.ERROR_MESSAGE);
+                    showErrorDialog("Could not save scoreboard entries to "
+                            + TemporaryScoreboardManager.ENTRIES_FILE_PATH);
                 }
             }
         });
@@ -224,7 +224,6 @@ public class GameOverDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 File file = new File(TemporaryScoreboardManager.ENTRIES_FILE_PATH);
                 try {
-                    file.createNewFile();
                     Scoreboard scoreboardFromFile = ScoreboardEntryFileReader.readInScoreboardEntries(file);
                     if (scoreboardFromFile.getSize() == 0) {
                         JOptionPane.showMessageDialog(null, "You have no permanently-saved scores.");
@@ -232,11 +231,10 @@ public class GameOverDialog extends JDialog {
                         new PlainScoreboardDisplay(scoreboardFromFile,"Permanently-Saved Scoreboard").display();
                     }
                 } catch (CorruptedFileException ex) {
-                    JOptionPane.showMessageDialog(null, TemporaryScoreboardManager.ENTRIES_FILE_PATH
-                            + " is corrupted.", "Error", JOptionPane.ERROR_MESSAGE);
+                    showErrorDialog(TemporaryScoreboardManager.ENTRIES_FILE_PATH + " is corrupted.");
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(null, "Could not retrieve saved scores from "
-                            + TemporaryScoreboardManager.ENTRIES_FILE_PATH, "Error", JOptionPane.ERROR_MESSAGE);
+                    showErrorDialog("Could not retrieve saved scores from "
+                            + TemporaryScoreboardManager.ENTRIES_FILE_PATH);
                 }
             }
         });
@@ -252,14 +250,12 @@ public class GameOverDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 File file = new File(TemporaryScoreboardManager.ENTRIES_FILE_PATH);
                 try {
-                    file.createNewFile();
                     helpUserRemoveScoresFrom(file);
                 } catch (CorruptedFileException ex) {
-                    JOptionPane.showMessageDialog(null, TemporaryScoreboardManager.ENTRIES_FILE_PATH
-                            + " is corrupted.", "Error", JOptionPane.ERROR_MESSAGE);
+                    showErrorDialog(TemporaryScoreboardManager.ENTRIES_FILE_PATH + " is corrupted.");
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(null, "Could not retrieve saved scores from "
-                            + TemporaryScoreboardManager.ENTRIES_FILE_PATH, "Error", JOptionPane.ERROR_MESSAGE);
+                    showErrorDialog("Could not retrieve saved scores from "
+                            + TemporaryScoreboardManager.ENTRIES_FILE_PATH);
                 }
             }
         });
@@ -291,8 +287,9 @@ public class GameOverDialog extends JDialog {
                 JOptionPane.showMessageDialog(null, "Successfully removed selected entries "
                         + "from file " + TemporaryScoreboardManager.ENTRIES_FILE_PATH);
             } catch (FileNotFoundException e) {
-                JOptionPane.showMessageDialog(null, "The file at " + file.getAbsolutePath()
-                        + " does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+                // This catch block shouldn't ever execute because the file is guaranteed to exist if
+                // ScoreboardEntryFileReader.readInScoreboardEntries(file) does not throw an exception.
+                showErrorDialog("The file at " + file.getAbsolutePath() + " does not exist.");
             }
         }
     }
@@ -315,5 +312,11 @@ public class GameOverDialog extends JDialog {
             }
         });
         buttonPanel.add(quitButton);
+    }
+
+    // EFFECTS: makes given error message appear on screen as a dialog window. The parent component
+    //          of the dialog is null, and the dialog's title is "Error".
+    private void showErrorDialog(String errorMessage) {
+        JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

@@ -1,6 +1,7 @@
 package ui;
 
 import ui.graphics.TetrisGui;
+import ui.util.TemporaryScoreboardManager;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -25,6 +26,14 @@ public class Main {
         // If we export the application to a JAR file and put it in a directory that does not have a data
         // folder, the application must create a data folder in order to save the user's scores.
         if (!makeDataFolder()) {
+            return;
+        }
+
+        try {
+            new File(TemporaryScoreboardManager.ENTRIES_FILE_PATH).createNewFile();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Could not create file "
+                    + TemporaryScoreboardManager.ENTRIES_FILE_PATH, "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
