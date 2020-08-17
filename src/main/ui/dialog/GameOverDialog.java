@@ -5,6 +5,7 @@ import model.Game;
 import model.Scoreboard;
 import model.ScoreboardEntry;
 import persistence.ScoreboardEntryFileReader;
+import persistence.Writer;
 import ui.util.TemporaryScoreboardManager;
 import ui.graphics.TetrisGui;
 
@@ -14,7 +15,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
 // Represents the window that appears when the game ends.
 // According to the linked StackOverflow post below, having multiple JFrames in a program is considered bad practice.
@@ -97,6 +101,7 @@ public class GameOverDialog extends JDialog {
         addSaveTempScoresButton();
         addViewTempScoresButton();
         addViewSavedScoresButton();
+        addRemoveSavedScoresButton();
         addQuitButton();
     }
 
@@ -158,7 +163,11 @@ public class GameOverDialog extends JDialog {
                     JOptionPane.showMessageDialog(null, "Temporary scoreboard is empty.");
                     return;
                 }
+                int previousSize = tempScoreboard.getSize();
                 new RemoveScoresDialog(tempScoreboard, "Remove Scores").display();
+                if (tempScoreboard.getSize() < previousSize) {
+                    JOptionPane.showMessageDialog(null, "Successfully removed selected entries.");
+                }
             }
         });
         buttonPanel.add(removeTempScoresButton);
@@ -232,6 +241,60 @@ public class GameOverDialog extends JDialog {
             }
         });
         buttonPanel.add(saveTempScoresButton);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds a button to buttonPanel that lets the user remove scores that were saved to file.
+    private void addRemoveSavedScoresButton() {
+        JButton removeSavedScoresButton = new JButton("Remove permanently-saved scores");
+        removeSavedScoresButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File file = new File(TemporaryScoreboardManager.ENTRIES_FILE_PATH);
+                try {
+                    file.createNewFile();
+                    helpUserRemoveScoresFrom(file);
+                } catch (CorruptedFileException ex) {
+                    JOptionPane.showMessageDialog(null, TemporaryScoreboardManager.ENTRIES_FILE_PATH
+                            + " is corrupted.", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Could not retrieve saved scores from "
+                            + TemporaryScoreboardManager.ENTRIES_FILE_PATH, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        buttonPanel.add(removeSavedScoresButton);
+    }
+
+    // MODIFIES: file
+    // EFFECTS: if there are scoreboard entries in given file, displays a dialog window that allows the user
+    //          to remove entries from the file. Otherwise, shows a dialog window telling the user they have
+    //          no saved scores in the file.
+    //          Throws CorruptedFileException if given file is not a valid scoreboard entry file.
+    //          Throws IOException if an I/O error occurs when reading from the file.
+    private void helpUserRemoveScoresFrom(File file) throws CorruptedFileException, IOException {
+        Scoreboard scoreboard = ScoreboardEntryFileReader.readInScoreboardEntries(file);
+        if (scoreboard.getSize() == 0) {
+            JOptionPane.showMessageDialog(null, "You have no permanently-saved scores.");
+            return;
+        }
+        int previousSize = scoreboard.getSize();
+        new RemoveScoresDialog(scoreboard, "Remove Scores").display();
+        if (scoreboard.getSize() < previousSize) {
+            try {
+                Writer writer = new Writer(new PrintWriter(file));
+                List<ScoreboardEntry> entries = scoreboard.getEntries();
+                for (ScoreboardEntry entry : entries) {
+                    writer.write(entry);
+                }
+                writer.close();
+                JOptionPane.showMessageDialog(null, "Successfully removed selected entries "
+                        + "from file " + TemporaryScoreboardManager.ENTRIES_FILE_PATH);
+            } catch (FileNotFoundException e) {
+                JOptionPane.showMessageDialog(null, "The file at " + file.getAbsolutePath()
+                        + " does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     // MODIFIES: this

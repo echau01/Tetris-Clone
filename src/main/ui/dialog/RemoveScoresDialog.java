@@ -17,8 +17,9 @@ public class RemoveScoresDialog extends ScoreboardDialog {
     // Maps checkboxes that the user can select to their associated scoreboard entries.
     private Map<JCheckBox, ScoreboardEntry> checkBoxToEntryMap;
 
-    // EFFECTS: creates a RemoveScoresDialog that displays the given scoreboard. The dialog has the given title,
+    // EFFECTS: creates a RemoveScoresDialog for the given scoreboard. The dialog has the given title,
     //          is resizable, and is set to be modal. Upon closing, the dialog is disposed.
+    //          The given scoreboard will be modified if the user chooses to remove entries from it.
     //          Note: to display the dialog, call the display() method after invoking the constructor.
     public RemoveScoresDialog(Scoreboard scoreboard, String title) {
         super(scoreboard, title);
@@ -152,7 +153,6 @@ public class RemoveScoresDialog extends ScoreboardDialog {
                     JOptionPane.showMessageDialog(null, "You did not select any entries to remove.");
                 } else {
                     RemoveScoresDialog.this.dispose();
-                    JOptionPane.showMessageDialog(null, "Successfully removed selected entries.");
                 }
             }
         });
