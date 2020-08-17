@@ -232,7 +232,8 @@ public class GameOverDialog extends JDialog {
                         new PlainScoreboardDisplay(scoreboardFromFile,"Permanently-Saved Scoreboard").display();
                     }
                 } catch (CorruptedFileException ex) {
-                    showErrorDialog(TemporaryScoreboardManager.ENTRIES_FILE_PATH + " is corrupted.");
+                    showErrorDialog(TemporaryScoreboardManager.ENTRIES_FILE_PATH + " is corrupted.\n"
+                            + "Please clear your saved scores to reset the file.");
                 } catch (IOException ex) {
                     showErrorDialog("Could not retrieve saved scores from "
                             + TemporaryScoreboardManager.ENTRIES_FILE_PATH);
@@ -253,7 +254,8 @@ public class GameOverDialog extends JDialog {
                 try {
                     helpUserRemoveScoresFrom(file);
                 } catch (CorruptedFileException ex) {
-                    showErrorDialog(TemporaryScoreboardManager.ENTRIES_FILE_PATH + " is corrupted.");
+                    showErrorDialog(TemporaryScoreboardManager.ENTRIES_FILE_PATH + " is corrupted.\n"
+                            + "Please clear your saved scores to reset the file.");
                 } catch (IOException ex) {
                     showErrorDialog("Could not retrieve saved scores from "
                             + TemporaryScoreboardManager.ENTRIES_FILE_PATH);
