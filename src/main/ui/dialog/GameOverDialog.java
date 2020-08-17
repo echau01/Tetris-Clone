@@ -102,6 +102,7 @@ public class GameOverDialog extends JDialog {
         addViewTempScoresButton();
         addViewSavedScoresButton();
         addRemoveSavedScoresButton();
+        addClearSavedScoresButton();
         addQuitButton();
     }
 
@@ -312,6 +313,32 @@ public class GameOverDialog extends JDialog {
             }
         });
         buttonPanel.add(quitButton);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds a button to buttonPanel that allows the user to clear all scoreboard entries saved to file
+    private void addClearSavedScoresButton() {
+        JButton clearButton = new JButton("Clear saved scores");
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File file = new File(TemporaryScoreboardManager.ENTRIES_FILE_PATH);
+                if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete all of your saved scores?",
+                        "Clear Saved Scores", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    try {
+                        file.createNewFile();
+                        PrintWriter printWriter = new PrintWriter(file);
+                        printWriter.close();
+                        JOptionPane.showMessageDialog(null, "All scores in "
+                                + TemporaryScoreboardManager.ENTRIES_FILE_PATH + " have been deleted.");
+                    } catch (IOException ioException) {
+                        showErrorDialog("An error occurred when trying to create file "
+                                + TemporaryScoreboardManager.ENTRIES_FILE_PATH);
+                    }
+                }
+            }
+        });
+        buttonPanel.add(clearButton);
     }
 
     // EFFECTS: makes given error message appear on screen as a dialog window. The parent component
