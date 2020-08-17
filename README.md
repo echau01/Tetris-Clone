@@ -21,4 +21,4 @@ scores. Some of this functionality is shown below.
 Finally, the clip below shows a very fast game where I started on Level 19. Note that players can set the starting
 level of the game themselves, as shown in the clip.
 
-![Level 19 Start](https://user-images.githubusercontent.com/25561432/90330127-3efee200-df5f-11ea-8774-57850187af71.gif)
+![Level 19 Start](https://user-images.githubusercontent.com/25561432/90455327-a7a6a580-e0aa-11ea-9ca8-f03b96094563.gif)
