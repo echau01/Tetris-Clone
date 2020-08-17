@@ -64,24 +64,50 @@ public class RemoveScoresDialog extends ScoreboardDialog {
     private JPanel makeScoreboardPanel() {
         List<ScoreboardEntry> sortedEntries = super.scoreboard.getSortedEntries();
 
-        JPanel panel = new JPanel(new GridLayout(0, 4, 10, 0));
-        panel.add(new JLabel("Rank"));
-        panel.add(new JLabel("Name"));
-        panel.add(new JLabel("Score"));
-        panel.add(new JLabel("Lines cleared"));
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints constraints = createGridBagConstraints(0, 0);
+
+        panel.add(new JLabel("Rank"), constraints);
+
+        constraints.gridx = GridBagConstraints.RELATIVE;
+
+        panel.add(new JLabel("Name"), constraints);
+        panel.add(new JLabel("Score"), constraints);
+        panel.add(new JLabel("Lines cleared"), constraints);
 
         for (int i = 0; i < sortedEntries.size(); i++) {
+            constraints = createGridBagConstraints(0, i + 1);
             ScoreboardEntry entry = sortedEntries.get(i);
+
             JCheckBox checkBox = new JCheckBox(String.valueOf(i + 1));
             checkBoxToEntryMap.put(checkBox, entry);
+            panel.add(checkBox, constraints);
 
-            panel.add(checkBox);
-            panel.add(new JLabel(entry.getPlayerName()));
-            panel.add(new JLabel(String.valueOf(entry.getScore())));
-            panel.add(new JLabel(String.valueOf(entry.getLinesCleared())));
+            constraints.gridx = GridBagConstraints.RELATIVE;
+
+            panel.add(new JLabel(entry.getPlayerName()), constraints);
+            panel.add(new JLabel(String.valueOf(entry.getScore())), constraints);
+            panel.add(new JLabel(String.valueOf(entry.getLinesCleared())), constraints);
         }
 
         return panel;
+    }
+
+    // EFFECTS: creates a GridBagConstraints object with grid cell coordinates set to (x, y), where x and y
+    //          are this method's parameters. The component used with the returned GridBagConstraints object will
+    //          have some horizontal internal padding, and will be placed in its grid cell according to
+    //          GridBagConstraints.LINE_START.
+    //
+    //          This method is called by makeScoreboardPanel().
+    private GridBagConstraints createGridBagConstraints(int x, int y) {
+        // Credit to https://stackoverflow.com/a/9852059/3335320 for the idea of making this method
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = x;
+        constraints.gridy = y;
+        constraints.ipadx = 20;
+        constraints.anchor = GridBagConstraints.LINE_START;
+
+        return constraints;
     }
 
     // MODIFIES: this
