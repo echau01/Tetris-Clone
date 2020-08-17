@@ -325,7 +325,8 @@ public class GameOverDialog extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 File file = new File(TemporaryScoreboardManager.ENTRIES_FILE_PATH);
-                if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete all of your saved scores?",
+                if (JOptionPane.showConfirmDialog(null,
+                        "Are you sure you want to delete all of your saved scores? This operation cannot be undone.",
                         "Clear Saved Scores", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     try {
                         file.createNewFile();
