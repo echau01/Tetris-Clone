@@ -13,10 +13,10 @@ Some gameplay is shown in the following GIF:
 
 ![Basic Gameplay](https://user-images.githubusercontent.com/25561432/90330121-3c9c8800-df5f-11ea-81ec-2e8de26c4d24.gif)
 
-The game over screen allows players to add and remove their scores to a scoreboard, as well as to save and view their
+The game over screen allows players to add and remove their scores to and from a scoreboard, as well as to save and view their
 scores. Some of this functionality is shown below.
 
-![Game Over Screen](https://user-images.githubusercontent.com/25561432/90330114-3a3a2e00-df5f-11ea-832e-8e4759e13d5b.gif)
+![Game Over Screen](https://user-images.githubusercontent.com/25561432/90454458-2817d700-e0a8-11ea-8cac-e6a7b9be9863.gif)
 
 Finally, the clip below shows a very fast game where I started on Level 19. Note that players can set the starting
 level of the game themselves, as shown in the clip.
