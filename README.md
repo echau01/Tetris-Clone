@@ -1,4 +1,4 @@
-# Tetris
+# Tetris Clone
 
 ## Introduction
 
