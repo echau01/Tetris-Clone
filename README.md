@@ -2,8 +2,7 @@
 
 ## Introduction
 
-This project is a re-creation of [Tetris](https://en.wikipedia.org/wiki/Tetris), a classic video game. I submitted
-this project as my term project for CPSC 210 (Software Construction) at UBC.
+This project is a re-creation of [Tetris](https://en.wikipedia.org/wiki/Tetris), a classic video game.
 
 ## GIFs of the Application
 

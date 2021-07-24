@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Tetris-Clone:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Tetris_Clone_jar</output-path>
+    <root id="archive" name="Tetris-Clone.jar">
+      <element id="module-output" name="Tetris-Clone" />
+      <element id="dir-copy" path="$PROJECT_DIR$/resources" />
+    </root>
+  </artifact>
+</component>
